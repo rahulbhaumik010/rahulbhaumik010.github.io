@@ -1,0 +1,123 @@
+/* General Styles */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f2f2f2; /* Light Gray Background */
+  color: #333; /* Dark Gray Text */
+  line-height: 1.6;
+}
+
+header {
+  background-color: #2c2c2c; /* Dark Gray Header */
+  color: #ffffff; /* White Text */
+  padding: 2rem 0;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  font-weight: 300;
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+/* Navigation Styles */
+nav ul {
+  list-style-type: none;
+  background-color: #2c2c2c; /* Match Navigation with Header */
+  margin: 0;
+  padding: 1rem;
+  text-align: center;
+}
+
+nav ul li {
+  display: inline;
+  margin-right: 15px;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: underline; /* Underline the links by default */
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  transition: text-decoration 0.3s ease; /* Smooth transition for underline effect */
+}
+
+nav ul li a:hover {
+  text-decoration: none; /* Remove underline on hover */
+}
+
+/* Section Styles */
+section {
+  padding: 3rem 1.5rem;
+  margin: 1rem auto;
+  max-width: 800px;
+  background-color: #ffffff; /* White Background */
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+h2, h3 {
+  color: #2c2c2c; /* Dark Gray Headings */
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+#about img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+ul {
+  padding-left: 1.5rem;
+}
+
+ul li {
+  margin-bottom: 0.75rem;
+}
+
+/* Add underline to publication links */
+ul li a {
+  color: #2c2c2c; /* Dark Gray Links */
+  text-decoration: underline; /* Underline to indicate clickable */
+}
+
+ul li a:hover {
+  text-decoration: underline; /* Keep underline on hover */
+}
+
+/* Style for the project image */
+.project-image {
+  width: 100%; /* Full width of the container */
+  overflow: hidden; /* Ensure the image doesn't overflow */
+  margin-bottom: 1rem; /* Space between image and content */
+}
+
+.project-image img {
+  width: 100%; /* Image fills the container */
+  height: auto; /* Maintain aspect ratio */
+  display: block; /* Remove space below the image */
+}
+/* Center the video in the project overview */
+section video {
+  display: block; /* Center the video */
+  margin: 1rem auto; /* Add some margin around the video */
+  border: 2px solid #2c2c2c; /* Optional: add border for styling */
+  border-radius: 10px; /* Optional: rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: shadow effect */
+}
+
+
+/* Footer Styles */
+footer {
+  background-color: #2c2c2c; /* Dark Gray Footer */
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+  box-shadow: 
