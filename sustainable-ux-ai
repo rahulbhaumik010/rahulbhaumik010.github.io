@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Driven Sustainable UI/UX Design</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>AI-Driven Sustainable UI/UX Design</h1>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">&#8592; Home</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section>
+      <h2>A Framework for Sustainable and AI-Enhanced Design Practices</h2>
+      <p>As the demand for digital services grows, so does the energy footprint of web applications and user interfaces. To address this, we propose a conceptual framework for integrating sustainable practices into the UI/UX design process, enhanced by AI-driven tools.</p>
+
+      <h3>Design Strategies for Energy Efficiency</h3>
+      <ul>
+        <li><strong>Use of dark themes:</strong> Especially for OLED and AMOLED displays, darker backgrounds significantly reduce energy consumption.</li>
+        <li><strong>Optimized media usage:</strong> Limiting high-resolution images and autoplay videos can reduce bandwidth and energy needs.</li>
+        <li><strong>System-default fonts:</strong> Relying on built-in fonts eliminates the need for external font loading, saving both time and energy.</li>
+        <li><strong>Minimalist layout and animations:</strong> Reduces processor workload and enhances responsiveness, particularly on older devices.</li>
+      </ul>
+
+      <h3>AI-Enabled Design Assistance</h3>
+      <p>Artificial Intelligence can aid designers by offering real-time feedback and suggestions during the design phase. AI tools can:</p>
+      <ul>
+        <li>Analyze design mockups and estimate their energy consumption based on component complexity.</li>
+        <li>Recommend alternatives for heavy components (e.g., compressed image versions or static instead of animated elements).</li>
+        <li>Suggest accessible and energy-efficient color palettes and font systems.</li>
+      </ul>
+
+      <h3>User-End Sustainability Monitoring</h3>
+      <p>On the user side, AI bots embedded in browsers or websites can monitor browsing behavior and generate sustainability reports. These can include:</p>
+      <ul>
+        <li>Energy consumption estimates per session or website visited.</li>
+        <li>Suggestions for more eco-friendly alternatives or habits (e.g., using Reader Mode, reducing brightness).</li>
+        <li>Personalized dashboards reflecting cumulative impact and energy savings over time.</li>
+      </ul>
+
+      <p>This dual-pronged approach—focusing on both the design/development phase and user-side feedback—paves the way for more responsible and environmentally-conscious digital experiences.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2024 Rahul Bhaumik</p>
+  </footer>
+</body>
+</html>
