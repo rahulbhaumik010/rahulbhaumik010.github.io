@@ -1,0 +1,232 @@
+{
+  "nodes": [
+    {
+      "id": "rahul-research",
+      "label": "Rahul Bhaumik Research",
+      "type": "center",
+      "description": "Research at the intersection of human-computer interaction, soft interfaces, smart textiles, sensing, interaction design, fabrication, and design pedagogy."
+    },
+
+    {
+      "id": "soft-interfaces",
+      "label": "Soft Interfaces",
+      "type": "theme",
+      "description": "Designing flexible, deformable, and material-driven interfaces for embodied interaction."
+    },
+    {
+      "id": "smart-textiles",
+      "label": "Smart Textiles",
+      "type": "theme",
+      "description": "Textile-based interaction systems using sensing, embroidery, knitting, conductive yarns, and soft material structures."
+    },
+    {
+      "id": "inductive-sensing",
+      "label": "Inductive Sensing",
+      "type": "theme",
+      "description": "Exploring inductive sensing for deformation-aware, soft, and 3D-printed interactive structures."
+    },
+    {
+      "id": "3d-printed-sensors",
+      "label": "3D-Printed Sensors",
+      "type": "theme",
+      "description": "Using 3D printing, lattice structures, and functional materials to create sensor-enabled interactive objects."
+    },
+    {
+      "id": "surface-gestures",
+      "label": "Surface Gestures",
+      "type": "theme",
+      "description": "Investigating touch, gesture, and surface-based interaction on textile and deformable interfaces."
+    },
+    {
+      "id": "automotive-hci",
+      "label": "Automotive HCI",
+      "type": "theme",
+      "description": "Designing novel in-car interaction systems and interfaces for improved user experience."
+    },
+    {
+      "id": "tangible-interaction",
+      "label": "Tangible Interaction",
+      "type": "theme",
+      "description": "Creating physical, material, and embodied interfaces that support richer forms of interaction."
+    },
+    {
+      "id": "design-pedagogy",
+      "label": "Design Pedagogy",
+      "type": "theme",
+      "description": "Research on design learning, creativity, design thinking, and pedagogical tools."
+    },
+    {
+      "id": "xr-virtual-environments",
+      "label": "XR and Virtual Environments",
+      "type": "theme",
+      "description": "Exploring immersive and virtual environments for design, interaction, accessibility, and learning."
+    },
+
+    {
+      "id": "paper-insense3d",
+      "label": "InSense3D: Designing Smart 3D-Printed Structures Leveraging Ferromagnetic Filaments for Inductive Deformation Sensing",
+      "type": "paper",
+      "year": "2026",
+      "venue": "ACM CHI",
+      "description": "A design and sensing approach for creating smart 3D-printed structures using ferromagnetic filaments and inductive deformation sensing."
+    },
+    {
+      "id": "paper-inductive-pressure",
+      "label": "Inductive Pressure Sensors Using 3D-Printed Structures With Tunable Stiffness",
+      "type": "paper",
+      "year": "2025",
+      "venue": "IEEE Sensors Letters",
+      "description": "A sensing approach using 3D-printed structures with tunable stiffness for pressure-sensitive interaction."
+    },
+    {
+      "id": "paper-flexible-compressible",
+      "label": "Flexible and Compressible 3D-Printed Hybrid Structures Using Magnetically Detectable PETG for Inductive Sensing",
+      "type": "paper",
+      "year": "2025",
+      "venue": "IEEE FLEPS",
+      "description": "A study on flexible and compressible 3D-printed hybrid structures using magnetically detectable thermoplastic materials for inductive sensing."
+    },
+    {
+      "id": "paper-3d-console",
+      "label": "Interaction with a 3D Surface for an Innovative Input Experience on a Central Console",
+      "type": "paper",
+      "year": "2024",
+      "venue": "AutomotiveUI",
+      "url": "https://dl.acm.org/doi/10.1145/3640792.3675707",
+      "description": "A study on interaction with a three-dimensional surface for automotive central console input."
+    },
+    {
+      "id": "paper-design-thinking-game",
+      "label": "A Gamified Model of Design Thinking for Fostering Learning in Children",
+      "type": "paper",
+      "year": "2019",
+      "venue": "Springer",
+      "description": "A gamified design-thinking model for supporting learning and creativity among children."
+    },
+    {
+      "id": "paper-virtual-designers",
+      "label": "An Intelligent Virtual Environment for Designers with Reduced Motor Abilities",
+      "type": "paper",
+      "year": "2023",
+      "venue": "Procedia Computer Science",
+      "description": "A virtual environment intended to support designers with reduced motor abilities."
+    }
+  ],
+
+  "links": [
+    {
+      "source": "rahul-research",
+      "target": "soft-interfaces"
+    },
+    {
+      "source": "rahul-research",
+      "target": "smart-textiles"
+    },
+    {
+      "source": "rahul-research",
+      "target": "inductive-sensing"
+    },
+    {
+      "source": "rahul-research",
+      "target": "3d-printed-sensors"
+    },
+    {
+      "source": "rahul-research",
+      "target": "surface-gestures"
+    },
+    {
+      "source": "rahul-research",
+      "target": "automotive-hci"
+    },
+    {
+      "source": "rahul-research",
+      "target": "tangible-interaction"
+    },
+    {
+      "source": "rahul-research",
+      "target": "design-pedagogy"
+    },
+    {
+      "source": "rahul-research",
+      "target": "xr-virtual-environments"
+    },
+
+    {
+      "source": "paper-insense3d",
+      "target": "inductive-sensing"
+    },
+    {
+      "source": "paper-insense3d",
+      "target": "3d-printed-sensors"
+    },
+    {
+      "source": "paper-insense3d",
+      "target": "soft-interfaces"
+    },
+    {
+      "source": "paper-insense3d",
+      "target": "tangible-interaction"
+    },
+
+    {
+      "source": "paper-inductive-pressure",
+      "target": "inductive-sensing"
+    },
+    {
+      "source": "paper-inductive-pressure",
+      "target": "3d-printed-sensors"
+    },
+    {
+      "source": "paper-inductive-pressure",
+      "target": "soft-interfaces"
+    },
+
+    {
+      "source": "paper-flexible-compressible",
+      "target": "inductive-sensing"
+    },
+    {
+      "source": "paper-flexible-compressible",
+      "target": "3d-printed-sensors"
+    },
+    {
+      "source": "paper-flexible-compressible",
+      "target": "soft-interfaces"
+    },
+
+    {
+      "source": "paper-3d-console",
+      "target": "automotive-hci"
+    },
+    {
+      "source": "paper-3d-console",
+      "target": "surface-gestures"
+    },
+    {
+      "source": "paper-3d-console",
+      "target": "soft-interfaces"
+    },
+    {
+      "source": "paper-3d-console",
+      "target": "tangible-interaction"
+    },
+
+    {
+      "source": "paper-design-thinking-game",
+      "target": "design-pedagogy"
+    },
+
+    {
+      "source": "paper-virtual-designers",
+      "target": "xr-virtual-environments"
+    },
+    {
+      "source": "paper-virtual-designers",
+      "target": "design-pedagogy"
+    },
+    {
+      "source": "paper-virtual-designers",
+      "target": "tangible-interaction"
+    }
+  ]
+}
