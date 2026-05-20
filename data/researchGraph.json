@@ -3,230 +3,241 @@
     {
       "id": "rahul-research",
       "label": "Rahul Bhaumik Research",
+      "shortLabel": "Rahul Research",
       "type": "center",
-      "description": "Research at the intersection of human-computer interaction, soft interfaces, smart textiles, sensing, interaction design, fabrication, and design pedagogy."
+      "description": "Research across human-computer interaction, soft interfaces, smart textiles, design pedagogy, extended reality, AI-supported systems, and interaction design."
     },
 
     {
-      "id": "soft-interfaces",
-      "label": "Soft Interfaces",
+      "id": "hci-interaction-design",
+      "label": "HCI and Interaction Design",
+      "shortLabel": "HCI",
       "type": "theme",
-      "description": "Designing flexible, deformable, and material-driven interfaces for embodied interaction."
+      "description": "Human-computer interaction, user experience, and interaction design research."
+    },
+    {
+      "id": "soft-interfaces",
+      "label": "Soft and Deformable Interfaces",
+      "shortLabel": "Soft Interfaces",
+      "type": "theme",
+      "description": "Flexible, deformable, material-driven, and embodied interfaces."
     },
     {
       "id": "smart-textiles",
       "label": "Smart Textiles",
+      "shortLabel": "Smart Textiles",
       "type": "theme",
-      "description": "Textile-based interaction systems using sensing, embroidery, knitting, conductive yarns, and soft material structures."
+      "description": "Textile-based interaction systems using sensing, embroidery, knitting, conductive yarns, and material structures."
     },
     {
       "id": "inductive-sensing",
       "label": "Inductive Sensing",
+      "shortLabel": "Inductive Sensing",
       "type": "theme",
-      "description": "Exploring inductive sensing for deformation-aware, soft, and 3D-printed interactive structures."
+      "description": "Inductive sensing for deformation-aware, soft, and 3D-printed interactive structures."
     },
     {
       "id": "3d-printed-sensors",
       "label": "3D-Printed Sensors",
+      "shortLabel": "3D Sensors",
       "type": "theme",
-      "description": "Using 3D printing, lattice structures, and functional materials to create sensor-enabled interactive objects."
-    },
-    {
-      "id": "surface-gestures",
-      "label": "Surface Gestures",
-      "type": "theme",
-      "description": "Investigating touch, gesture, and surface-based interaction on textile and deformable interfaces."
+      "description": "3D printing, lattice structures, functional materials, and sensor-enabled interactive objects."
     },
     {
       "id": "automotive-hci",
       "label": "Automotive HCI",
+      "shortLabel": "Automotive HCI",
       "type": "theme",
-      "description": "Designing novel in-car interaction systems and interfaces for improved user experience."
-    },
-    {
-      "id": "tangible-interaction",
-      "label": "Tangible Interaction",
-      "type": "theme",
-      "description": "Creating physical, material, and embodied interfaces that support richer forms of interaction."
+      "description": "In-car interaction systems and interfaces for improved user experience."
     },
     {
       "id": "design-pedagogy",
       "label": "Design Pedagogy",
+      "shortLabel": "Design Pedagogy",
       "type": "theme",
-      "description": "Research on design learning, creativity, design thinking, and pedagogical tools."
+      "description": "Design learning, creativity, design thinking, and pedagogical tools."
     },
     {
       "id": "xr-virtual-environments",
       "label": "XR and Virtual Environments",
+      "shortLabel": "XR / VR",
       "type": "theme",
-      "description": "Exploring immersive and virtual environments for design, interaction, accessibility, and learning."
+      "description": "Immersive and virtual environments for design, interaction, accessibility, and learning."
+    },
+    {
+      "id": "ai-ml-systems",
+      "label": "AI and ML Systems",
+      "shortLabel": "AI / ML",
+      "type": "theme",
+      "description": "AI, machine learning, intelligent systems, and multimodal computational systems."
+    },
+    {
+      "id": "sustainable-social-design",
+      "label": "Sustainable and Social Design",
+      "shortLabel": "Social Design",
+      "type": "theme",
+      "description": "Design and technology for sustainability, community systems, indigenous knowledge, and social impact."
     },
 
     {
       "id": "paper-insense3d",
       "label": "InSense3D: Designing Smart 3D-Printed Structures Leveraging Ferromagnetic Filaments for Inductive Deformation Sensing",
+      "shortLabel": "InSense3D",
       "type": "paper",
       "year": "2026",
       "venue": "ACM CHI",
-      "description": "A design and sensing approach for creating smart 3D-printed structures using ferromagnetic filaments and inductive deformation sensing."
+      "description": "Smart 3D-printed structures using ferromagnetic filaments and inductive deformation sensing."
     },
     {
       "id": "paper-inductive-pressure",
       "label": "Inductive Pressure Sensors Using 3D-Printed Structures With Tunable Stiffness",
+      "shortLabel": "Inductive Pressure Sensors",
       "type": "paper",
       "year": "2025",
       "venue": "IEEE Sensors Letters",
-      "description": "A sensing approach using 3D-printed structures with tunable stiffness for pressure-sensitive interaction."
+      "description": "3D-printed structures with tunable stiffness for pressure-sensitive interaction."
     },
     {
       "id": "paper-flexible-compressible",
       "label": "Flexible and Compressible 3D-Printed Hybrid Structures Using Magnetically Detectable PETG for Inductive Sensing",
+      "shortLabel": "MDT PETG Structures",
       "type": "paper",
       "year": "2025",
       "venue": "IEEE FLEPS",
-      "description": "A study on flexible and compressible 3D-printed hybrid structures using magnetically detectable thermoplastic materials for inductive sensing."
+      "description": "Flexible and compressible 3D-printed hybrid structures using magnetically detectable thermoplastic materials."
     },
     {
       "id": "paper-3d-console",
       "label": "Interaction with a 3D Surface for an Innovative Input Experience on a Central Console",
+      "shortLabel": "3D Central Console",
       "type": "paper",
       "year": "2024",
       "venue": "AutomotiveUI",
       "url": "https://dl.acm.org/doi/10.1145/3640792.3675707",
-      "description": "A study on interaction with a three-dimensional surface for automotive central console input."
+      "description": "Interaction with a three-dimensional surface for automotive central console input."
     },
     {
-      "id": "paper-design-thinking-game",
-      "label": "A Gamified Model of Design Thinking for Fostering Learning in Children",
+      "id": "paper-toda-dwellings",
+      "label": "Smart vernacular architecture: a framework for assessment and virtual reality-based visualisation of indigenous Toda dwellings",
+      "shortLabel": "Toda Dwellings VR",
       "type": "paper",
-      "year": "2019",
+      "year": "2023",
+      "venue": "Procedia Computer Science",
+      "url": "https://www.sciencedirect.com/science/article/pii/S1877050923000479",
+      "description": "A framework for assessing and visualising indigenous Toda dwellings using virtual reality."
+    },
+    {
+      "id": "paper-ai-sketch-tool",
+      "label": "An AI-based pedagogical tool for creating sketched representation of emotive product forms in the conceptual design stages",
+      "shortLabel": "AI Sketch Tool",
+      "type": "paper",
+      "year": "2020",
       "venue": "Springer",
-      "description": "A gamified design-thinking model for supporting learning and creativity among children."
+      "url": "https://link.springer.com/chapter/10.1007/978-981-15-8289-9_63",
+      "description": "An AI-based pedagogical tool for supporting sketched representation of emotive product forms."
+    },
+    {
+      "id": "paper-pandemic-urban",
+      "label": "An Intelligent ABM-based framework for developing pandemic-resilient urban spaces in post-COVID smart cities",
+      "shortLabel": "Pandemic Urban Spaces",
+      "type": "paper",
+      "year": "2023",
+      "venue": "Procedia Computer Science",
+      "url": "https://www.sciencedirect.com/science/article/pii/S1877050923002053",
+      "description": "An agent-based intelligent framework for pandemic-resilient urban spaces."
     },
     {
       "id": "paper-virtual-designers",
       "label": "An Intelligent Virtual Environment for Designers with Reduced Motor Abilities",
+      "shortLabel": "Virtual Environment",
       "type": "paper",
       "year": "2023",
       "venue": "Procedia Computer Science",
+      "url": "https://www.sciencedirect.com/science/article/pii/S1877050923000315",
       "description": "A virtual environment intended to support designers with reduced motor abilities."
+    },
+    {
+      "id": "paper-water-purification",
+      "label": "An Inclusive Community Based Water Purification and Monitoring System for the Base of the Pyramid",
+      "shortLabel": "Water Purification",
+      "type": "paper",
+      "year": "2020",
+      "venue": "IEEE",
+      "url": "https://ieeexplore.ieee.org/abstract/document/9033102",
+      "description": "A community-based water purification and monitoring system for base-of-the-pyramid contexts."
+    },
+    {
+      "id": "paper-covid-diagnosis",
+      "label": "A deep-learning based multimodal system for Covid-19 diagnosis using breathing sounds and chest X-ray images",
+      "shortLabel": "COVID-19 Multimodal AI",
+      "type": "paper",
+      "year": "2021",
+      "venue": "Applied Soft Computing",
+      "url": "https://www.sciencedirect.com/science/article/pii/S1568494621004452",
+      "description": "A deep-learning based multimodal system using breathing sounds and chest X-ray images."
+    },
+    {
+      "id": "paper-design-thinking-game",
+      "label": "A Gamified Model of Design Thinking for Fostering Learning in Children",
+      "shortLabel": "Design Thinking Game",
+      "type": "paper",
+      "year": "2019",
+      "venue": "Springer",
+      "url": "https://link.springer.com/chapter/10.1007/978-981-13-5977-4_85",
+      "description": "A gamified design-thinking model for supporting learning and creativity among children."
     }
   ],
 
   "links": [
-    {
-      "source": "rahul-research",
-      "target": "soft-interfaces"
-    },
-    {
-      "source": "rahul-research",
-      "target": "smart-textiles"
-    },
-    {
-      "source": "rahul-research",
-      "target": "inductive-sensing"
-    },
-    {
-      "source": "rahul-research",
-      "target": "3d-printed-sensors"
-    },
-    {
-      "source": "rahul-research",
-      "target": "surface-gestures"
-    },
-    {
-      "source": "rahul-research",
-      "target": "automotive-hci"
-    },
-    {
-      "source": "rahul-research",
-      "target": "tangible-interaction"
-    },
-    {
-      "source": "rahul-research",
-      "target": "design-pedagogy"
-    },
-    {
-      "source": "rahul-research",
-      "target": "xr-virtual-environments"
-    },
+    { "source": "rahul-research", "target": "hci-interaction-design", "strength": 2 },
+    { "source": "rahul-research", "target": "soft-interfaces", "strength": 2 },
+    { "source": "rahul-research", "target": "smart-textiles", "strength": 2 },
+    { "source": "rahul-research", "target": "inductive-sensing", "strength": 2 },
+    { "source": "rahul-research", "target": "3d-printed-sensors", "strength": 2 },
+    { "source": "rahul-research", "target": "automotive-hci", "strength": 2 },
+    { "source": "rahul-research", "target": "design-pedagogy", "strength": 2 },
+    { "source": "rahul-research", "target": "xr-virtual-environments", "strength": 2 },
+    { "source": "rahul-research", "target": "ai-ml-systems", "strength": 2 },
+    { "source": "rahul-research", "target": "sustainable-social-design", "strength": 2 },
 
-    {
-      "source": "paper-insense3d",
-      "target": "inductive-sensing"
-    },
-    {
-      "source": "paper-insense3d",
-      "target": "3d-printed-sensors"
-    },
-    {
-      "source": "paper-insense3d",
-      "target": "soft-interfaces"
-    },
-    {
-      "source": "paper-insense3d",
-      "target": "tangible-interaction"
-    },
+    { "source": "paper-insense3d", "target": "inductive-sensing", "strength": 1.5 },
+    { "source": "paper-insense3d", "target": "3d-printed-sensors", "strength": 1.5 },
+    { "source": "paper-insense3d", "target": "soft-interfaces", "strength": 1.5 },
+    { "source": "paper-insense3d", "target": "hci-interaction-design", "strength": 1 },
 
-    {
-      "source": "paper-inductive-pressure",
-      "target": "inductive-sensing"
-    },
-    {
-      "source": "paper-inductive-pressure",
-      "target": "3d-printed-sensors"
-    },
-    {
-      "source": "paper-inductive-pressure",
-      "target": "soft-interfaces"
-    },
+    { "source": "paper-inductive-pressure", "target": "inductive-sensing", "strength": 1.5 },
+    { "source": "paper-inductive-pressure", "target": "3d-printed-sensors", "strength": 1.5 },
+    { "source": "paper-inductive-pressure", "target": "soft-interfaces", "strength": 1.5 },
 
-    {
-      "source": "paper-flexible-compressible",
-      "target": "inductive-sensing"
-    },
-    {
-      "source": "paper-flexible-compressible",
-      "target": "3d-printed-sensors"
-    },
-    {
-      "source": "paper-flexible-compressible",
-      "target": "soft-interfaces"
-    },
+    { "source": "paper-flexible-compressible", "target": "inductive-sensing", "strength": 1.5 },
+    { "source": "paper-flexible-compressible", "target": "3d-printed-sensors", "strength": 1.5 },
+    { "source": "paper-flexible-compressible", "target": "soft-interfaces", "strength": 1.5 },
 
-    {
-      "source": "paper-3d-console",
-      "target": "automotive-hci"
-    },
-    {
-      "source": "paper-3d-console",
-      "target": "surface-gestures"
-    },
-    {
-      "source": "paper-3d-console",
-      "target": "soft-interfaces"
-    },
-    {
-      "source": "paper-3d-console",
-      "target": "tangible-interaction"
-    },
+    { "source": "paper-3d-console", "target": "automotive-hci", "strength": 1.5 },
+    { "source": "paper-3d-console", "target": "soft-interfaces", "strength": 1 },
+    { "source": "paper-3d-console", "target": "hci-interaction-design", "strength": 1.5 },
 
-    {
-      "source": "paper-design-thinking-game",
-      "target": "design-pedagogy"
-    },
+    { "source": "paper-toda-dwellings", "target": "xr-virtual-environments", "strength": 1.2 },
+    { "source": "paper-toda-dwellings", "target": "sustainable-social-design", "strength": 1.2 },
+    { "source": "paper-toda-dwellings", "target": "hci-interaction-design", "strength": 1 },
 
-    {
-      "source": "paper-virtual-designers",
-      "target": "xr-virtual-environments"
-    },
-    {
-      "source": "paper-virtual-designers",
-      "target": "design-pedagogy"
-    },
-    {
-      "source": "paper-virtual-designers",
-      "target": "tangible-interaction"
-    }
+    { "source": "paper-ai-sketch-tool", "target": "ai-ml-systems", "strength": 1.4 },
+    { "source": "paper-ai-sketch-tool", "target": "design-pedagogy", "strength": 1.4 },
+    { "source": "paper-ai-sketch-tool", "target": "hci-interaction-design", "strength": 1 },
+
+    { "source": "paper-pandemic-urban", "target": "ai-ml-systems", "strength": 1.2 },
+    { "source": "paper-pandemic-urban", "target": "sustainable-social-design", "strength": 1.2 },
+
+    { "source": "paper-virtual-designers", "target": "xr-virtual-environments", "strength": 1.5 },
+    { "source": "paper-virtual-designers", "target": "design-pedagogy", "strength": 1 },
+    { "source": "paper-virtual-designers", "target": "hci-interaction-design", "strength": 1.2 },
+
+    { "source": "paper-water-purification", "target": "sustainable-social-design", "strength": 1.5 },
+    { "source": "paper-water-purification", "target": "hci-interaction-design", "strength": 1 },
+
+    { "source": "paper-covid-diagnosis", "target": "ai-ml-systems", "strength": 1.5 },
+
+    { "source": "paper-design-thinking-game", "target": "design-pedagogy", "strength": 1.5 },
+    { "source": "paper-design-thinking-game", "target": "hci-interaction-design", "strength": 1 }
   ]
 }
