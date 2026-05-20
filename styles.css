@@ -1,17 +1,28 @@
 /* General Styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f2f2f2; /* Light Gray Background */
-  color: #333; /* Dark Gray Text */
+  background-color: #f2f2f2;
+  color: #333;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
+/* Header */
 header {
-  background-color: #2c2c2c; /* Dark Gray Header */
-  color: #ffffff; /* White Text */
-  padding: 2rem 0;
+  background-color: #2c2c2c;
+  color: #ffffff;
+  padding: 2rem 1rem;
   text-align: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -22,30 +33,29 @@ header h1 {
   font-size: 2.5rem;
 }
 
-/* Navigation Styles */
+/* Navigation */
 nav ul {
   list-style-type: none;
-  background-color: #2c2c2c; /* Match Navigation with Header */
+  background-color: #2c2c2c;
   margin: 0;
   padding: 1rem;
   text-align: center;
 }
 
 nav ul li {
-  display: inline;
-  margin-right: 15px;
+  display: inline-block;
+  margin: 0.25rem 0.4rem;
 }
 
 nav ul li a {
   color: white;
-  text-decoration: underline; /* Underline the links by default */
+  text-decoration: underline;
   font-weight: 700;
-  padding: 0.5rem 1rem;
-  transition: text-decoration 0.3s ease; /* Smooth transition for underline effect */
+  padding: 0.5rem 0.75rem;
 }
 
 nav ul li a:hover {
-  text-decoration: none; /* Remove underline on hover */
+  text-decoration: none;
 }
 
 /* Section Styles */
@@ -53,13 +63,14 @@ section {
   padding: 3rem 1.5rem;
   margin: 1rem auto;
   max-width: 800px;
-  background-color: #ffffff; /* White Background */
+  background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
-h2, h3 {
-  color: #2c2c2c; /* Dark Gray Headings */
+h2,
+h3 {
+  color: #2c2c2c;
   font-weight: 700;
   margin-bottom: 1rem;
 }
@@ -81,49 +92,48 @@ ul li {
   margin-bottom: 0.75rem;
 }
 
-/* Add underline to publication links */
 ul li a {
-  color: #2c2c2c; /* Dark Gray Links */
-  text-decoration: underline; /* Underline to indicate clickable */
+  color: #2c2c2c;
+  text-decoration: underline;
 }
 
 ul li a:hover {
-  text-decoration: underline; /* Keep underline on hover */
+  text-decoration: underline;
 }
 
-/* Style for the project image */
+/* Project Image */
 .project-image {
-  width: 100%; /* Full width of the container */
-  overflow: hidden; /* Ensure the image doesn't overflow */
-  margin-bottom: 1rem; /* Space between image and content */
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 1rem;
 }
 
 .project-image img {
-  width: 100%; /* Image fills the container */
-  height: auto; /* Maintain aspect ratio */
-  display: block; /* Remove space below the image */
+  width: 100%;
+  height: auto;
+  display: block;
 }
-/* Center the video in the project overview */
+
+/* Video */
 section video {
-  display: block; /* Center the video */
-  margin: 1rem auto; /* Add some margin around the video */
-  border: 2px solid #2c2c2c; /* Optional: add border for styling */
-  border-radius: 10px; /* Optional: rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: shadow effect */
+  display: block;
+  max-width: 100%;
+  margin: 1rem auto;
+  border: 2px solid #2c2c2c;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.no-bullet {
+  margin-top: 0.5rem;
+}
 
-/* Footer Styles */
-footer {
-  background-color: #2c2c2c; /* Dark Gray Footer */
-  color: white;
-  text-align: center;
-  padding: 1rem;
-  margin-top: 2rem;
-  box-shadow: 
+/* Research Graph Section */
 .research-map-section {
-  max-width: 1200px;
-  padding: 3rem 1.5rem;
+  width: calc(100% - 2rem);
+  max-width: 1100px;
+  padding: 3rem 1.25rem;
+  overflow: hidden;
 }
 
 .section-heading {
@@ -137,37 +147,52 @@ footer {
   letter-spacing: 0.14em;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #9a6b3f;
+  color: #8a5a2b;
   margin-bottom: 0.5rem;
 }
 
 .research-map-layout {
+  width: 100%;
   display: grid;
-  grid-template-columns: minmax(0, 2.2fr) minmax(280px, 0.8fr);
-  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 1.25rem;
   align-items: stretch;
+  overflow: hidden;
 }
 
 #researchGraph {
   width: 100%;
-  min-height: 620px;
-  border-radius: 22px;
+  height: 560px;
+  min-width: 0;
+  max-width: 100%;
+  border-radius: 18px;
   overflow: hidden;
   background: radial-gradient(circle at top, #fffaf2 0%, #f7f4ef 45%, #ece7df 100%);
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+#researchGraph canvas {
+  display: block;
+  max-width: 100%;
 }
 
 .research-info-panel {
-  background: #ffffff;
-  border-radius: 22px;
-  padding: 1.5rem;
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  min-width: 0;
+  background: #fffdf9;
+  border-radius: 18px;
+  padding: 1.25rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
 }
 
 .research-info-panel h3 {
   margin-top: 0.4rem;
   line-height: 1.25;
+  font-size: 1.1rem;
+}
+
+.research-info-panel p {
+  font-size: 0.95rem;
 }
 
 .panel-label {
@@ -175,7 +200,7 @@ footer {
   letter-spacing: 0.12em;
   font-size: 0.72rem;
   font-weight: 700;
-  color: #9a6b3f;
+  color: #8a5a2b;
 }
 
 .paper-link {
@@ -187,18 +212,54 @@ footer {
   color: #ffffff !important;
   text-decoration: none;
   font-weight: 700;
+  font-size: 0.9rem;
 }
 
 .paper-link:hover {
-  background: #9a6b3f;
+  background: #8a5a2b;
 }
 
-@media (max-width: 850px) {
+.graph-error {
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Footer */
+footer {
+  background-color: #2c2c2c;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
   .research-map-layout {
     grid-template-columns: 1fr;
   }
 
   #researchGraph {
-    min-height: 480px;
+    height: 500px;
+  }
+}
+
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 1.75rem;
+  }
+
+  section {
+    width: calc(100% - 1rem);
+    padding: 2rem 1rem;
+  }
+
+  .research-map-section {
+    width: calc(100% - 1rem);
+  }
+
+  #researchGraph {
+    height: 460px;
   }
 }
