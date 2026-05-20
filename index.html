@@ -29,10 +29,29 @@
     <p>I am a designer and researcher exploring design thinking, human-computer interaction (HCI), extended reality (XR), design pedagogy, and design for learning.</p>
   </section>
 
-  <section id="research">
-    <h2>Research</h2>
-    <p>I am currently focusing on the design and development of novel in-car interfaces for improved user experience. My work centers around textile-based interfaces, with a specific focus on creating a 3-dimensional, touch-sensitive middle console for cars.</p>
-  </section>
+ <section id="research" class="research-map-section">
+  <div class="section-heading">
+    <p class="eyebrow">Research Constellation</p>
+    <h2>Interactive Map of My Research Themes</h2>
+    <p>
+      This interactive graph visualizes my research through connected themes, methods,
+      materials, applications, and publications. The map is manually curated from my
+      publication record and Google Scholar profile.
+    </p>
+  </div>
+
+  <div class="research-map-layout">
+    <div id="researchGraph"></div>
+
+    <aside id="researchInfoPanel" class="research-info-panel">
+      <p class="panel-label">Selected node</p>
+      <h3>Explore the graph</h3>
+      <p>
+        Click a theme or paper node to view its details and related research connections.
+      </p>
+    </aside>
+  </div>
+</section>
 
   <section id="experience">
     <h2>Experience</h2>
@@ -82,5 +101,7 @@
   <footer>
     <p>&copy; 2024 Rahul Bhaumik</p>
   </footer>
+  <script src="https://unpkg.com/3d-force-graph"></script>
+<script src="research-graph.js"></script>
 </body>
 </html>
