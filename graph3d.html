@@ -6,19 +6,22 @@
 
   <title>3D Research Constellation | Rahul Bhaumik</title>
 
-  <!-- p5.js library -->
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js"></script>
-
   <style>
     html,
     body {
       margin: 0;
       padding: 0;
-      overflow: hidden;
       width: 100%;
       height: 100%;
+      overflow: hidden;
       background: #000000;
       font-family: Arial, Helvetica, sans-serif;
+    }
+
+    #scene-container {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, #07111f 0%, #02040a 55%, #000000 100%);
     }
 
     canvas {
@@ -30,7 +33,7 @@
       top: 18px;
       left: 18px;
       right: 18px;
-      z-index: 10;
+      z-index: 20;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
@@ -84,7 +87,7 @@
       position: fixed;
       left: 18px;
       bottom: 18px;
-      z-index: 10;
+      z-index: 20;
       padding: 0.85rem 1rem;
       border-radius: 16px;
       background: rgba(5, 12, 24, 0.76);
@@ -119,25 +122,91 @@
       background: #d7ecff;
     }
 
-    #status {
+    #info-panel {
       position: fixed;
       right: 18px;
       bottom: 18px;
-      z-index: 10;
+      z-index: 20;
       width: min(390px, calc(100vw - 36px));
+      max-height: 46vh;
+      overflow-y: auto;
       padding: 1rem;
       border-radius: 16px;
-      background: rgba(5, 12, 24, 0.76);
+      background: rgba(5, 12, 24, 0.78);
       border: 1px solid rgba(255, 255, 255, 0.16);
-      color: rgba(255, 255, 255, 0.82);
-      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.84);
+      font-size: 0.86rem;
       line-height: 1.45;
       backdrop-filter: blur(12px);
     }
 
-    @media (max-width: 720px) {
+    #info-panel h2 {
+      margin: 0 0 0.55rem 0;
+      color: #ffffff;
+      font-size: 1rem;
+      line-height: 1.3;
+    }
+
+    #info-panel p {
+      margin: 0.35rem 0;
+    }
+
+    #info-panel a {
+      display: inline-block;
+      margin-top: 0.75rem;
+      color: #b9ddff;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+
+    .node-label {
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      text-shadow:
+        0 0 8px rgba(0, 0, 0, 1),
+        0 0 14px rgba(0, 0, 0, 0.9);
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .node-label.center {
+      font-size: 20px;
+      color: #ffffff;
+    }
+
+    .node-label.theme {
+      font-size: 14px;
+      color: #b9ddff;
+    }
+
+    .node-label.paper {
+      font-size: 10px;
+      color: #eaf6ff;
+      max-width: 160px;
+      white-space: normal;
+      line-height: 1.2;
+    }
+
+    .loading {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      z-index: 30;
+      transform: translate(-50%, -50%);
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 760px) {
       .top-bar {
         flex-direction: column;
+      }
+
+      .title-box {
+        max-width: calc(100vw - 36px);
       }
 
       .title-box h1 {
@@ -152,7 +221,7 @@
         display: none;
       }
 
-      #status {
+      #info-panel {
         left: 18px;
         right: 18px;
         width: auto;
@@ -162,10 +231,12 @@
 </head>
 
 <body>
+  <div id="scene-container"></div>
+
   <div class="top-bar">
     <div class="title-box">
       <h1>3D Research Constellation</h1>
-      <p>Drag to rotate, scroll to zoom, and explore the spatial map of research themes and publications.</p>
+      <p>Drag to rotate, scroll to zoom, and click nodes to explore publications and research themes.</p>
     </div>
 
     <a class="back-button" href="index.html#research">Back to main website</a>
@@ -177,229 +248,367 @@
     <div><span class="dot dot-paper"></span>Publication</div>
   </div>
 
-  <div id="status">Loading research constellation...</div>
+  <aside id="info-panel">
+    <h2>Explore the 3D graph</h2>
+    <p>Click any node to view details. Theme nodes connect research areas, and paper nodes show related publications.</p>
+  </aside>
 
-  <script>
-    let graphData;
-    let nodes = [];
-    let links = [];
-    let nodeMap = {};
-    let graphReady = false;
+  <div id="loading" class="loading">Loading research constellation...</div>
 
-    function preload() {
-      graphData = loadJSON(
-        "data/researchGraph.json",
-        function () {
-          console.log("Research graph JSON loaded.");
-        },
-        function () {
-          document.getElementById("status").innerHTML =
-            "Could not load data/researchGraph.json. Check the file path and JSON validity.";
-        }
+  <script type="module">
+    import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js";
+    import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js";
+    import { CSS2DRenderer, CSS2DObject } from "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/renderers/CSS2DRenderer.js";
+
+    const container = document.getElementById("scene-container");
+    const infoPanel = document.getElementById("info-panel");
+    const loading = document.getElementById("loading");
+
+    let scene;
+    let camera;
+    let renderer;
+    let labelRenderer;
+    let controls;
+    let raycaster;
+    let mouse;
+
+    const clickableNodes = [];
+    const nodeObjects = {};
+    const nodeDataMap = {};
+
+    init();
+
+    async function init() {
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x000000);
+      scene.fog = new THREE.FogExp2(0x000000, 0.0014);
+
+      camera = new THREE.PerspectiveCamera(
+        60,
+        window.innerWidth / window.innerHeight,
+        1,
+        4000
       );
-    }
+      camera.position.set(0, 120, 720);
 
-    function setup() {
-      createCanvas(windowWidth, windowHeight, WEBGL);
-      textFont("Arial");
-      textAlign(CENTER, CENTER);
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true
+      });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      container.appendChild(renderer.domElement);
 
-      if (!graphData || !graphData.nodes || !graphData.links) {
-        document.getElementById("status").innerHTML =
-          "Graph data was not found or is invalid.";
-        return;
+      labelRenderer = new CSS2DRenderer();
+      labelRenderer.setSize(window.innerWidth, window.innerHeight);
+      labelRenderer.domElement.style.position = "fixed";
+      labelRenderer.domElement.style.top = "0";
+      labelRenderer.domElement.style.left = "0";
+      labelRenderer.domElement.style.pointerEvents = "none";
+      container.appendChild(labelRenderer.domElement);
+
+      controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.06;
+      controls.rotateSpeed = 0.55;
+      controls.zoomSpeed = 0.7;
+      controls.minDistance = 180;
+      controls.maxDistance = 1600;
+
+      raycaster = new THREE.Raycaster();
+      mouse = new THREE.Vector2();
+
+      addLights();
+      addStars();
+
+      try {
+        const response = await fetch("data/researchGraph.json");
+        if (!response.ok) {
+          throw new Error("Could not load data/researchGraph.json");
+        }
+
+        const graphData = await response.json();
+        buildGraph(graphData);
+        loading.style.display = "none";
+      } catch (error) {
+        loading.textContent = "Graph could not be loaded. Check researchGraph.json.";
+        console.error(error);
       }
 
-      buildGraphLayout();
+      window.addEventListener("resize", onWindowResize);
+      renderer.domElement.addEventListener("click", onCanvasClick);
+      renderer.domElement.addEventListener("mousemove", onCanvasMove);
 
-      const publicationCount = nodes.filter(n => n.type === "paper").length;
-      const themeCount = nodes.filter(n => n.type === "theme").length;
-
-      document.getElementById("status").innerHTML =
-        publicationCount +
-        " publications · " +
-        themeCount +
-        " research themes<br>Drag to rotate. Scroll to zoom.";
-
-      graphReady = true;
+      animate();
     }
 
-    function draw() {
-      background(0);
+    function addLights() {
+      const ambient = new THREE.AmbientLight(0xffffff, 0.55);
+      scene.add(ambient);
 
-      drawBackgroundGlow();
+      const keyLight = new THREE.DirectionalLight(0xb9ddff, 1.1);
+      keyLight.position.set(320, 420, 540);
+      scene.add(keyLight);
 
-      ambientLight(130);
-      directionalLight(180, 220, 255, -0.4, -0.6, -1);
-      pointLight(120, 190, 255, 0, 0, 500);
-
-      orbitControl(1.2, 1.2, 0.15);
-
-      if (!graphReady) return;
-
-      drawStarField();
-      drawLinks();
-      drawNodes();
+      const fillLight = new THREE.PointLight(0x6bbcff, 2.0, 1200);
+      fillLight.position.set(-260, -120, 360);
+      scene.add(fillLight);
     }
 
-    function buildGraphLayout() {
-      nodes = graphData.nodes.map(n => Object.assign({}, n));
-      links = graphData.links.map(l => Object.assign({}, l));
+    function addStars() {
+      const starGeometry = new THREE.BufferGeometry();
+      const starCount = 900;
+      const positions = [];
 
-      nodeMap = {};
+      for (let i = 0; i < starCount; i++) {
+        positions.push(
+          THREE.MathUtils.randFloatSpread(2200),
+          THREE.MathUtils.randFloatSpread(1400),
+          THREE.MathUtils.randFloatSpread(2200)
+        );
+      }
 
-      nodes.forEach(n => {
-        nodeMap[n.id] = n;
+      starGeometry.setAttribute(
+        "position",
+        new THREE.Float32BufferAttribute(positions, 3)
+      );
+
+      const starMaterial = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 1.25,
+        transparent: true,
+        opacity: 0.42,
+        depthWrite: false
       });
 
-      const centerNode = nodeMap["rahul-research"];
+      const stars = new THREE.Points(starGeometry, starMaterial);
+      scene.add(stars);
+    }
 
-      if (centerNode) {
-        centerNode.x = 0;
-        centerNode.y = 0;
-        centerNode.z = 0;
+    function buildGraph(graphData) {
+      const nodes = graphData.nodes.map(node => ({ ...node }));
+      const links = graphData.links.map(link => ({ ...link }));
+
+      nodes.forEach(node => {
+        nodeDataMap[node.id] = node;
+      });
+
+      computeNodePositions(nodes, links);
+
+      nodes.forEach(node => {
+        createNode(node);
+      });
+
+      links.forEach(link => {
+        const source = nodeDataMap[link.source];
+        const target = nodeDataMap[link.target];
+
+        if (!source || !target) return;
+
+        createLink(source, target, link);
+      });
+
+      updateInfoPanel({
+        label: "3D Research Constellation",
+        type: "map",
+        description:
+          `${nodes.filter(n => n.type === "paper").length} publications and ` +
+          `${nodes.filter(n => n.type === "theme").length} research themes are shown. Click a node to explore details.`
+      });
+    }
+
+    function computeNodePositions(nodes, links) {
+      const center = nodes.find(n => n.id === "rahul-research");
+
+      if (center) {
+        center.position = new THREE.Vector3(0, 0, 0);
       }
 
       const themes = nodes.filter(n => n.type === "theme");
       const papers = nodes.filter(n => n.type === "paper");
 
-      const themeRadius = 230;
+      const themeRadius = 260;
 
-      themes.forEach((theme, i) => {
-        const theta = TWO_PI * i / themes.length;
-        const phi = acos(1 - 2 * (i + 0.5) / themes.length);
+      themes.forEach((theme, index) => {
+        const theta = 2 * Math.PI * index / themes.length;
+        const phi = Math.acos(1 - 2 * (index + 0.5) / themes.length);
 
-        theme.x = themeRadius * sin(phi) * cos(theta);
-        theme.y = themeRadius * sin(phi) * sin(theta);
-        theme.z = themeRadius * cos(phi);
+        theme.position = new THREE.Vector3(
+          themeRadius * Math.sin(phi) * Math.cos(theta),
+          themeRadius * Math.sin(phi) * Math.sin(theta),
+          themeRadius * Math.cos(phi)
+        );
       });
 
-      papers.forEach((paper, i) => {
+      papers.forEach((paper, index) => {
         const connectedThemeIds = links
-          .filter(l => l.source === paper.id || l.target === paper.id)
-          .map(l => l.source === paper.id ? l.target : l.source)
-          .filter(id => nodeMap[id] && nodeMap[id].type === "theme");
+          .filter(link => link.source === paper.id || link.target === paper.id)
+          .map(link => link.source === paper.id ? link.target : link.source)
+          .filter(id => nodeDataMap[id] && nodeDataMap[id].type === "theme");
 
-        let baseX = 0;
-        let baseY = 0;
-        let baseZ = 0;
+        let base = new THREE.Vector3(0, 0, 0);
 
         if (connectedThemeIds.length > 0) {
           connectedThemeIds.forEach(id => {
-            baseX += nodeMap[id].x;
-            baseY += nodeMap[id].y;
-            baseZ += nodeMap[id].z;
+            base.add(nodeDataMap[id].position);
           });
 
-          baseX /= connectedThemeIds.length;
-          baseY /= connectedThemeIds.length;
-          baseZ /= connectedThemeIds.length;
+          base.divideScalar(connectedThemeIds.length);
         }
 
+        const theta = 2 * Math.PI * index / papers.length;
         const spread = 95;
-        const theta = TWO_PI * i / papers.length;
-        const vertical = map(i % 7, 0, 6, -80, 80);
+        const vertical = ((index % 7) - 3) * 26;
 
-        paper.x = baseX * 1.35 + cos(theta) * spread;
-        paper.y = baseY * 1.35 + sin(theta) * spread;
-        paper.z = baseZ * 1.35 + vertical;
+        paper.position = new THREE.Vector3(
+          base.x * 1.35 + Math.cos(theta) * spread,
+          base.y * 1.35 + Math.sin(theta) * spread,
+          base.z * 1.35 + vertical
+        );
       });
     }
 
-    function drawBackgroundGlow() {
-      push();
-      noStroke();
+    function createNode(node) {
+      const radius =
+        node.type === "center"
+          ? 18
+          : node.type === "theme"
+          ? 12
+          : 7;
 
-      translate(0, 0, -650);
+      const color =
+        node.type === "center"
+          ? 0xffffff
+          : node.type === "theme"
+          ? 0x8fd3ff
+          : 0xd7ecff;
 
-      fill(10, 25, 48, 110);
-      sphere(420, 32, 24);
+      const geometry = new THREE.SphereGeometry(radius, 32, 20);
 
-      fill(0, 0, 0, 180);
-      sphere(700, 32, 24);
-
-      pop();
-    }
-
-    function drawLinks() {
-      strokeWeight(1);
-      stroke(150, 205, 255, 95);
-
-      links.forEach(link => {
-        const source = nodeMap[link.source];
-        const target = nodeMap[link.target];
-
-        if (!source || !target) return;
-
-        line(source.x, source.y, source.z, target.x, target.y, target.z);
+      const material = new THREE.MeshStandardMaterial({
+        color,
+        emissive: color,
+        emissiveIntensity: node.type === "center" ? 0.45 : 0.22,
+        roughness: 0.28,
+        metalness: 0.18
       });
+
+      const sphere = new THREE.Mesh(geometry, material);
+      sphere.position.copy(node.position);
+      sphere.userData = node;
+
+      scene.add(sphere);
+      clickableNodes.push(sphere);
+      nodeObjects[node.id] = sphere;
+
+      const label = createLabel(node);
+      label.position.set(0, radius + 15, 0);
+      sphere.add(label);
     }
 
-    function drawNodes() {
-      nodes.forEach(node => {
-        push();
-        translate(node.x, node.y, node.z);
+    function createLabel(node) {
+      const labelDiv = document.createElement("div");
+      labelDiv.className = `node-label ${node.type || ""}`;
+      labelDiv.textContent = node.shortLabel || node.label;
 
-        noStroke();
+      return new CSS2DObject(labelDiv);
+    }
 
-        if (node.type === "center") {
-          fill(255);
-          sphere(17, 24, 16);
-        } else if (node.type === "theme") {
-          fill(143, 211, 255);
-          sphere(11, 20, 12);
-        } else {
-          fill(215, 236, 255);
-          sphere(7, 16, 10);
-        }
+    function createLink(source, target, link) {
+      const geometry = new THREE.BufferGeometry().setFromPoints([
+        source.position,
+        target.position
+      ]);
 
-        pop();
-
-        drawLabel(node);
+      const material = new THREE.LineBasicMaterial({
+        color: 0x8fcaff,
+        transparent: true,
+        opacity: link.strength ? Math.min(0.18 + link.strength * 0.09, 0.42) : 0.22
       });
+
+      const line = new THREE.Line(geometry, material);
+      scene.add(line);
     }
 
-    function drawLabel(node) {
-      push();
+    function onCanvasClick(event) {
+      const rect = renderer.domElement.getBoundingClientRect();
 
-      translate(node.x, node.y - 25, node.z);
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
-      noStroke();
+      raycaster.setFromCamera(mouse, camera);
 
-      if (node.type === "center") {
-        fill(255);
-        textSize(18);
-      } else if (node.type === "theme") {
-        fill(180, 225, 255);
-        textSize(13);
-      } else {
-        fill(235, 246, 255);
-        textSize(9);
+      const intersections = raycaster.intersectObjects(clickableNodes, false);
+
+      if (intersections.length > 0) {
+        const selectedObject = intersections[0].object;
+        const node = selectedObject.userData;
+
+        updateInfoPanel(node);
+        focusCameraOnNode(selectedObject);
+      }
+    }
+
+    function onCanvasMove(event) {
+      const rect = renderer.domElement.getBoundingClientRect();
+
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+
+      const intersections = raycaster.intersectObjects(clickableNodes, false);
+
+      renderer.domElement.style.cursor = intersections.length > 0 ? "pointer" : "grab";
+    }
+
+    function updateInfoPanel(node) {
+      const year = node.year ? `<p><strong>Year:</strong> ${node.year}</p>` : "";
+      const venue = node.venue ? `<p><strong>Venue:</strong> ${node.venue}</p>` : "";
+      const link = node.url
+        ? `<a href="${node.url}" target="_blank" rel="noopener noreferrer">Open publication</a>`
+        : "";
+
+      infoPanel.innerHTML = `
+        <h2>${node.label}</h2>
+        <p><strong>Type:</strong> ${node.type || "node"}</p>
+        ${year}
+        ${venue}
+        <p>${node.description || "No description added yet."}</p>
+        ${link}
+      `;
+    }
+
+    function focusCameraOnNode(object) {
+      const targetPosition = object.position.clone();
+      const direction = targetPosition.clone().normalize();
+
+      if (direction.length() === 0) {
+        direction.set(0, 0, 1);
       }
 
-      const label = node.shortLabel || node.label;
-      text(label, 0, 0);
+      const newCameraPosition = targetPosition.clone().add(direction.multiplyScalar(210));
 
-      pop();
+      camera.position.lerp(newCameraPosition, 0.45);
+      controls.target.copy(targetPosition);
+      controls.update();
     }
 
-    function drawStarField() {
-      push();
-      stroke(255, 55);
-      strokeWeight(1);
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
 
-      for (let i = 0; i < 120; i++) {
-        const x = sin(i * 12.9898) * 950;
-        const y = cos(i * 78.233) * 580;
-        const z = sin(i * 37.719) * 950;
-        point(x, y, z);
-      }
-
-      pop();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      labelRenderer.setSize(window.innerWidth, window.innerHeight);
     }
 
-    function windowResized() {
-      resizeCanvas(windowWidth, windowHeight);
+    function animate() {
+      requestAnimationFrame(animate);
+
+      controls.update();
+
+      renderer.render(scene, camera);
+      labelRenderer.render(scene, camera);
     }
   </script>
 </body>
