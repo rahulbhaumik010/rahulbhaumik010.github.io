@@ -6,6 +6,7 @@
 
   <title>3D Research Constellation | Rahul Bhaumik</title>
 
+  <!-- p5.js library -->
   <script src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js"></script>
 
   <style>
@@ -183,14 +184,15 @@
     let nodes = [];
     let links = [];
     let nodeMap = {};
-    let angle = 0;
     let graphReady = false;
 
     function preload() {
       graphData = loadJSON(
         "data/researchGraph.json",
-        () => {},
-        () => {
+        function () {
+          console.log("Research graph JSON loaded.");
+        },
+        function () {
           document.getElementById("status").innerHTML =
             "Could not load data/researchGraph.json. Check the file path and JSON validity.";
         }
@@ -210,11 +212,14 @@
 
       buildGraphLayout();
 
+      const publicationCount = nodes.filter(n => n.type === "paper").length;
+      const themeCount = nodes.filter(n => n.type === "theme").length;
+
       document.getElementById("status").innerHTML =
-        nodes.filter(n => n.type === "paper").length +
+        publicationCount +
         " publications · " +
-        nodes.filter(n => n.type === "theme").length +
-        " research themes<br>Use mouse drag to rotate and scroll to zoom.";
+        themeCount +
+        " research themes<br>Drag to rotate. Scroll to zoom.";
 
       graphReady = true;
     }
@@ -222,16 +227,15 @@
     function draw() {
       background(0);
 
-      ambientLight(120);
-      directionalLight(180, 210, 255, -0.4, -0.6, -1);
+      drawBackgroundGlow();
+
+      ambientLight(130);
+      directionalLight(180, 220, 255, -0.4, -0.6, -1);
       pointLight(120, 190, 255, 0, 0, 500);
 
       orbitControl(1.2, 1.2, 0.15);
 
       if (!graphReady) return;
-
-      rotateY(angle);
-      angle += 0.0015;
 
       drawStarField();
       drawLinks();
@@ -243,11 +247,13 @@
       links = graphData.links.map(l => Object.assign({}, l));
 
       nodeMap = {};
+
       nodes.forEach(n => {
         nodeMap[n.id] = n;
       });
 
       const centerNode = nodeMap["rahul-research"];
+
       if (centerNode) {
         centerNode.x = 0;
         centerNode.y = 0;
@@ -258,6 +264,7 @@
       const papers = nodes.filter(n => n.type === "paper");
 
       const themeRadius = 230;
+
       themes.forEach((theme, i) => {
         const theta = TWO_PI * i / themes.length;
         const phi = acos(1 - 2 * (i + 0.5) / themes.length);
@@ -289,9 +296,9 @@
           baseZ /= connectedThemeIds.length;
         }
 
-        const spread = 85;
+        const spread = 95;
         const theta = TWO_PI * i / papers.length;
-        const vertical = map(i % 7, 0, 6, -70, 70);
+        const vertical = map(i % 7, 0, 6, -80, 80);
 
         paper.x = baseX * 1.35 + cos(theta) * spread;
         paper.y = baseY * 1.35 + sin(theta) * spread;
@@ -299,9 +306,24 @@
       });
     }
 
+    function drawBackgroundGlow() {
+      push();
+      noStroke();
+
+      translate(0, 0, -650);
+
+      fill(10, 25, 48, 110);
+      sphere(420, 32, 24);
+
+      fill(0, 0, 0, 180);
+      sphere(700, 32, 24);
+
+      pop();
+    }
+
     function drawLinks() {
       strokeWeight(1);
-      stroke(150, 205, 255, 90);
+      stroke(150, 205, 255, 95);
 
       links.forEach(link => {
         const source = nodeMap[link.source];
@@ -322,7 +344,7 @@
 
         if (node.type === "center") {
           fill(255);
-          sphere(16, 24, 16);
+          sphere(17, 24, 16);
         } else if (node.type === "theme") {
           fill(143, 211, 255);
           sphere(11, 20, 12);
@@ -339,9 +361,9 @@
 
     function drawLabel(node) {
       push();
-      translate(node.x, node.y - 24, node.z);
 
-      // Make text readable by drawing in 3D space.
+      translate(node.x, node.y - 25, node.z);
+
       noStroke();
 
       if (node.type === "center") {
@@ -363,13 +385,13 @@
 
     function drawStarField() {
       push();
-      stroke(255, 45);
+      stroke(255, 55);
       strokeWeight(1);
 
-      for (let i = 0; i < 90; i++) {
-        const x = sin(i * 12.9898) * 900;
-        const y = cos(i * 78.233) * 520;
-        const z = sin(i * 37.719) * 900;
+      for (let i = 0; i < 120; i++) {
+        const x = sin(i * 12.9898) * 950;
+        const y = cos(i * 78.233) * 580;
+        const z = sin(i * 37.719) * 950;
         point(x, y, z);
       }
 
