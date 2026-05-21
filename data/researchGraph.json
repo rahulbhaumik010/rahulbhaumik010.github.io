@@ -1,12 +1,12 @@
 {
   "nodes": [
     {
-      "id": "rahul-research",
-      "label": "Rahul Bhaumik Research",
-      "shortLabel": "Rahul Research",
-      "type": "center",
-      "description": "Research across human-computer interaction, soft interfaces, smart textiles, sensing, design pedagogy, AI-supported systems, XR, accessibility, healthcare, and socially responsive design."
-    },
+  "id": "rahul-research",
+  "label": "Me",
+  "shortLabel": "Me",
+  "type": "center",
+  "description": "A central node representing Rahul Bhaumik's research identity and its connections across themes, methods, materials, applications, and publications."
+},
 
     {
       "id": "hci-interaction-design",
