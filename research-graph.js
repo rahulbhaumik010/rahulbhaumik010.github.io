@@ -1,99 +1,154 @@
 const graphContainer = document.getElementById("researchGraph");
 const infoPanel = document.getElementById("researchInfoPanel");
 
-function getGraphSize() {
-  const width = graphContainer.clientWidth || 800;
-  const height = graphContainer.clientHeight || 560;
-  return { width, height };
-}
+if (graphContainer) {
+  fetch("data/researchGraph.json")
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Could not load researchGraph.json");
+      }
+      return response.json();
+    })
+    .then(data => {
+      const getWidth = () => graphContainer.clientWidth || 800;
+      const getHeight = () => graphContainer.clientHeight || 560;
 
-fetch("data/researchGraph.json")
-  .then(response => response.json())
-  .then(data => {
-    const { width, height } = getGraphSize();
+      const Graph = ForceGraph()(graphContainer)
+        .graphData(data)
+        .width(getWidth())
+        .height(getHeight())
+        .backgroundColor("#fbfaf7")
+        .nodeId("id")
+        .nodeVal(node => {
+          if (node.type === "center") return 18;
+          if (node.type === "theme") return 12;
+          return 7;
+        })
+        .nodeColor(node => {
+          if (node.type === "center") return "#2f2f2f";
+          if (node.type === "theme") return "#9a6b3f";
+          return "#355c7d";
+        })
+        .linkColor(() => "rgba(80, 80, 80, 0.32)")
+        .linkWidth(link => link.strength ? link.strength : 1)
+        .linkDirectionalParticles(0)
+        .enableNodeDrag(true)
+        .enableZoomInteraction(true)
+        .enablePanInteraction(true)
+        .nodeCanvasObject((node, ctx, globalScale) => {
+          const label = node.shortLabel || node.label;
+          const isCenter = node.type === "center";
+          const isTheme = node.type === "theme";
 
-    const Graph = ForceGraph3D()(graphContainer)
-      .graphData(data)
-      .width(width)
-      .height(height)
-      .backgroundColor("#fbfaf7")
-      .showNavInfo(false)
-      .nodeRelSize(4)
-      .linkOpacity(0.35)
-      .linkWidth(link => link.strength || 1)
-      .linkColor(() => "rgba(70, 70, 70, 0.45)")
-      .linkDirectionalParticles(0)
-      .d3VelocityDecay(0.42)
-      .cooldownTicks(120)
-      .nodeThreeObject(node => {
-        const label = node.shortLabel || node.label;
+          const radius = isCenter ? 11 : isTheme ? 8 : 5.5;
 
-        const sprite = new SpriteText(label);
-        sprite.color = node.type === "center" ? "#1f2933" :
-                       node.type === "theme" ? "#8a5a2b" :
-                       "#284b63";
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
+          ctx.fillStyle = isCenter ? "#2f2f2f" : isTheme ? "#9a6b3f" : "#355c7d";
+          ctx.fill();
 
-        sprite.textHeight = node.type === "center" ? 9 :
-                            node.type === "theme" ? 7 :
-                            5;
+          ctx.lineWidth = 1.5 / globalScale;
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+          ctx.stroke();
 
-        sprite.backgroundColor = node.type === "paper"
-          ? "rgba(255, 255, 255, 0.82)"
-          : "rgba(255, 248, 238, 0.9)";
+          const fontSize = isCenter ? 14 : isTheme ? 12 : 10;
+          ctx.font = `${fontSize}px Roboto, Arial, sans-serif`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
 
-        sprite.borderColor = "rgba(0, 0, 0, 0.12)";
-        sprite.borderWidth = 0.6;
-        sprite.borderRadius = 4;
-        sprite.padding = node.type === "paper" ? 4 : 5;
+          const textWidth = ctx.measureText(label).width;
+          const bgHeight = fontSize + 8;
+          const bgWidth = textWidth + 14;
+          const textX = node.x;
+          const textY = node.y + radius + 12;
 
-        return sprite;
-      })
-      .nodeThreeObjectExtend(false)
-      .onNodeClick(node => {
-        showNodeDetails(node);
+          ctx.fillStyle = "rgba(255, 255, 255, 0.86)";
+          roundRect(
+            ctx,
+            textX - bgWidth / 2,
+            textY - bgHeight / 2,
+            bgWidth,
+            bgHeight,
+            6
+          );
+          ctx.fill();
 
-        const distance = 130;
-        const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
+          ctx.fillStyle = isCenter ? "#2f2f2f" : isTheme ? "#6f4518" : "#243b53";
+          ctx.fillText(label, textX, textY);
+        })
+        .nodePointerAreaPaint((node, color, ctx) => {
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, 18, 0, 2 * Math.PI, false);
+          ctx.fill();
+        })
+        .onNodeClick(node => {
+          showNodeDetails(node);
+          Graph.centerAt(node.x, node.y, 700);
+          Graph.zoom(2.2, 700);
+        });
 
-        Graph.cameraPosition(
-          {
-            x: node.x * distRatio,
-            y: node.y * distRatio,
-            z: node.z * distRatio
-          },
-          node,
-          900
-        );
+      Graph.d3Force("charge").strength(-260);
+      Graph.d3Force("link").distance(link => {
+        const sourceType = typeof link.source === "object" ? link.source.type : "";
+        const targetType = typeof link.target === "object" ? link.target.type : "";
+
+        if (sourceType === "center" || targetType === "center") return 120;
+        if (sourceType === "paper" || targetType === "paper") return 90;
+        return 100;
       });
 
-    Graph.cameraPosition({ x: 0, y: 0, z: 360 });
+      setTimeout(() => {
+        Graph.zoomToFit(700, 60);
+      }, 700);
 
-    function showNodeDetails(node) {
-      const year = node.year ? `<p><strong>Year:</strong> ${node.year}</p>` : "";
-      const venue = node.venue ? `<p><strong>Venue:</strong> ${node.venue}</p>` : "";
-      const type = node.type ? node.type.replace("-", " ") : "node";
+      window.addEventListener("resize", () => {
+        Graph.width(getWidth());
+        Graph.height(getHeight());
+        setTimeout(() => Graph.zoomToFit(400, 60), 200);
+      });
 
-      const link = node.url
-        ? `<a class="paper-link" href="${node.url}" target="_blank" rel="noopener noreferrer">Open publication</a>`
-        : "";
+      function showNodeDetails(node) {
+        const year = node.year ? `<p><strong>Year:</strong> ${node.year}</p>` : "";
+        const venue = node.venue ? `<p><strong>Venue:</strong> ${node.venue}</p>` : "";
+        const type = node.type ? node.type.replace("-", " ") : "node";
 
-      infoPanel.innerHTML = `
-        <p class="panel-label">${type}</p>
-        <h3>${node.label}</h3>
-        ${year}
-        ${venue}
-        <p>${node.description || "No description added yet."}</p>
-        ${link}
+        const link = node.url
+          ? `<a class="paper-link" href="${node.url}" target="_blank" rel="noopener noreferrer">Open publication</a>`
+          : "";
+
+        infoPanel.innerHTML = `
+          <p class="panel-label">${type}</p>
+          <h3>${node.label}</h3>
+          ${year}
+          ${venue}
+          <p>${node.description || "No description added yet."}</p>
+          ${link}
+        `;
+      }
+    })
+    .catch(error => {
+      console.error("Research graph error:", error);
+      graphContainer.innerHTML = `
+        <div class="graph-error">
+          <strong>Research graph could not be loaded.</strong>
+          <br>
+          Please check research-graph.js and data/researchGraph.json.
+        </div>
       `;
-    }
-
-    window.addEventListener("resize", () => {
-      const { width, height } = getGraphSize();
-      Graph.width(width);
-      Graph.height(height);
     });
-  })
-  .catch(error => {
-    console.error("Could not load research graph:", error);
-    graphContainer.innerHTML = "<p class='graph-error'>Research graph could not be loaded.</p>";
-  });
+}
+
+function roundRect(ctx, x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+}
