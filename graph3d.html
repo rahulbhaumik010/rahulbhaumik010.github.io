@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Research Map | Rahul Bhaumik</title>
+
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000000;
+      font-family: Arial, sans-serif;
+    }
+
+    #graph3d {
+      width: 100vw;
+      height: 100vh;
+      background: #000000;
+    }
+
+    .top-bar {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .title-box {
+      color: #ffffff;
+      max-width: 520px;
+      pointer-events: auto;
+    }
+
+    .title-box h1 {
+      margin: 0 0 0.35rem 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .title-box p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .back-button {
+      pointer-events: auto;
+      display: inline-block;
+      padding: 0.7rem 1rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      backdrop-filter: blur(10px);
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    .info-panel {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 20;
+      width: min(380px, calc(100vw - 40px));
+      max-height: 45vh;
+      overflow-y: auto;
+      padding: 1rem;
+      border-radius: 18px;
+      color: #ffffff;
+      background: rgba(10, 10, 10, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(12px);
+    }
+
+    .info-panel h2 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1rem;
+    }
+
+    .info-panel p {
+      margin: 0.35rem 0;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .info-panel a {
+      display: inline-block;
+      margin-top: 0.7rem;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    @media (max-width: 700px) {
+      .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+
+      .title-box h1 {
+        font-size: 1rem;
+      }
+
+      .title-box p {
+        font-size: 0.78rem;
+      }
+
+      .info-panel {
+        left: 20px;
+        right: 20px;
+        width: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="top-bar">
+    <div class="title-box">
+      <h1>3D Research Constellation</h1>
+      <p>Drag to rotate, scroll to zoom, and click nodes to explore publications and research themes.</p>
+    </div>
+
+    <a class="back-button" href="index.html#research">Back to main website</a>
+  </div>
+
+  <div id="graph3d"></div>
+
+  <aside id="graphInfo" class="info-panel">
+    <h2>Explore the 3D graph</h2>
+    <p>Click any node to view details. Theme nodes connect research areas, and paper nodes show related publications.</p>
+  </aside>
+
+  <script src="https://unpkg.com/3d-force-graph"></script>
+  <script src="https://unpkg.com/three-spritetext"></script>
+  <script src="graph-3d.js"></script>
+</body>
+</html>
