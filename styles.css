@@ -9,7 +9,7 @@ html {
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', Arial, sans-serif;
   margin: 0;
   padding: 0;
   background-color: #f2f2f2;
@@ -75,15 +75,22 @@ h3 {
   margin-bottom: 1rem;
 }
 
+p {
+  margin-top: 0;
+}
+
+/* About Image */
 #about img {
   width: 180px;
   height: 180px;
   border-radius: 50%;
   display: block;
   margin: 0 auto 1rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
 }
 
+/* Lists */
 ul {
   padding-left: 1.5rem;
 }
@@ -121,7 +128,7 @@ section video {
   margin: 1rem auto;
   border: 2px solid #2c2c2c;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
 }
 
 .no-bullet {
@@ -131,7 +138,7 @@ section video {
 /* Research Graph Section */
 .research-map-section {
   width: calc(100% - 2rem);
-  max-width: 1100px;
+  max-width: 1150px;
   padding: 3rem 1.25rem;
   overflow: hidden;
 }
@@ -140,6 +147,16 @@ section video {
   max-width: 850px;
   margin: 0 auto 2rem auto;
   text-align: center;
+}
+
+.section-heading h2 {
+  margin-bottom: 0.75rem;
+}
+
+.section-heading p {
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .eyebrow {
@@ -154,15 +171,47 @@ section video {
 .research-map-layout {
   width: 100%;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 280px;
+  grid-template-columns: minmax(0, 1fr) 300px;
   gap: 1.25rem;
   align-items: stretch;
   overflow: hidden;
 }
 
+/* Graph toolbar */
+.graph-toolbar {
+  width: 100%;
+  margin-bottom: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.graph-toolbar span {
+  font-weight: 600;
+}
+
+.graph-toolbar button {
+  border: none;
+  border-radius: 999px;
+  padding: 0.55rem 0.9rem;
+  background: #2f2f2f;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.graph-toolbar button:hover {
+  background: #8a5a2b;
+}
+
+/* Graph container */
 #researchGraph {
   width: 100%;
-  height: 560px;
+  height: 760px;
   min-width: 0;
   max-width: 100%;
   position: relative;
@@ -170,6 +219,7 @@ section video {
   overflow: hidden;
   background: #fbfaf7;
   border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
 }
 
 #researchGraph canvas {
@@ -182,6 +232,7 @@ section video {
   cursor: grabbing;
 }
 
+/* Info panel */
 .research-info-panel {
   min-width: 0;
   background: #fffdf9;
@@ -189,6 +240,9 @@ section video {
   padding: 1.25rem;
   border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  align-self: start;
+  max-height: 760px;
+  overflow-y: auto;
 }
 
 .research-info-panel h3 {
@@ -231,22 +285,61 @@ section video {
   color: #7f1d1d;
 }
 
+/* Footer */
+footer {
+  background-color: #2c2c2c;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.08);
+}
+
+/* Responsive */
 @media (max-width: 900px) {
   .research-map-layout {
     grid-template-columns: 1fr;
   }
 
   #researchGraph {
-    height: 500px;
+    height: 620px;
+  }
+
+  .research-info-panel {
+    max-height: none;
   }
 }
 
 @media (max-width: 600px) {
+  header h1 {
+    font-size: 1.75rem;
+  }
+
+  nav ul {
+    padding: 0.75rem;
+  }
+
+  nav ul li {
+    display: block;
+    margin: 0.35rem 0;
+  }
+
+  section {
+    width: calc(100% - 1rem);
+    padding: 2rem 1rem;
+  }
+
   .research-map-section {
     width: calc(100% - 1rem);
+    padding: 2rem 0.75rem;
+  }
+
+  .graph-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   #researchGraph {
-    height: 460px;
+    height: 560px;
   }
 }
