@@ -58,7 +58,7 @@ nav ul li a:hover {
   text-decoration: none;
 }
 
-/* Section Styles */
+/* Standard Section Styles */
 section {
   padding: 3rem 1.5rem;
   margin: 1rem auto;
@@ -135,7 +135,10 @@ section video {
   margin-top: 0.5rem;
 }
 
-/* Research Graph Section */
+/* ========================================================= */
+/* RESEARCH GRAPH SECTION */
+/* ========================================================= */
+
 .research-map-section {
   width: calc(100% - 2rem);
   max-width: 1150px;
@@ -168,21 +171,30 @@ section video {
   margin-bottom: 0.5rem;
 }
 
-/* Main research graph layout */
+/* 
+   Important:
+   The toolbar, graph, and side panel are inside .research-map-layout.
+   The toolbar takes the full row.
+   The graph stays in the large left column.
+   The info panel stays in the smaller right column.
+*/
 .research-map-layout {
   width: 100%;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 300px;
+  grid-template-areas:
+    "toolbar toolbar"
+    "graph panel";
   gap: 1.25rem;
-  align-items: stretch;
+  align-items: start;
   overflow: hidden;
 }
 
-/* Graph toolbar */
+/* Graph Toolbar */
 .graph-toolbar {
-  grid-column: 1 / -1;
+  grid-area: toolbar;
   width: 100%;
-  margin-bottom: 0.75rem;
+  margin: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -210,9 +222,9 @@ section video {
   background: #8a5a2b;
 }
 
-/* Graph container */
+/* Main Graph Container */
 #researchGraph {
-  grid-column: 1 / 2;
+  grid-area: graph;
   width: 100%;
   height: 760px;
   min-width: 0;
@@ -225,9 +237,11 @@ section video {
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
 }
 
+/* Force graph creates canvas inside this div */
 #researchGraph canvas {
   display: block;
-  max-width: 100%;
+  width: 100% !important;
+  max-width: 100% !important;
   cursor: grab;
 }
 
@@ -235,10 +249,11 @@ section video {
   cursor: grabbing;
 }
 
-/* Info panel */
+/* Side Information Panel */
 .research-info-panel {
-  grid-column: 2 / 3;
+  grid-area: panel;
   min-width: 0;
+  width: 100%;
   background: #fffdf9;
   border-radius: 18px;
   padding: 1.25rem;
@@ -299,16 +314,14 @@ footer {
   box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.08);
 }
 
-/* Responsive */
+/* Responsive Layout */
 @media (max-width: 900px) {
   .research-map-layout {
     grid-template-columns: 1fr;
-  }
-
-  .graph-toolbar,
-  #researchGraph,
-  .research-info-panel {
-    grid-column: 1 / -1;
+    grid-template-areas:
+      "toolbar"
+      "graph"
+      "panel";
   }
 
   #researchGraph {
