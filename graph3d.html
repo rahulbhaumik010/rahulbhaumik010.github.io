@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3D Research Map | Rahul Bhaumik</title>
+
+  <title>3D Research Constellation | Rahul Bhaumik</title>
 
   <style>
     html,
@@ -14,82 +15,92 @@
       height: 100%;
       overflow: hidden;
       background: #000000;
-      font-family: Arial, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
     #graph3d {
       width: 100vw;
       height: 100vh;
-      background: #000000;
+      background: radial-gradient(circle at center, #07111f 0%, #02040a 55%, #000000 100%);
     }
 
     .top-bar {
       position: fixed;
-      top: 20px;
-      left: 20px;
-      right: 20px;
+      top: 18px;
+      left: 18px;
+      right: 18px;
       z-index: 20;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
+      gap: 1rem;
       pointer-events: none;
     }
 
     .title-box {
       color: #ffffff;
-      max-width: 520px;
+      max-width: 560px;
+      padding: 1rem 1.1rem;
+      border-radius: 18px;
+      background: rgba(5, 12, 24, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(12px);
       pointer-events: auto;
     }
 
     .title-box h1 {
       margin: 0 0 0.35rem 0;
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 700;
+      letter-spacing: 0.02em;
     }
 
     .title-box p {
       margin: 0;
-      color: rgba(255, 255, 255, 0.72);
+      color: rgba(255, 255, 255, 0.75);
       font-size: 0.9rem;
-      line-height: 1.4;
+      line-height: 1.45;
     }
 
     .back-button {
       pointer-events: auto;
       display: inline-block;
-      padding: 0.7rem 1rem;
+      padding: 0.75rem 1rem;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.12);
       color: #ffffff;
       text-decoration: none;
       font-weight: 700;
-      border: 1px solid rgba(255, 255, 255, 0.28);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       backdrop-filter: blur(10px);
+      white-space: nowrap;
     }
 
     .back-button:hover {
-      background: rgba(255, 255, 255, 0.22);
+      background: rgba(132, 190, 255, 0.22);
+      border-color: rgba(132, 190, 255, 0.55);
     }
 
     .info-panel {
       position: fixed;
-      right: 20px;
-      bottom: 20px;
+      right: 18px;
+      bottom: 18px;
       z-index: 20;
-      width: min(380px, calc(100vw - 40px));
-      max-height: 45vh;
+      width: min(390px, calc(100vw - 36px));
+      max-height: 46vh;
       overflow-y: auto;
       padding: 1rem;
       border-radius: 18px;
       color: #ffffff;
-      background: rgba(10, 10, 10, 0.72);
-      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(5, 12, 24, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.16);
       backdrop-filter: blur(12px);
     }
 
     .info-panel h2 {
-      margin: 0 0 0.5rem 0;
+      margin: 0 0 0.55rem 0;
       font-size: 1rem;
+      line-height: 1.3;
     }
 
     .info-panel p {
@@ -101,16 +112,58 @@
 
     .info-panel a {
       display: inline-block;
-      margin-top: 0.7rem;
-      color: #ffffff;
+      margin-top: 0.75rem;
+      color: #b9ddff;
       font-weight: 700;
+      text-decoration: underline;
     }
 
-    @media (max-width: 700px) {
+    .legend {
+      position: fixed;
+      left: 18px;
+      bottom: 18px;
+      z-index: 20;
+      color: rgba(255, 255, 255, 0.78);
+      background: rgba(5, 12, 24, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      padding: 0.85rem 1rem;
+      font-size: 0.85rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .legend div {
+      margin: 0.25rem 0;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 0.7rem;
+      height: 0.7rem;
+      border-radius: 50%;
+      margin-right: 0.45rem;
+      vertical-align: middle;
+    }
+
+    .dot-center {
+      background: #ffffff;
+    }
+
+    .dot-theme {
+      background: #9fd3ff;
+    }
+
+    .dot-paper {
+      background: #d8e9ff;
+    }
+
+    @media (max-width: 760px) {
       .top-bar {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
+      }
+
+      .title-box {
+        max-width: calc(100vw - 36px);
       }
 
       .title-box h1 {
@@ -121,9 +174,13 @@
         font-size: 0.78rem;
       }
 
+      .legend {
+        display: none;
+      }
+
       .info-panel {
-        left: 20px;
-        right: 20px;
+        left: 18px;
+        right: 18px;
         width: auto;
       }
     }
@@ -141,6 +198,12 @@
   </div>
 
   <div id="graph3d"></div>
+
+  <div class="legend">
+    <div><span class="dot dot-center"></span>Me</div>
+    <div><span class="dot dot-theme"></span>Research theme</div>
+    <div><span class="dot dot-paper"></span>Publication</div>
+  </div>
 
   <aside id="graphInfo" class="info-panel">
     <h2>Explore the 3D graph</h2>
