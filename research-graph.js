@@ -82,19 +82,14 @@ if (graphContainer) {
           ctx.fill();
         })
         .onNodeClick(node => {
+  if (node.id === "rahul-research") {
+    window.location.href = "graph3d.html";
+    return;
+  }
+
   showNodeDetails(node);
   Graph.centerAt(node.x, node.y, 700);
   Graph.zoom(1.7, 700);
-})
-.onNodeRightClick(node => {
-  if (node.id === "rahul-research") {
-    window.location.href = "graph3d.html";
-  }
-})
-.onNodeDoubleClick(node => {
-  if (node.id === "rahul-research") {
-    window.location.href = "graph3d.html";
-  }
 });
 
       Graph.d3Force("charge").strength(-120);
