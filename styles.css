@@ -1,0 +1,219 @@
+/* ═══════════════════════════════════════════════════
+   RAHUL BHAUMIK — Global Stylesheet
+   Used by: project.html, sustainable-ux-ai.html
+   (index.html uses its own embedded styles)
+═══════════════════════════════════════════════════ */
+
+:root {
+  --black:      #0a0a0a;
+  --offwhite:   #f5f4f0;
+  --warm-white: #faf9f6;
+  --mid:        #5a5a5a;
+  --light:      #c8c5be;
+  --accent:     #b85c2a;
+  --accent2:    #2a5cb8;
+  --rule:       rgba(10,10,10,0.1);
+
+  --font-display: 'Syne', sans-serif;
+  --font-serif:   'Playfair Display', serif;
+  --font-body:    'DM Sans', sans-serif;
+
+  --max: 820px;
+  --gap: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  background: var(--offwhite);
+  color: var(--black);
+  font-family: var(--font-body);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body { overflow-x: hidden; }
+img  { display: block; max-width: 100%; }
+a    { color: inherit; }
+
+/* ── GRAIN ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  z-index: 9999; pointer-events: none; opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--black);
+  padding: clamp(3rem, 8vw, 5rem) var(--gap) clamp(2rem, 5vw, 3.5rem);
+  max-width: 100%;
+}
+
+header h1 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(1.6rem, 4vw, 2.8rem);
+  color: #fff;
+  line-height: 1.15;
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+/* ── NAV ── */
+nav {
+  background: var(--black);
+  border-top: 1px solid rgba(255,255,255,0.07);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 0;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gap);
+}
+
+nav ul li a {
+  display: inline-block;
+  padding: 0.85rem 1rem 0.85rem 0;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+nav ul li a:hover { color: #fff; }
+
+/* ── MAIN CONTENT WRAPPER ── */
+main, body > section {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: clamp(2.5rem, 6vw, 4rem) var(--gap);
+}
+
+/* ── PROJECT IMAGE ── */
+.project-image {
+  width: 100%;
+  max-height: 480px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--rule);
+}
+
+.project-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── SECTION ── */
+section {
+  padding: clamp(2.5rem, 6vw, 4rem) var(--gap);
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+h2 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 400;
+  color: var(--black);
+  line-height: 1.2;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+h3 {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 2rem 0 0.75rem;
+}
+
+p {
+  font-size: 0.95rem;
+  color: var(--mid);
+  line-height: 1.75;
+  margin-bottom: 0.75rem;
+}
+
+/* ── LISTS ── */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+}
+
+ul li {
+  font-size: 0.92rem;
+  color: var(--mid);
+  line-height: 1.65;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--rule);
+  padding-left: 1rem;
+  position: relative;
+}
+
+ul li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--light);
+  font-size: 0.8rem;
+}
+
+ul li a {
+  color: var(--black);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--rule);
+  transition: text-decoration-color 0.2s;
+}
+
+ul li a:hover { text-decoration-color: var(--accent2); color: var(--accent2); }
+
+/* ── VIDEO ── */
+section video {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  margin: 1.5rem 0;
+  border-radius: 4px;
+  border: 1px solid var(--rule);
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--black);
+  color: rgba(255,255,255,0.25);
+  text-align: center;
+  padding: 1.5rem var(--gap);
+  margin-top: 0;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  border-top: 1px solid rgba(255,255,255,0.07);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  header h1 { font-size: 1.5rem; }
+  nav ul { flex-direction: column; gap: 0; }
+}
