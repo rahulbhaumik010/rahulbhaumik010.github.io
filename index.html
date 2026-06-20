@@ -122,19 +122,30 @@
       align-items: flex-end;
     }
 
-    /* The colorize-bg: shows the background image, desaturated */
-    .hero-bg {
+    /* The hero-media layer: cycling video/image background, desaturated */
+    .hero-media {
       position: absolute;
       inset: 0;
-      background-image: url('background.png');
-      background-size: cover;
-      background-position: 50% 0%;
-      filter: brightness(0.6);
-      transform: scale(1.02);
-      transition: transform 8s ease;
+      overflow: hidden;
     }
 
-    .hero:hover .hero-bg { transform: scale(1.0); }
+    .hero-media video,
+    .hero-media img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 50%;
+      filter: brightness(0.6);
+      opacity: 0;
+      transition: opacity 1.1s ease;
+    }
+
+    .hero-media video.is-active,
+    .hero-media img.is-active {
+      opacity: 1;
+    }
 
     /* Color extraction overlay — warm dark tint */
     .hero-overlay {
@@ -857,12 +868,17 @@
 
 <!-- ── HERO ── -->
 <div class="hero" id="top">
-  <div class="hero-bg"></div>
+  <div class="hero-media">
+    <video class="is-active" autoplay muted loop playsinline preload="auto" src="hero-1.mp4"></video>
+    <video autoplay muted loop playsinline preload="none" src="hero-2.mp4"></video>
+    <video autoplay muted loop playsinline preload="none" src="hero-3.mp4"></video>
+    <img src="hero-4.jpg" alt="" />
+  </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <div class="hero-avatar"><img src="profile.jpeg" alt="Rahul Bhaumik" /></div>
     <div class="hero-text">
-      <h1 class="hero-name">Behnaz Farahi</h1>
+      <h1 class="hero-name">Rahul Bhaumik</h1>
       <p class="hero-title">PhD Scholar · Free University of Bozen-Bolzano &nbsp;·&nbsp; HCI, XR, Soft Interfaces, Design Pedagogy</p>
     </div>
   </div>
@@ -1108,8 +1124,44 @@
 <script src="research-graph.js"></script>
 
 <script>
-  // Fix hero name (hardcoded Behnaz Farahi above as placeholder — correcting)
-  document.querySelector('.hero-name').textContent = 'Rahul Bhaumik';
+  // Hero background: cycle through video1 -> video2 -> video3 -> still image -> repeat
+  (function () {
+    const items = Array.from(document.querySelectorAll('.hero-media video, .hero-media img'));
+    if (!items.length) return;
+
+    const STILL_DURATION = 4500; // ms the static image stays on screen
+    let current = 0;
+    let stillTimer = null;
+
+    function showItem(index) {
+      items.forEach((el, i) => el.classList.toggle('is-active', i === index));
+
+      const el = items[index];
+
+      if (el.tagName === 'VIDEO') {
+        if (stillTimer) { clearTimeout(stillTimer); stillTimer = null; }
+        el.currentTime = 0;
+        el.play().catch(() => {});
+        // lazy-load the next-up video shortly before it's needed
+        const next = items[(index + 1) % items.length];
+        if (next.tagName === 'VIDEO' && next.preload === 'none') next.preload = 'auto';
+      } else {
+        // static image: hold for a fixed duration, then advance
+        stillTimer = setTimeout(advance, STILL_DURATION);
+      }
+    }
+
+    function advance() {
+      current = (current + 1) % items.length;
+      showItem(current);
+    }
+
+    items.forEach(el => {
+      if (el.tagName === 'VIDEO') el.addEventListener('ended', advance);
+    });
+
+    showItem(current);
+  })();
 
   // Scroll spy for rail nav
   const sections = document.querySelectorAll('.section-anchor');
