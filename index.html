@@ -129,8 +129,7 @@
       overflow: hidden;
     }
 
-    .hero-media video,
-    .hero-media img {
+    .hero-media video {
       position: absolute;
       inset: 0;
       width: 100%;
@@ -139,12 +138,20 @@
       object-position: 50% 50%;
       filter: brightness(0.6);
       opacity: 0;
-      transition: opacity 1.1s ease;
+      z-index: 1;
+      transition: opacity 1.2s ease;
     }
 
-    .hero-media video.is-active,
-    .hero-media img.is-active {
+    /* Active video fades in on top */
+    .hero-media video.is-active {
       opacity: 1;
+      z-index: 2;
+    }
+
+    /* Leaving video stays fully visible underneath during crossfade */
+    .hero-media video.is-leaving {
+      opacity: 1;
+      z-index: 1;
     }
 
     /* Color extraction overlay — warm dark tint */
@@ -172,20 +179,19 @@
     }
 
     .hero-avatar {
-      width: 260px;
-      height: 340px;
+      width: 200px;
+      height: 200px;
       flex-shrink: 0;
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-      -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-      mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+      border: 2px solid rgba(255,255,255,0.12);
     }
 
     .hero-avatar img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center 15%;
       display: block;
     }
 
@@ -401,8 +407,8 @@
     #researchGraph {
       width: 100%;
       height: 620px;
-      background: #0c0c0c;
-      border: 1px solid #1c1c1c;
+      background: transparent;
+      border: none;
       cursor: grab;
       overflow: hidden;
     }
@@ -841,7 +847,7 @@
     @media (max-width: 600px) {
       .hero { height: 420px; }
       .hero-name { font-size: 2rem; }
-      .hero-avatar { width: 72px; height: 72px; }
+      .hero-avatar { width: 80px; height: 80px; }
     }
   </style>
 </head>
@@ -870,9 +876,9 @@
 <div class="hero" id="top">
   <div class="hero-media">
     <video class="is-active" autoplay muted playsinline preload="auto" src="hero-1.mp4"></video>
-    <video autoplay muted playsinline preload="none" src="hero-2.mp4"></video>
-    <video autoplay muted playsinline preload="none" src="hero-3.mp4"></video>
-    <video autoplay muted playsinline preload="none" src="hero-4.mp4"></video>
+    <video muted playsinline preload="none" src="hero-2.mp4"></video>
+    <video muted playsinline preload="none" src="hero-3.mp4"></video>
+    <video muted playsinline preload="none" src="hero-4.mp4"></video>
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
@@ -910,7 +916,7 @@
 
     <div class="rail-affil">
       <p class="rail-affil-label">Affiliation</p>
-      <p class="rail-affil-name">Free University of<br>Bozen-Bolzano<br>PhD, 2023–2026</p>
+      <p class="rail-affil-name">Free University of<br>Bozen-Bolzano<br>PhD, 2023–</p>
     </div>
   </aside>
 
@@ -1136,23 +1142,35 @@
 
     let current = 0;
 
-    function showItem(index) {
-      items.forEach((el, i) => el.classList.toggle('is-active', i === index));
-      const el = items[index];
-      el.currentTime = 0;
-      el.play().catch(() => {});
-      // preload the next video
-      const next = items[(index + 1) % items.length];
-      if (next.preload === 'none') next.preload = 'auto';
-    }
-
     function advance() {
+      const outgoing = items[current];
       current = (current + 1) % items.length;
-      showItem(current);
+      const incoming = items[current];
+
+      // Keep outgoing fully visible underneath during crossfade
+      outgoing.classList.remove('is-active');
+      outgoing.classList.add('is-leaving');
+
+      // Bring incoming in on top
+      incoming.currentTime = 0;
+      incoming.play().catch(() => {});
+      incoming.classList.add('is-active');
+
+      // Clean up outgoing after crossfade completes
+      setTimeout(() => outgoing.classList.remove('is-leaving'), 1400);
+
+      // Preload the one after next
+      const afterNext = items[(current + 1) % items.length];
+      if (afterNext.preload === 'none') afterNext.preload = 'auto';
     }
 
     items.forEach(el => el.addEventListener('ended', advance));
-    showItem(current);
+
+    // Start first video
+    items[0].classList.add('is-active');
+    items[0].play().catch(() => {});
+    // Preload second
+    if (items[1]) items[1].preload = 'auto';
   })();
 
   // Scroll spy for rail nav
