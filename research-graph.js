@@ -48,7 +48,7 @@ if (graphContainer) {
       const Graph = ForceGraph()(graphContainer)
         .width(getWidth())
         .height(getHeight())
-        .backgroundColor("#fbfaf7")
+        .backgroundColor("#ffffff")
         .nodeId("id")
         .nodeVal(node => {
           if (node.type === "center") return 20;
@@ -56,9 +56,9 @@ if (graphContainer) {
           return 7;
         })
         .nodeColor(node => {
-          if (node.type === "center") return "#1a1a1a";
-          if (node.type === "theme")  return expandedThemes.has(node.id) ? "#b85c2a" : "#888";
-          return "#2a5cb8";
+          if (node.type === "center") return "#141414";
+          if (node.type === "theme")  return expandedThemes.has(node.id) ? "#f24e1e" : "#9a9a9a";
+          return "#141414";
         })
         .linkColor(() => "rgba(80,80,80,0.18)")
         .linkWidth(link => link.strength ? link.strength : 1)
@@ -88,7 +88,7 @@ if (graphContainer) {
           if (isExpanded) {
             ctx.beginPath();
             ctx.arc(node.x, node.y, radius + 5, 0, 2 * Math.PI);
-            ctx.strokeStyle = "rgba(184,92,42,0.4)";
+            ctx.strokeStyle = "rgba(242,78,30,0.4)";
             ctx.lineWidth = 2 / globalScale;
             ctx.stroke();
           }
@@ -96,10 +96,10 @@ if (graphContainer) {
           // Main circle
           ctx.beginPath();
           ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
-          ctx.fillStyle = isCenter  ? "#1a1a1a"
-                        : isExpanded ? "#b85c2a"
-                        : isTheme   ? "#888888"
-                        : "#2a5cb8";
+          ctx.fillStyle = isCenter  ? "#141414"
+                        : isExpanded ? "#f24e1e"
+                        : isTheme   ? "#9a9a9a"
+                        : "#141414";
           ctx.fill();
 
           ctx.lineWidth = 1.5 / globalScale;
@@ -118,9 +118,9 @@ if (graphContainer) {
           const textY = node.y + radius + 12;
 
           ctx.fillStyle = isCenter  ? "rgba(26,26,26,0.85)"
-                        : isExpanded ? "rgba(184,92,42,0.85)"
+                        : isExpanded ? "rgba(242,78,30,0.85)"
                         : isTheme   ? "rgba(100,100,100,0.82)"
-                        : "rgba(42,92,184,0.82)";
+                        : "rgba(20,20,20,0.85)";
           roundRect(ctx, node.x - bgW / 2, textY - bgH / 2, bgW, bgH, 4);
           ctx.fill();
 
@@ -190,9 +190,9 @@ if (graphContainer) {
       (function animateLoop() {
         requestAnimationFrame(animateLoop);
         Graph.nodeColor(node => {
-          if (node.type === "center") return "#1a1a1a";
-          if (node.type === "theme")  return expandedThemes.has(node.id) ? "#b85c2a" : "#888";
-          return "#2a5cb8";
+          if (node.type === "center") return "#141414";
+          if (node.type === "theme")  return expandedThemes.has(node.id) ? "#f24e1e" : "#9a9a9a";
+          return "#141414";
         });
       })();
 

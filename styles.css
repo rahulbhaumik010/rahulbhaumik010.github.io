@@ -1,28 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap');
 /* ═══════════════════════════════════════════════════
    RAHUL BHAUMIK — Global Stylesheet
-   Used by: project.html, sustainable-ux-ai.html
+   Used by: project.html
    (index.html uses its own embedded styles)
 ═══════════════════════════════════════════════════ */
 
 :root {
   --black:      #0a0a0a;
-  --offwhite:   #f5f4f0;
-  --warm-white: #faf9f6;
+  --offwhite:   #ffffff;
+  --warm-white: #ffffff;
   --mid:        #5a5a5a;
   --light:      #c8c5be;
-  --accent:     #b85c2a;
-  --accent2:    #2a5cb8;
+  --accent:     #f24e1e;
+  --accent2:    #f24e1e;
   --rule:       rgba(10,10,10,0.1);
 
-  --font-display: 'Syne', sans-serif;
-  --font-serif:   'Playfair Display', serif;
-  --font-body:    'DM Sans', sans-serif;
+  --font-display: 'JetBrains Mono', ui-monospace, monospace;
+  --font-serif:   'Inter Tight', 'Helvetica Neue', Arial, sans-serif;
+  --font-body:    'Inter', 'Helvetica Neue', Arial, sans-serif;
 
   --max: 820px;
   --gap: clamp(1.25rem, 4vw, 2.5rem);
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -40,15 +41,6 @@ body { overflow-x: hidden; }
 img  { display: block; max-width: 100%; }
 a    { color: inherit; }
 
-/* ── GRAIN ── */
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  z-index: 9999; pointer-events: none; opacity: 0.028;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-size: 200px;
-}
-
 /* ── HEADER ── */
 header {
   background: var(--black);
@@ -58,8 +50,9 @@ header {
 
 header h1 {
   font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: clamp(1.6rem, 4vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-size: clamp(1.8rem, 4.4vw, 3.2rem);
   color: #fff;
   line-height: 1.15;
   max-width: var(--max);
@@ -129,7 +122,8 @@ section {
 h2 {
   font-family: var(--font-serif);
   font-size: clamp(1.5rem, 3vw, 2.1rem);
-  font-weight: 400;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--black);
   line-height: 1.2;
   margin-bottom: 1.25rem;
@@ -217,3 +211,11 @@ footer {
   header h1 { font-size: 1.5rem; }
   nav ul { flex-direction: column; gap: 0; }
 }
+
+/* Nav links are not content lists */
+nav ul li { padding: 0; border: 0; }
+nav ul li::before { content: none; }
+header nav { background: transparent; border: 0; margin-top: 1.5rem; }
+header nav ul { padding: 0; max-width: var(--max); }
+header nav ul li a { color: rgba(255,255,255,.7); }
+header nav ul li a:hover { color: var(--accent); }

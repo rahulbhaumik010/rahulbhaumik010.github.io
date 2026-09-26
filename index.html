@@ -3,1242 +3,634 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Dr. Rahul Bhaumik – designer and HCI researcher working on soft interfaces, 3D-printed and textile sensing, automotive UX, XR and design pedagogy at the Free University of Bozen-Bolzano." />
+  <title>Dr. Rahul Bhaumik – Designer &amp; Researcher</title>
+  <meta name="description" content="Dr. Rahul Bhaumik – designer and HCI researcher at the Media Interaction Lab, Free University of Bozen-Bolzano, working on soft interfaces, 3D-printed and textile sensing, automotive UX, XR and design pedagogy." />
   <meta name="author" content="Rahul Bhaumik" />
   <link rel="canonical" href="https://rahulbhaumik010.github.io/" />
   <meta property="og:type" content="profile" />
   <meta property="og:title" content="Dr. Rahul Bhaumik – Designer &amp; Researcher" />
-  <meta property="og:description" content="HCI researcher at the Free University of Bozen-Bolzano: soft interfaces, 3D-printed and textile sensing, automotive UX, XR and design pedagogy." />
+  <meta property="og:description" content="HCI researcher at the Media Interaction Lab, Free University of Bozen-Bolzano: soft interfaces, 3D-printed and textile sensing, automotive UX, XR and design pedagogy." />
   <meta property="og:url" content="https://rahulbhaumik010.github.io/" />
   <meta property="og:image" content="https://rahulbhaumik010.github.io/profile.jpeg" />
-  <title>Rahul Bhaumik – Designer & Researcher</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    /* ──────────────────────────────────────────
-       TOKENS
-    ────────────────────────────────────────── */
+    /* ─────────────────────────────  TOKENS  ───────────────────────────── */
     :root {
-      --black:   #000000;
-      --white:   #ffffff;
-      --off:     #f7f6f2;
-      --mid:     #666;
-      --rule:    #e0ddd6;
-      --accent:  #c8501a;   /* warm terracotta — pulled from profile image */
+      --bg:      #ffffff;
+      --ink:     #141414;
+      --ink-2:   #3d3d3d;
+      --mute:    #767676;
+      --rule:    #e6e6e6;
+      --tint:    #f4f4f4;
+      --accent:  #f24e1e;
 
-      --rail-w:  220px;
-      --header-h: 52px;
+      --header-h: 64px;
+      --rail-w:   248px;
+      --max:      1320px;
+      --pad:      clamp(1rem, 3vw, 2.5rem);
 
-      --sans: 'neue-haas-grotesk-display', 'Helvetica Neue', Arial, sans-serif;
-      --body: 'DM Sans', 'Helvetica Neue', Arial, sans-serif;
-      --serif: 'Instrument Serif', Georgia, serif;
+      --display: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --body:    'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --mono:    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      --ease:    cubic-bezier(.2,.7,.2,1);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html {
-      font-size: 16px;
-      background: var(--off);
-      color: var(--black);
-      -webkit-font-smoothing: antialiased;
-      scroll-behavior: smooth;
-      overflow-x: hidden;
-    }
-
-    body { font-family: var(--body); overflow-x: hidden; }
+    html { background: var(--bg); color: var(--ink); scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+    body { font-family: var(--body); font-size: 16px; line-height: 1.6; background: var(--bg); overflow-x: hidden; }
     a { color: inherit; text-decoration: none; }
-    img { display: block; max-width: 100%; }
+    img, video { display: block; max-width: 100%; }
+    ::selection { background: var(--accent); color: #fff; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-    /* ──────────────────────────────────────────
-       GLOBAL HEADER  (Media Lab style: black bar)
-    ────────────────────────────────────────── */
+    /* Shared type */
+    .eyebrow {
+      display: flex; align-items: center; gap: .6rem;
+      font-family: var(--mono); font-size: .72rem; font-weight: 500;
+      letter-spacing: .08em; text-transform: uppercase; color: var(--mute);
+      margin-bottom: 1.1rem;
+    }
+    .eyebrow::before { content: ''; width: 8px; height: 8px; background: var(--accent); flex-shrink: 0; }
+    .h-section {
+      font-family: var(--display); font-weight: 700;
+      font-size: clamp(1.9rem, 3.4vw, 2.9rem); line-height: 1.02; letter-spacing: -.03em;
+      margin-bottom: 2rem; max-width: 18ch;
+    }
+    .link-arrow {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-family: var(--display); font-weight: 600; font-size: .95rem;
+      border-bottom: 2px solid var(--ink); padding-bottom: 2px;
+      transition: color .2s, border-color .2s;
+    }
+    .link-arrow:hover { color: var(--accent); border-color: var(--accent); }
+    .link-arrow span { transition: transform .25s var(--ease); }
+    .link-arrow:hover span { transform: translateX(4px); }
+
+    /* Grayscale → colour on hover (images) */
+    .bw { filter: grayscale(1) contrast(1.05); transition: filter .6s var(--ease), transform .8s var(--ease); }
+    a:hover .bw, .bw:hover { filter: none; }
+
+    /* ─────────────────────────────  HEADER  ───────────────────────────── */
     .g-header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 200;
-      height: var(--header-h);
-      background: var(--black);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1.5rem;
-      border-bottom: 1px solid #1a1a1a;
+      position: fixed; inset: 0 0 auto 0; z-index: 200; height: var(--header-h);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--pad);
+      background: rgba(255,255,255,.92); backdrop-filter: saturate(1.4) blur(12px); -webkit-backdrop-filter: saturate(1.4) blur(12px);
+      border-bottom: 1px solid var(--rule);
     }
-
-    .g-header-wordmark {
-      font-family: var(--sans);
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--white);
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
+    .wordmark { display: flex; align-items: center; gap: .75rem; }
+    .wordmark-mark {
+      width: 34px; height: 34px; background: var(--ink); color: #fff;
+      display: grid; place-items: center;
+      font-family: var(--display); font-weight: 800; font-size: .95rem; letter-spacing: -.04em;
+      transition: background .2s;
     }
+    .wordmark:hover .wordmark-mark { background: var(--accent); }
+    .wordmark-text { line-height: 1.1; }
+    .wordmark-name { display: block; font-family: var(--display); font-weight: 700; font-size: 1rem; letter-spacing: -.01em; }
+    .wordmark-role { display: block; font-family: var(--mono); font-size: .66rem; color: var(--mute); letter-spacing: .04em; text-transform: uppercase; }
+    .g-nav { display: flex; gap: 1.6rem; list-style: none; }
+    .g-nav a { font-family: var(--display); font-size: .9rem; font-weight: 500; color: var(--ink-2); transition: color .15s; }
+    .g-nav a:hover, .g-nav a.is-current { color: var(--accent); }
 
-    .g-header-wordmark span {
-      display: inline-block;
-      width: 1px;
-      height: 16px;
-      background: rgba(255,255,255,0.25);
-    }
-
-    .g-header-wordmark em {
-      font-style: normal;
-      font-weight: 400;
-      opacity: 0.55;
-    }
-
-    .g-header-nav {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      list-style: none;
-    }
-
-    .g-header-nav li a {
-      display: block;
-      padding: 0 0.9rem;
-      font-family: var(--sans);
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.55);
-      line-height: var(--header-h);
-      transition: color 0.15s;
-      white-space: nowrap;
-    }
-
-    .g-header-nav li a:hover { color: var(--white); }
-
-    /* ──────────────────────────────────────────
-       HERO  (full-bleed, image bg + overlay)
-    ────────────────────────────────────────── */
+    /* ─────────────────────────────  HERO  ───────────────────────────── */
     .hero {
-      position: relative;
-      margin-top: var(--header-h);
-      height: 820px;
-      background: var(--black);
-      overflow: hidden;
-      display: flex;
-      align-items: flex-end;
+      position: relative; margin-top: var(--header-h);
+      height: clamp(520px, 82vh, 860px); overflow: hidden; background: #111;
+      color: #fff;
+    }
+    .hero-media { position: absolute; inset: 0; background: #111 url("hero-4.jpg") center / cover no-repeat; filter: grayscale(1) contrast(1.08) brightness(.72); }
+    .hero-media video, .hero-media img {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+      opacity: 0; z-index: 1; transition: opacity 1.2s ease;
+    }
+    .hero-media .is-active  { opacity: 1; z-index: 2; }
+    .hero-media .is-leaving { opacity: 1; z-index: 1; }
+    .hero-shade { position: absolute; inset: 0; z-index: 3; background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,.55) 100%); }
+    .hero-inner {
+      position: relative; z-index: 4; height: 100%;
+      max-width: var(--max); margin: 0 auto; padding: 0 var(--pad) clamp(7rem, 12vh, 9rem) calc(var(--pad) + var(--rail-w) + 3rem);
+      display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    .hero-kicker { font-family: var(--mono); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; opacity: .85; margin-bottom: 1.25rem; }
+    .hero-kicker b { color: var(--accent); font-weight: 500; }
+    .hero-statement {
+      font-family: var(--display); font-weight: 700;
+      font-size: clamp(2.4rem, 6.2vw, 5.6rem); line-height: .95; letter-spacing: -.04em;
+      max-width: 13ch;
+    }
+    .hero-statement em { font-style: normal; color: var(--accent); }
+
+    /* ─────────────────────────────  LAYOUT  ───────────────────────────── */
+    .layout {
+      max-width: var(--max); margin: 0 auto; padding: 0 var(--pad);
+      display: grid; grid-template-columns: var(--rail-w) minmax(0, 1fr); gap: 3rem;
     }
 
-    /* The hero-media layer: cycling video/image background, desaturated */
-    .hero-media {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
+    /* Rail */
+    .rail { position: relative; z-index: 5; }
+    .id-card { background: var(--bg); margin-top: -7.5rem; padding: 1rem 1rem 1.5rem; margin-left: -1rem; margin-right: -1rem; }
+    .id-card img { width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; }
+    .id-card-name { font-family: var(--display); font-weight: 700; font-size: 1.35rem; letter-spacing: -.02em; line-height: 1.1; margin-top: 1rem; }
+    .id-card-role { font-size: .85rem; color: var(--ink-2); line-height: 1.45; margin-top: .4rem; }
+    .rail-sticky { position: sticky; top: calc(var(--header-h) + 1.5rem); padding-bottom: 2rem; }
+    .rail-nav { list-style: none; border-top: 1px solid var(--ink); margin-top: .5rem; }
+    .rail-nav a {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .6rem 0; border-bottom: 1px solid var(--rule);
+      font-family: var(--display); font-weight: 600; font-size: .95rem; color: var(--ink-2);
+      transition: color .15s, padding .25s var(--ease);
     }
+    .rail-nav a::after { content: '→'; opacity: 0; transform: translateX(-6px); transition: opacity .2s, transform .25s var(--ease); color: var(--accent); }
+    .rail-nav a:hover { color: var(--ink); }
+    .rail-nav li.active a { color: var(--accent); }
+    .rail-nav li.active a::after, .rail-nav a:hover::after { opacity: 1; transform: none; }
+    .rail-label { font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); margin: 1.75rem 0 .7rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: .35rem; }
+    .tag { font-size: .76rem; font-weight: 500; padding: .28rem .6rem; background: var(--tint); color: var(--ink-2); transition: background .15s, color .15s; }
+    .tag:hover { background: var(--ink); color: #fff; }
+    .rail-affil { font-size: .85rem; line-height: 1.5; color: var(--ink-2); }
 
-    .hero-media video,
-    .hero-media img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: 50% 50%;
-      filter: brightness(0.6);
-      opacity: 0;
-      z-index: 1;
-      transition: opacity 1.2s ease;
+    /* Main */
+    .main { padding: 3.5rem 0 2rem; min-width: 0; }
+    .block { padding: 0 0 5rem; margin-bottom: 5rem; border-bottom: 1px solid var(--rule); scroll-margin-top: calc(var(--header-h) + 1.5rem); }
+    .block:last-of-type { border-bottom: 0; margin-bottom: 0; }
+
+    /* Overview */
+    .lead {
+      font-family: var(--display); font-weight: 500;
+      font-size: clamp(1.35rem, 2.2vw, 1.85rem); line-height: 1.28; letter-spacing: -.015em;
+      max-width: 32ch; margin-bottom: 2rem;
     }
+    .lead mark { background: none; color: var(--accent); }
+    .prose { columns: 2 22rem; column-gap: 2.5rem; }
+    .prose p { color: var(--ink-2); margin-bottom: 1rem; break-inside: avoid; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--ink); margin-top: 2.5rem; }
+    .stat { padding: 1.1rem 1rem 0 0; }
+    .stat-num { font-family: var(--display); font-weight: 700; font-size: 2.2rem; letter-spacing: -.04em; line-height: 1; }
+    .stat-label { font-family: var(--mono); font-size: .7rem; color: var(--mute); text-transform: uppercase; letter-spacing: .06em; margin-top: .45rem; }
 
-    /* Active video fades in on top */
-    .hero-media .is-active {
-      opacity: 1;
-      z-index: 2;
-    }
-
-    /* Leaving video stays fully visible underneath during crossfade */
-    .hero-media .is-leaving {
-      opacity: 1;
-      z-index: 1;
-    }
-
-    /* Color extraction overlay — warm dark tint */
-    .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        to top,
-        rgba(0,0,0,0.85) 0%,
-        rgba(0,0,0,0.4) 50%,
-        rgba(0,0,0,0.1) 100%
-      );
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 calc(var(--rail-w) + 3rem) 3rem 3rem;
-      display: flex;
-      align-items: flex-end;
-      gap: 2.5rem;
-    }
-
-    .hero-avatar {
-      width: 200px;
-      height: 200px;
-      flex-shrink: 0;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.7);
-      border: 2px solid rgba(255,255,255,0.12);
-    }
-
-    .hero-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .hero-text {}
-
-    .hero-name {
-      font-family: var(--sans);
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      font-weight: 700;
-      color: var(--white);
-      line-height: 1.05;
-      letter-spacing: -0.01em;
-      margin-bottom: 0.4rem;
-    }
-
-    .hero-title {
-      font-family: var(--body);
-      font-size: 0.95rem;
-      font-weight: 300;
-      color: rgba(255,255,255,0.7);
-      line-height: 1.5;
-      max-width: 560px;
-    }
-
-    /* ──────────────────────────────────────────
-       RAIL LAYOUT  (sidebar + body, Media Lab)
-    ────────────────────────────────────────── */
-    .rail-layout {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: var(--rail-w) 1fr;
-      min-height: 60vh;
-      padding: 0 3rem;
-      gap: 0;
-    }
-
-    /* ── RAIL (left sidebar nav) ── */
-    .rail {
-      position: sticky;
-      top: calc(var(--header-h) + 2rem);
-      align-self: start;
-      padding: 2.5rem 1.5rem 2.5rem 0;
-      border-right: 1px solid var(--rule);
-    }
-
-    .rail-nav-list {
-      list-style: none;
-      margin-bottom: 2rem;
-    }
-
-    .rail-nav-list li {
-      border-bottom: 1px solid var(--rule);
-    }
-
-    .rail-nav-list li a {
-      display: block;
-      padding: 0.65rem 0;
-      font-family: var(--sans);
-      font-size: 0.78rem;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      color: var(--mid);
-      transition: color 0.15s;
-      position: relative;
-    }
-
-    .rail-nav-list li a::before {
-      content: '';
-      position: absolute;
-      left: -1.5rem;
-      top: 0; bottom: 0;
-      width: 2px;
-      background: var(--accent);
-      opacity: 0;
-      transition: opacity 0.15s;
-    }
-
-    .rail-nav-list li a:hover,
-    .rail-nav-list li.active a { color: var(--black); }
-
-    .rail-nav-list li.active a::before { opacity: 1; }
-
-    .rail-meta {
-      margin-top: 1.5rem;
-    }
-
-    .rail-meta-label {
-      font-family: var(--sans);
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--mid);
-      margin-bottom: 0.75rem;
-    }
-
-    .rail-meta-tag {
-      display: inline-block;
-      font-family: var(--sans);
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      padding: 0.25rem 0.6rem;
-      border: 1px solid var(--rule);
-      color: var(--mid);
-      margin: 0 0.25rem 0.35rem 0;
-      transition: background 0.15s, color 0.15s;
-    }
-
-    .rail-meta-tag:hover {
-      background: var(--black);
-      color: var(--white);
-      border-color: var(--black);
-    }
-
-    .rail-affil {
-      margin-top: 2rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--rule);
-    }
-
-    .rail-affil-label {
-      font-family: var(--sans);
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--mid);
-      margin-bottom: 0.5rem;
-    }
-
-    .rail-affil-name {
-      font-size: 0.78rem;
-      color: var(--black);
-      line-height: 1.5;
-    }
-
-    /* ── BODY ── */
-    .rail-body {
-      padding: 3rem 0 3rem 3rem;
-    }
-
-    /* ──────────────────────────────────────────
-       SECTION BLOCKS  (primary-block style)
-    ────────────────────────────────────────── */
-    .primary-block {
-      margin-bottom: 4rem;
-      padding-bottom: 4rem;
-      border-bottom: 1px solid var(--rule);
-    }
-
-    .primary-block:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-    }
-
-    .block-eyebrow {
-      font-family: var(--sans);
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.75rem;
-    }
-
-    .block-title {
-      font-family: var(--sans);
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--black);
-      line-height: 1.15;
-      margin-bottom: 1.5rem;
-      letter-spacing: -0.01em;
-    }
-
-    /* About bio text */
-    .main-copy p {
-      font-size: 1.05rem;
-      font-weight: 300;
-      color: #2a2a2a;
-      line-height: 1.75;
-      margin-bottom: 1rem;
-      max-width: 640px;
-    }
-
-    .main-copy p:last-child { margin-bottom: 0; }
-
-    /* ──────────────────────────────────────────
-       RESEARCH GRAPH BLOCK
-    ────────────────────────────────────────── */
-    .graph-block {
-      margin-bottom: 4rem;
-      padding-bottom: 4rem;
-      border-bottom: 1px solid var(--rule);
-    }
-
-    .graph-hint {
-      font-size: 0.8rem;
-      color: var(--mid);
-      margin-bottom: 1.5rem;
-      font-style: italic;
-    }
-
-    .graph-layout {
-      display: grid;
-      grid-template-columns: 1fr 260px;
-      gap: 1.25rem;
-      align-items: start;
-    }
-
-    #researchGraph {
-      width: 100%;
-      height: 620px;
-      background: transparent;
-      border: none;
-      cursor: grab;
-      overflow: hidden;
-    }
-
+    /* Research graph */
+    .graph-hint { color: var(--mute); font-size: .9rem; margin: -1.25rem 0 1.5rem; }
+    .graph-layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; border: 1px solid var(--ink); }
+    #researchGraph { height: 600px; cursor: grab; overflow: hidden; background: #fff; }
     #researchGraph:active { cursor: grabbing; }
-    #researchGraph canvas { display: block; width: 100% !important; }
-
-    #researchInfoPanel {
-      background: var(--white);
-      border: 1px solid var(--rule);
-      padding: 1.25rem;
-      font-size: 0.85rem;
-      line-height: 1.6;
-      color: var(--mid);
-      align-self: start;
-      max-height: 620px;
-      overflow-y: auto;
-    }
-
-    #researchInfoPanel::-webkit-scrollbar { width: 3px; }
-    #researchInfoPanel::-webkit-scrollbar-thumb { background: var(--rule); }
-
-    #researchInfoPanel .panel-label {
-      font-family: var(--sans);
-      font-size: 0.62rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.5rem;
-    }
-
-    #researchInfoPanel h3 {
-      font-family: var(--sans);
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--black);
-      line-height: 1.3;
-      margin-bottom: 0.6rem;
-    }
-
-    #researchInfoPanel p { font-size: 0.8rem; margin-bottom: 0.3rem; }
-    #researchInfoPanel strong { color: var(--black); }
-
-    .paper-link {
-      display: inline-block;
-      margin-top: 0.75rem;
-      font-family: var(--sans);
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--black);
-      border-bottom: 1.5px solid var(--black);
-      padding-bottom: 1px;
-      transition: color 0.15s, border-color 0.15s;
-    }
-
+    #researchGraph canvas { display: block; }
+    #researchInfoPanel { border-left: 1px solid var(--ink); padding: 1.4rem; max-height: 600px; overflow-y: auto; font-size: .88rem; color: var(--ink-2); background: var(--tint); }
+    #researchInfoPanel .panel-label { font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: .6rem; }
+    #researchInfoPanel h3 { font-family: var(--display); font-size: 1.15rem; font-weight: 700; letter-spacing: -.01em; color: var(--ink); line-height: 1.2; margin-bottom: .8rem; }
+    #researchInfoPanel p { margin-bottom: .45rem; }
+    #researchInfoPanel strong { color: var(--ink); font-weight: 600; }
+    .paper-link { display: inline-block; margin-top: .9rem; font-family: var(--display); font-weight: 600; border-bottom: 2px solid var(--ink); }
     .paper-link:hover { color: var(--accent); border-color: var(--accent); }
 
-    /* ──────────────────────────────────────────
-       EXPERIENCE / EDUCATION
-    ────────────────────────────────────────── */
-    .xp-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0 3rem;
+    /* Thesis */
+    .thesis-title { font-family: var(--display); font-weight: 700; font-size: clamp(2rem, 4.2vw, 3.6rem); line-height: 1; letter-spacing: -.04em; max-width: 16ch; margin-bottom: 2rem; }
+    .meta-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); margin-bottom: 2rem; }
+    .meta-grid > div { padding: .9rem 1rem .9rem 0; }
+    .meta-k { font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); margin-bottom: .25rem; }
+    .meta-v { font-size: .92rem; line-height: 1.45; }
+    .body-text { max-width: 68ch; color: var(--ink-2); margin-bottom: 2.5rem; font-size: 1.02rem; }
+    .parts { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 2.5rem; counter-reset: part; }
+    .part { border-top: 4px solid var(--ink); padding-top: 1rem; counter-increment: part; transition: border-color .25s; }
+    .part:hover { border-color: var(--accent); }
+    .part::before { content: counter(part, decimal-leading-zero); font-family: var(--mono); font-size: .75rem; color: var(--mute); }
+    .part h3 { font-family: var(--display); font-weight: 700; font-size: 1.25rem; letter-spacing: -.02em; line-height: 1.15; margin: .4rem 0 .6rem; }
+    .part h3 span { display: block; color: var(--accent); }
+    .part p { font-size: .9rem; color: var(--ink-2); }
+    .part-links { margin-top: .8rem; display: flex; flex-wrap: wrap; gap: .4rem; }
+    .chip { font-family: var(--mono); font-size: .7rem; padding: .25rem .55rem; border: 1px solid var(--ink); transition: background .15s, color .15s; }
+    .chip:hover { background: var(--ink); color: #fff; }
+
+    /* Projects */
+    .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+    .card { display: block; }
+    .card-media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--tint); margin-bottom: 1.1rem; }
+    .card-media img { width: 100%; height: 100%; object-fit: cover; }
+    .card:hover .card-media img { transform: scale(1.03); }
+    .card-status {
+      position: absolute; top: .9rem; left: .9rem; z-index: 2;
+      font-family: var(--mono); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase;
+      background: #fff; color: var(--ink); padding: .3rem .55rem; display: inline-flex; align-items: center; gap: .4rem;
+    }
+    .card-status.live::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 1.8s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .3 } }
+    .card-title { font-family: var(--display); font-weight: 700; font-size: 1.4rem; letter-spacing: -.02em; line-height: 1.12; margin-bottom: .5rem; transition: color .2s; }
+    a.card:hover .card-title { color: var(--accent); }
+    .card-desc { font-size: .92rem; color: var(--ink-2); }
+    .card-meta { font-family: var(--mono); font-size: .7rem; color: var(--mute); text-transform: uppercase; letter-spacing: .06em; margin-top: .8rem; }
+    /* Generative "sole lattice" cover for the ongoing project */
+    .sole-art { position: absolute; inset: 0; background: var(--accent); overflow: hidden; }
+    .sole-art svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .sole-art .cell { transform-box: fill-box; transform-origin: center; animation: breathe 3.2s var(--ease) infinite; }
+    @keyframes breathe { 0%,100% { transform: scale(.55) } 50% { transform: scale(1) } }
+
+    /* Publications */
+    .pub-tools { display: flex; justify-content: space-between; align-items: end; gap: 1rem; flex-wrap: wrap; margin: -1rem 0 1.5rem; }
+    .pub-count { font-family: var(--mono); font-size: .75rem; color: var(--mute); }
+    .pub-list { list-style: none; border-top: 1px solid var(--ink); }
+    .pub {
+      display: grid; grid-template-columns: 4.5rem minmax(0,1fr) 1.5rem; gap: 1.25rem; align-items: baseline;
+      padding: 1.15rem 0; border-bottom: 1px solid var(--rule);
+      transition: background .2s, padding .25s var(--ease);
+    }
+    .pub:hover { background: var(--tint); padding-left: .75rem; padding-right: .75rem; }
+    .pub-year { font-family: var(--mono); font-size: .8rem; color: var(--mute); }
+    .pub-title { font-family: var(--display); font-weight: 600; font-size: 1.05rem; line-height: 1.3; letter-spacing: -.01em; }
+    .pub:hover .pub-title { color: var(--accent); }
+    .pub-venue { font-size: .82rem; color: var(--mute); margin-top: .25rem; }
+    .pub-arrow { color: var(--mute); transition: transform .25s var(--ease), color .2s; }
+    .pub:hover .pub-arrow { color: var(--accent); transform: translate(3px,-3px); }
+    .pub-more { margin-top: 2rem; }
+
+    /* Experience */
+    .xp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+    .xp-col-title { font-family: var(--mono); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); padding-bottom: .7rem; border-bottom: 1px solid var(--ink); }
+    .xp { display: grid; grid-template-columns: 5.5rem 1fr; gap: 1rem; padding: 1.1rem 0; border-bottom: 1px solid var(--rule); }
+    .xp-year { font-family: var(--mono); font-size: .78rem; color: var(--mute); padding-top: .15rem; }
+    .xp-role { font-family: var(--display); font-weight: 700; font-size: 1.05rem; letter-spacing: -.01em; line-height: 1.25; }
+    .xp-place { font-size: .88rem; color: var(--ink-2); margin-top: .15rem; }
+    .xp-place a { border-bottom: 1px solid currentColor; }
+    .xp-place a:hover { color: var(--accent); }
+
+    /* Contact */
+    .contact-big {
+      display: inline-block; font-family: var(--display); font-weight: 700;
+      font-size: clamp(1.6rem, 4.4vw, 3.4rem); letter-spacing: -.04em; line-height: 1.05;
+      border-bottom: 4px solid var(--ink); padding-bottom: .2rem; margin-bottom: 2.5rem; word-break: break-word;
+      transition: color .2s, border-color .2s;
+    }
+    .contact-big:hover { color: var(--accent); border-color: var(--accent); }
+    .contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--ink); }
+    .contact-grid > div { padding: 1rem 1rem 0 0; }
+    .contact-grid a { border-bottom: 1px solid currentColor; }
+    .contact-grid a:hover { color: var(--accent); }
+
+    /* ─────────────────────────────  FOOTER  ───────────────────────────── */
+    .g-footer { background: var(--ink); color: #fff; margin-top: 4rem; }
+    .g-footer-inner { max-width: var(--max); margin: 0 auto; padding: 4rem var(--pad) 2rem; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2rem; }
+    .g-footer-big { font-family: var(--display); font-weight: 700; font-size: clamp(1.8rem, 3.6vw, 3rem); letter-spacing: -.04em; line-height: 1; max-width: 14ch; }
+    .g-footer-big em { font-style: normal; color: var(--accent); }
+    .g-footer h4 { font-family: var(--mono); font-weight: 400; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: .8rem; }
+    .g-footer ul { list-style: none; }
+    .g-footer li a { display: inline-block; padding: .2rem 0; font-size: .92rem; color: rgba(255,255,255,.85); }
+    .g-footer li a:hover { color: var(--accent); }
+    .g-footer-meta { max-width: var(--max); margin: 0 auto; padding: 1.25rem var(--pad) 2rem; display: flex; justify-content: space-between; font-family: var(--mono); font-size: .7rem; color: rgba(255,255,255,.45); border-top: 1px solid rgba(255,255,255,.12); }
+    .g-footer-meta a:hover { color: #fff; }
+
+    /* ─────────────────────────────  REVEAL  ───────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; }
+      .sole-art .cell, .card-status.live::before { animation: none; }
+      html { scroll-behavior: auto; }
     }
 
-    .xp-col-title {
-      font-family: var(--sans);
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--mid);
-      padding-bottom: 0.75rem;
-      border-bottom: 1px solid var(--rule);
-      margin-bottom: 1.5rem;
-    }
-
-    .xp-item {
-      padding-bottom: 1.5rem;
-      margin-bottom: 1.5rem;
-      border-bottom: 1px solid var(--rule);
-      display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 0 1rem;
-    }
-
-    .xp-item:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
-
-    .xp-year {
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: 0.78rem;
-      color: #aaa;
-      padding-top: 3px;
-      line-height: 1.4;
-    }
-
-    .xp-role {
-      font-family: var(--sans);
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--black);
-      margin-bottom: 0.15rem;
-    }
-
-    .xp-place {
-      font-size: 0.82rem;
-      color: var(--mid);
-      line-height: 1.5;
-    }
-
-    /* ──────────────────────────────────────────
-       DOCTORAL THESIS
-    ────────────────────────────────────────── */
-    .thesis-title {
-      font-family: var(--serif);
-      font-size: clamp(1.6rem, 3vw, 2.2rem);
-      line-height: 1.15;
-      color: var(--black);
-      margin-bottom: 1rem;
-      max-width: 640px;
-    }
-    .thesis-meta {
-      display: flex; flex-wrap: wrap; gap: 0.35rem 1.5rem;
-      font-size: 0.8rem; color: var(--mid);
-      padding: 0.9rem 0; margin-bottom: 1.75rem;
-      border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
-    }
-    .thesis-meta strong { color: var(--black); font-weight: 500; }
-    .thesis-parts {
-      list-style: none; counter-reset: part;
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 1px; background: var(--rule); border: 1px solid var(--rule);
-      margin: 1.75rem 0;
-    }
-    .thesis-parts li { background: var(--white); padding: 1.25rem; counter-increment: part; }
-    .thesis-parts li::before {
-      content: counter(part, decimal-leading-zero);
-      display: block; font-family: var(--serif); font-style: italic;
-      font-size: 1.6rem; color: var(--accent); line-height: 1; margin-bottom: 0.6rem;
-    }
-    .thesis-parts h3 { font-family: var(--sans); font-size: 0.88rem; font-weight: 700; margin-bottom: 0.4rem; line-height: 1.35; }
-    .thesis-parts p { font-size: 0.8rem; color: var(--mid); line-height: 1.6; }
-    .thesis-parts a { text-decoration: underline; text-underline-offset: 2px; color: var(--black); }
-
-    /* ──────────────────────────────────────────
-       PROJECT MODULES  (feed-block style)
-    ────────────────────────────────────────── */
-    .module-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1px;
-      background: var(--rule);
-      border: 1px solid var(--rule);
-    }
-
-    .module-item {
-      background: var(--white);
-      padding: 1.75rem;
-      transition: background 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .module-item:hover { background: var(--off); }
-
-    .module-num {
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: 3rem;
-      color: var(--rule);
-      line-height: 1;
-      margin-bottom: 1rem;
-      transition: color 0.2s;
-    }
-
-    .module-item:hover .module-num { color: var(--accent); }
-
-    .module-title {
-      font-family: var(--sans);
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--black);
-      line-height: 1.35;
-      margin-bottom: 0.6rem;
-    }
-
-    .module-desc {
-      font-size: 0.82rem;
-      color: var(--mid);
-      line-height: 1.65;
-      margin-bottom: 1.25rem;
-    }
-
-    .module-status {
-      font-family: var(--sans);
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--mid);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .module-status::before {
-      content: '';
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: #5a9e5a;
-      flex-shrink: 0;
-    }
-
-    .module-arrow {
-      position: absolute;
-      top: 1.75rem; right: 1.75rem;
-      font-size: 0.9rem;
-      color: var(--rule);
-      transition: color 0.2s, transform 0.2s;
-    }
-
-    .module-grid--single { grid-template-columns: 1fr; }
-    .module-status.is-past::before { background: #aaa; }
-    .module-item.is-static { cursor: default; }
-    .projects-subhead {
-      font-family: var(--sans); font-size: 0.65rem; font-weight: 700;
-      letter-spacing: 0.16em; text-transform: uppercase; color: var(--mid);
-      margin: 2.25rem 0 0.9rem;
-    }
-    .projects-subhead:first-of-type { margin-top: 0; }
-
-    .module-item:hover .module-arrow {
-      color: var(--accent);
-      transform: translate(2px, -2px);
-    }
-
-    /* ──────────────────────────────────────────
-       PUBLICATIONS
-    ────────────────────────────────────────── */
-    .pub-list { list-style: none; }
-
-    .pub-item {
-      display: grid;
-      grid-template-columns: 36px 1fr 20px;
-      gap: 0 1rem;
-      align-items: baseline;
-      padding: 1.1rem 0;
-      border-bottom: 1px solid var(--rule);
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-
-    .pub-list li:first-child .pub-item { border-top: 1px solid var(--rule); }
-
-    .pub-index {
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: 0.78rem;
-      color: #bbb;
-    }
-
-    .pub-title {
-      font-family: var(--sans);
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--black);
-      line-height: 1.4;
-      transition: color 0.15s;
-    }
-
-    .pub-item:hover .pub-title { color: var(--accent); }
-
-    .pub-venue {
-      font-size: 0.75rem;
-      color: var(--mid);
-      margin-top: 0.2rem;
-    }
-
-    .pub-arrow {
-      font-size: 0.78rem;
-      color: #ccc;
-      align-self: center;
-      transition: color 0.15s, transform 0.15s;
-    }
-
-    .pub-item:hover .pub-arrow {
-      color: var(--accent);
-      transform: translate(2px, -2px);
-    }
-
-    .scholar-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-top: 1.75rem;
-      font-family: var(--sans);
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--black);
-      border-bottom: 1.5px solid var(--black);
-      padding-bottom: 2px;
-      transition: color 0.15s, border-color 0.15s;
-    }
-
-    .scholar-cta:hover { color: var(--accent); border-color: var(--accent); }
-
-    /* ──────────────────────────────────────────
-       CTA FOOTER BLOCK (Media Lab "view more")
-    ────────────────────────────────────────── */
-    .cta-block {
-      padding: 1.5rem 0;
-      border-top: 1px solid var(--rule);
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      font-family: var(--sans);
-      font-size: 0.8rem;
-      color: var(--mid);
-    }
-
-    .cta-block a {
-      color: var(--black);
-      text-decoration: underline;
-      text-underline-offset: 2px;
-      font-weight: 600;
-      transition: color 0.15s;
-    }
-
-    .cta-block a:hover { color: var(--accent); }
-
-    /* ──────────────────────────────────────────
-       CONTACT BLOCK
-    ────────────────────────────────────────── */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0;
-      border: 1px solid var(--rule);
-    }
-
-    .contact-cell {
-      padding: 1.5rem;
-      border-right: 1px solid var(--rule);
-      border-bottom: 1px solid var(--rule);
-    }
-
-    .contact-cell:nth-child(2n) { border-right: none; }
-    .contact-cell:nth-last-child(-n+2) { border-bottom: none; }
-
-    .contact-cell-label {
-      font-family: var(--sans);
-      font-size: 0.62rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--mid);
-      margin-bottom: 0.4rem;
-    }
-
-    .contact-cell-value {
-      font-size: 0.95rem;
-      color: var(--black);
-      font-weight: 400;
-    }
-
-    .contact-cell-value a {
-      text-decoration: underline;
-      text-underline-offset: 2px;
-      transition: color 0.15s;
-    }
-
-    .contact-cell-value a:hover { color: var(--accent); }
-
-    /* ──────────────────────────────────────────
-       GLOBAL FOOTER
-    ────────────────────────────────────────── */
-    .g-footer {
-      background: var(--black);
-      color: rgba(255,255,255,0.45);
-      margin-top: 5rem;
-    }
-
-    .g-footer-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 3rem 3rem 2rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .g-footer-section-title {
-      font-family: var(--sans);
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.3);
-      margin-bottom: 1rem;
-    }
-
-    .g-footer-list { list-style: none; }
-
-    .g-footer-list li { padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
-
-    .g-footer-list a {
-      font-size: 0.82rem;
-      color: rgba(255,255,255,0.55);
-      transition: color 0.15s;
-    }
-
-    .g-footer-list a:hover { color: var(--white); }
-
-    .g-footer-meta {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1.25rem 3rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .g-footer-copy {
-      font-family: var(--sans);
-      font-size: 0.7rem;
-      letter-spacing: 0.06em;
-      color: rgba(255,255,255,0.2);
-    }
-
-    .g-footer-back {
-      font-family: var(--sans);
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.3);
-      transition: color 0.15s;
-    }
-
-    .g-footer-back:hover { color: rgba(255,255,255,0.7); }
-
-    /* ──────────────────────────────────────────
-       ACTIVE NAV HIGHLIGHT (scroll spy)
-    ────────────────────────────────────────── */
-    .section-anchor { scroll-margin-top: calc(var(--header-h) + 1rem); }
-
-    /* ──────────────────────────────────────────
-       RESPONSIVE
-    ────────────────────────────────────────── */
-    @media (max-width: 960px) {
-      .rail-layout { grid-template-columns: 1fr; padding: 0 1.5rem; }
-      .rail { position: static; border-right: none; border-bottom: 1px solid var(--rule); padding: 1.5rem 0; display: flex; gap: 0; flex-wrap: wrap; align-items: center; }
-      .rail-nav-list { display: flex; flex-wrap: wrap; gap: 0; margin-bottom: 0; }
-      .rail-nav-list li { border-bottom: none; }
-      .rail-nav-list li a { padding: 0.4rem 0.8rem 0.4rem 0; font-size: 0.8rem; }
-      .rail-meta, .rail-affil { display: none; }
-      .rail-body { padding: 2rem 0; }
-      .xp-grid { grid-template-columns: 1fr; gap: 2rem; }
-      .module-grid { grid-template-columns: 1fr; }
+    /* ─────────────────────────────  RESPONSIVE  ───────────────────────────── */
+    @media (max-width: 1100px) {
+      .g-nav { gap: 1.1rem; }
       .graph-layout { grid-template-columns: 1fr; }
-      .thesis-parts { grid-template-columns: 1fr; }
-      #researchGraph { height: 500px; }
-      .g-header-nav { display: none; }
-      .hero-content { padding: 0 1.5rem 2.5rem; }
-      .g-footer-inner { grid-template-columns: 1fr; gap: 2rem; }
-      .g-footer-inner, .g-footer-meta { padding-left: 1.5rem; padding-right: 1.5rem; }
-      .contact-grid { grid-template-columns: 1fr; }
-      .contact-cell { border-right: none !important; }
-      .contact-cell:nth-last-child(-n+2) { border-bottom: 1px solid var(--rule); }
-      .contact-cell:last-child { border-bottom: none; }
+      #researchInfoPanel { border-left: 0; border-top: 1px solid var(--ink); max-height: none; }
+      .parts { grid-template-columns: 1fr; }
     }
-
-    @media (max-width: 600px) {
-      .hero { height: 420px; }
-      .hero-name { font-size: 2rem; }
-      .hero-avatar { width: 80px; height: 80px; }
+    @media (max-width: 960px) {
+      .g-nav { display: none; }
+      .hero-inner { padding: 0 var(--pad) 3rem; }
+      .layout { grid-template-columns: 1fr; gap: 0; }
+      .id-card { margin: 0; padding: 1.5rem 0 1.25rem; display: grid; grid-template-columns: 96px 1fr; gap: 1rem; align-items: end; background: var(--bg); }
+      .id-card img { width: 96px; height: 96px; }
+      .id-card-name { margin-top: 0; }
+      .rail-sticky { position: static; padding-bottom: 0; }
+      .rail-nav { display: flex; flex-wrap: wrap; gap: 0 1.1rem; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+      .rail-nav a { border: 0; padding: .55rem 0; font-size: .88rem; }
+      .rail-nav a::after { display: none; }
+      .rail-extra { display: none; }
+      .main { padding-top: 2.5rem; }
+      .block { padding-bottom: 3.5rem; margin-bottom: 3.5rem; }
+      .cards, .xp-grid { grid-template-columns: 1fr; }
+      .xp-grid { gap: 2rem; }
+      .meta-grid, .contact-grid { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); row-gap: 1rem; }
+      .g-footer-inner { grid-template-columns: 1fr; }
+      #researchGraph { height: 460px; }
+    }
+    @media (max-width: 560px) {
+      .pub { grid-template-columns: 1fr 1.25rem; gap: .25rem 1rem; }
+      .pub-year { grid-column: 1 / -1; }
+      .pub-arrow { grid-row: 2; grid-column: 2; }
+      .wordmark-role { display: none; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── GLOBAL HEADER ── -->
+<!-- ── HEADER ── -->
 <header class="g-header">
-  <div class="g-header-wordmark">
-    Rahul Bhaumik
-    <span></span>
-    <em>Designer &amp; Researcher</em>
-  </div>
-  <nav>
-    <ul class="g-header-nav">
-      <li><a href="#about">Overview</a></li>
+  <a class="wordmark" href="#top" aria-label="Rahul Bhaumik — back to top">
+    <span class="wordmark-mark">rb</span>
+    <span class="wordmark-text">
+      <span class="wordmark-name">Rahul Bhaumik</span>
+      <span class="wordmark-role">Designer &amp; Researcher</span>
+    </span>
+  </a>
+  <nav aria-label="Primary">
+    <ul class="g-nav">
       <li><a href="#research">Research</a></li>
       <li><a href="#thesis">Thesis</a></li>
-      <li><a href="#experience">Experience</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#publications">Publications</a></li>
+      <li><a href="#experience">Experience</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
 </header>
 
 <!-- ── HERO ── -->
-<div class="hero" id="top">
-  <div class="hero-media">
+<section class="hero" id="top" aria-label="Introduction">
+  <div class="hero-media" aria-hidden="true">
     <video class="is-active" autoplay muted playsinline preload="auto" src="hero-1.mp4"></video>
     <video muted playsinline preload="none" src="hero-2.mp4"></video>
     <video muted playsinline preload="none" src="hero-3.mp4"></video>
-    <img src="hero-4.jpg" alt="" aria-hidden="true" />
+    <img src="hero-4.jpg" alt="" />
   </div>
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <div class="hero-avatar"><img src="profile.jpeg" alt="Portrait of Rahul Bhaumik" width="200" height="200" /></div>
-    <div class="hero-text">
-      <h1 class="hero-name">Dr. Rahul Bhaumik</h1>
-      <p class="hero-title">Researcher · Media Interaction Lab, Free University of Bozen-Bolzano &nbsp;·&nbsp; HCI, Soft &amp; Tangible Interfaces, XR, AI in Design, Design Pedagogy</p>
-    </div>
+  <div class="hero-shade"></div>
+  <div class="hero-inner">
+    <p class="hero-kicker"><b>●</b>&nbsp; Media Interaction Lab · Free University of Bozen-Bolzano</p>
+    <h1 class="hero-statement">Designing <em>soft</em> interfaces for everyday interaction.</h1>
   </div>
-</div>
+</section>
 
-<!-- ── RAIL LAYOUT ── -->
-<div class="rail-layout">
+<div class="layout">
 
-  <!-- LEFT RAIL -->
+  <!-- ── RAIL ── -->
   <aside class="rail">
-    <ul class="rail-nav-list">
-      <li class="active"><a href="#about">Overview</a></li>
-      <li><a href="#research">Research</a></li>
-      <li><a href="#thesis">Thesis</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#publications">Publications</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-
-    <div class="rail-meta">
-      <p class="rail-meta-label">Research Areas</p>
-      <a class="rail-meta-tag" href="#research">HCI</a>
-      <a class="rail-meta-tag" href="#research">XR / AR / VR</a>
-      <a class="rail-meta-tag" href="#research">Soft Interfaces</a>
-      <a class="rail-meta-tag" href="#research">Automotive UX</a>
-      <a class="rail-meta-tag" href="#research">AI in Design</a>
-      <a class="rail-meta-tag" href="#research">Design Pedagogy</a>
+    <div class="id-card">
+      <img class="bw" src="profile.jpeg" alt="Portrait of Rahul Bhaumik" width="600" height="600" />
+      <div>
+        <p class="id-card-name">Dr. Rahul Bhaumik</p>
+        <p class="id-card-role">Researcher, Media Interaction Lab<br>Free University of Bozen-Bolzano</p>
+      </div>
     </div>
-
-    <div class="rail-affil">
-      <p class="rail-affil-label">Affiliation</p>
-      <p class="rail-affil-name">Media Interaction Lab<br>Free University of<br>Bozen-Bolzano, Italy</p>
+    <div class="rail-sticky">
+      <nav aria-label="Sections">
+        <ul class="rail-nav">
+          <li class="active"><a href="#about">Overview</a></li>
+          <li><a href="#research">Research</a></li>
+          <li><a href="#thesis">Thesis</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#publications">Publications</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="rail-extra">
+        <p class="rail-label">Research areas</p>
+        <div class="tags">
+          <a class="tag" href="#research">HCI</a>
+          <a class="tag" href="#research">Soft Interfaces</a>
+          <a class="tag" href="#research">Smart Textiles</a>
+          <a class="tag" href="#research">3D-Printed Sensing</a>
+          <a class="tag" href="#research">Automotive UX</a>
+          <a class="tag" href="#research">XR / AR / VR</a>
+          <a class="tag" href="#research">AI in Design</a>
+          <a class="tag" href="#research">Design Pedagogy</a>
+        </div>
+      </div>
     </div>
   </aside>
 
-  <!-- BODY -->
-  <main class="rail-body">
+  <!-- ── MAIN ── -->
+  <main class="main">
 
-    <!-- ABOUT -->
-    <section class="primary-block section-anchor" id="about">
-      <p class="block-eyebrow">Overview</p>
-      <div class="main-copy">
-        <p>Rahul Bhaumik is a designer and researcher working at the intersection of human-computer interaction, extended reality, soft interfaces, and design pedagogy. He is a researcher and member of the Media Interaction Lab at the Free University of Bozen-Bolzano (unibz), Italy. He completed his PhD at unibz in 2026 with the thesis <em>Affordances of Soft Interfaces: A Design and Fabrication Approach</em>, which investigates soft, passive interfaces — from textiles to 3D-printed smart structures that sense pressure and deformation — for everyday and automotive interactions. His work has appeared at ACM CHI and ACM AutomotiveUI and in IEEE Sensors Letters and Communications Engineering.</p>
-        <p>Trained as an architect and product designer, Bhaumik's work focuses on the tactile, material, and experiential dimensions of human-technology relationships — drawing upon emerging fabrication technologies and morphological principles to create interfaces that are both functionally innovative and perceptually engaging.</p>
+    <!-- OVERVIEW -->
+    <section class="block" id="about">
+      <p class="eyebrow">Overview</p>
+      <p class="lead reveal">Designer and HCI researcher exploring how <mark>form, surface and material</mark> shape the way we touch, press and interact with technology.</p>
+      <div class="prose reveal">
+        <p>Rahul Bhaumik is a designer and researcher working at the intersection of human-computer interaction, extended reality, soft interfaces, and design pedagogy. He is a researcher and member of the Media Interaction Lab at the Free University of Bozen-Bolzano (unibz), Italy. He completed his PhD at unibz in 2026 with the thesis <em>Affordances of Soft Interfaces: A Design and Fabrication Approach</em>, which investigates soft, passive interfaces — from textiles to 3D-printed smart structures that sense pressure and deformation — for everyday and automotive interactions.</p>
+        <p>Trained as an architect and product designer, his work focuses on the tactile, material, and experiential dimensions of human-technology relationships — drawing upon emerging fabrication technologies and morphological principles to create interfaces that are both functionally innovative and perceptually engaging. His work has appeared at ACM CHI and ACM AutomotiveUI and in IEEE Sensors Letters and Communications Engineering.</p>
         <p>Before his doctoral studies, he was an Assistant Professor at the Faculty of Architecture &amp; Design, PES University, Bangalore (2018–2023), where he taught and researched at the confluence of digital design tools, learning systems, and interaction design. He holds an M.Des in Product Design and Engineering from the Indian Institute of Science, Bangalore, and a B.Arch from the School of Planning and Architecture, New Delhi.</p>
+      </div>
+      <div class="stats reveal">
+        <div class="stat"><p class="stat-num">2026</p><p class="stat-label">PhD, Computer Science</p></div>
+        <div class="stat"><p class="stat-num">20+</p><p class="stat-label">Publications</p></div>
+        <div class="stat"><p class="stat-num">5 yrs</p><p class="stat-label">Teaching design</p></div>
+        <div class="stat"><p class="stat-num">400+</p><p class="stat-label">Citations</p></div>
       </div>
     </section>
 
     <!-- RESEARCH GRAPH -->
-    <section class="graph-block section-anchor" id="research">
-      <p class="block-eyebrow">Research Constellation</p>
-      <h2 class="block-title">Interactive Map of Research Themes</h2>
-      <p class="graph-hint">Click the central node to enter the immersive 3D view. Click any theme or paper to explore details.</p>
+    <section class="block" id="research">
+      <p class="eyebrow">Research constellation</p>
+      <h2 class="h-section">An interactive map of research themes</h2>
+      <p class="graph-hint">Click a theme to reveal its papers. Click the centre node to enter the immersive 3D view.</p>
       <div class="graph-layout">
         <div id="researchGraph"></div>
         <aside id="researchInfoPanel">
-          <p class="panel-label">Selected Node</p>
+          <p class="panel-label">Selected node</p>
           <h3>Explore the graph</h3>
           <p>Click any theme or paper node to view its details and research connections.</p>
         </aside>
       </div>
     </section>
 
-    <!-- DOCTORAL THESIS -->
-    <section class="primary-block section-anchor" id="thesis">
-      <p class="block-eyebrow">Doctoral Thesis · 2026</p>
-      <h2 class="thesis-title">Affordances of Soft Interfaces: A Design and Fabrication Approach</h2>
-      <div class="thesis-meta">
-        <span><strong>PhD</strong>, Faculty of Engineering, Free University of Bozen-Bolzano</span>
-        <span><strong>Supervisors</strong> Prof. Michael Haller · Prof. Antonella De Angeli</span>
-        <span><strong>Awarded</strong> 12 June 2026</span>
+    <!-- THESIS -->
+    <section class="block" id="thesis">
+      <p class="eyebrow">Doctoral thesis · 2026</p>
+      <h2 class="thesis-title reveal">Affordances of Soft Interfaces: A Design and Fabrication Approach</h2>
+      <div class="meta-grid">
+        <div><p class="meta-k">Degree</p><p class="meta-v">PhD in Computer Science<br>Free University of Bozen-Bolzano</p></div>
+        <div><p class="meta-k">Supervisors</p><p class="meta-v">Prof. Michael Haller<br>Prof. Antonella De Angeli</p></div>
+        <div><p class="meta-k">Awarded</p><p class="meta-v">12 June 2026</p></div>
       </div>
-      <div class="main-copy">
-        <p>The thesis investigates how to design and fabricate soft, passive interfaces, and how their affordances emerge from geometry, surface and material. It spans textile interfaces and 3D-printed smart structures that detect touch and pressure while offering soft, deformable surfaces for everyday interaction — asking how an interface's overall form, the visual and tactile qualities of its surface, and the flexibility of its material shape the gestures people perform on it.</p>
-      </div>
-      <ol class="thesis-parts">
-        <li>
-          <h3>Form: interacting with 3D surfaces</h3>
-          <p>Experiments on a touch-sensitive, three-dimensional middle console for cars, evaluating how surface geometry affects usability and which gestural patterns people perform on 3D interfaces. <a href="https://doi.org/10.1145/3640792.3675707" target="_blank" rel="noopener">AutomotiveUI ’24</a></p>
+      <p class="body-text">The thesis investigates how to design and fabricate soft, passive interfaces, and how their affordances emerge from geometry, surface and material. It spans textile interfaces and 3D-printed smart structures that detect touch and pressure while offering soft, deformable surfaces for everyday interaction — asking how an interface's overall form, the visual and tactile qualities of its surface, and the flexibility of its material shape the gestures people perform on it.</p>
+      <ol class="parts">
+        <li class="part reveal">
+          <h3><span>Form</span>Interacting with 3D surfaces</h3>
+          <p>Experiments on a touch-sensitive, three-dimensional middle console for cars, evaluating how surface geometry affects usability and which gestural patterns people perform on 3D interfaces.</p>
+          <div class="part-links"><a class="chip" href="https://doi.org/10.1145/3640792.3675707" target="_blank" rel="noopener">AutomotiveUI ’24 ↗</a></div>
         </li>
-        <li>
-          <h3>Surface: textiles that guide touch</h3>
+        <li class="part reveal">
+          <h3><span>Surface</span>Textiles that guide touch</h3>
           <p>How visual and tactile surface features guide on-surface gestures, explored through the design and prototyping of functional and non-functional textile-based interfaces.</p>
         </li>
-        <li>
-          <h3>Material: soft 3D-printed sensing</h3>
-          <p>Deformable 3D-printed structures with ferromagnetic filaments that use inductive sensing for pressure and out-of-plane gestures — evaluated for mechanics, sensing performance and long-term stability, and demonstrated as controllers, weighing systems and smart shoes. <a href="https://doi.org/10.1109/LSENS.2025.3562455" target="_blank" rel="noopener">IEEE Sens. Lett. ’25</a> · <a href="https://doi.org/10.1145/3772318.3791824" target="_blank" rel="noopener">CHI ’26</a></p>
+        <li class="part reveal">
+          <h3><span>Material</span>Soft 3D-printed sensing</h3>
+          <p>Deformable 3D-printed structures with ferromagnetic filaments that use inductive sensing for pressure and out-of-plane gestures — evaluated for mechanics, sensing performance and long-term stability, and demonstrated as controllers, weighing systems and smart shoes.</p>
+          <div class="part-links">
+            <a class="chip" href="https://doi.org/10.1109/LSENS.2025.3562455" target="_blank" rel="noopener">IEEE Sens. Lett. ’25 ↗</a>
+            <a class="chip" href="https://doi.org/10.1145/3772318.3791824" target="_blank" rel="noopener">CHI ’26 ↗</a>
+          </div>
         </li>
       </ol>
-      <a class="scholar-cta" href="https://hdl.handle.net/10863/52531" target="_blank" rel="noopener">View thesis record →</a>
-    </section>
-
-    <!-- EXPERIENCE & EDUCATION -->
-    <section class="primary-block section-anchor" id="experience">
-      <p class="block-eyebrow">Background</p>
-      <h2 class="block-title">Experience &amp; Education</h2>
-      <div class="xp-grid">
-        <div>
-          <p class="xp-col-title">Experience</p>
-          <div class="xp-item">
-            <div class="xp-year">Current</div>
-            <div>
-              <p class="xp-role">Researcher</p>
-              <p class="xp-place">Media Interaction Lab, Free University of Bozen-Bolzano</p>
-            </div>
-          </div>
-          <div class="xp-item">
-            <div class="xp-year">2018 –<br>2023</div>
-            <div>
-              <p class="xp-role">Assistant Professor</p>
-              <p class="xp-place">Faculty of Architecture &amp; Design, PES University, Bangalore</p>
-            </div>
-          </div>
-        </div>
-        <div>
-          <p class="xp-col-title">Education</p>
-          <div class="xp-item">
-            <div class="xp-year">2023 –<br>2026</div>
-            <div>
-              <p class="xp-role">PhD — Computer Science</p>
-              <p class="xp-place">Free University of Bozen-Bolzano, Italy<br><a href="https://bia.unibz.it/esploro/outputs/doctoral/Affordances-of-Soft-Interfaces-A-Design/991007370725901241" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:2px">Thesis: Affordances of Soft Interfaces: A Design and Fabrication Approach</a></p>
-            </div>
-          </div>
-          <div class="xp-item">
-            <div class="xp-year">2016 –<br>2018</div>
-            <div>
-              <p class="xp-role">M.Des — Product Design &amp; Engineering</p>
-              <p class="xp-place">Indian Institute of Science, Bangalore</p>
-            </div>
-          </div>
-          <div class="xp-item">
-            <div class="xp-year">2010 –<br>2015</div>
-            <div>
-              <p class="xp-role">B.Arch</p>
-              <p class="xp-place">School of Planning and Architecture, New Delhi</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <a class="link-arrow" href="https://hdl.handle.net/10863/52531" target="_blank" rel="noopener">View thesis record <span>→</span></a>
     </section>
 
     <!-- PROJECTS -->
-    <section class="primary-block section-anchor" id="projects">
-      <p class="block-eyebrow">Selected Work</p>
-      <h2 class="block-title">Projects</h2>
-      <p class="projects-subhead">Current</p>
-      <div class="module-grid module-grid--single">
-        <div class="module-item is-static">
-          <p class="module-num">01</p>
-          <h3 class="module-title">Smart Shoe Sole with Real-Time Variable Stiffness</h3>
-          <p class="module-desc">A smart shoe sole whose stiffness can change in real time — extending the thesis work on soft, 3D-printed structures and smart wearables.</p>
-          <span class="module-status">Ongoing</span>
-        </div>
-      </div>
-      <p class="projects-subhead">Past</p>
-      <div class="module-grid module-grid--single">
-        <a href="project.html" class="module-item">
-          <p class="module-num">02</p>
-          <span class="module-arrow">↗</span>
-          <h3 class="module-title">Textile-based Novel Cover Interfaces for Automotive Interiors</h3>
-          <p class="module-desc">3D touch-sensitive textile surfaces for automotive consoles — exploring tactile affordances and multi-surface interaction for in-vehicle HCI. Part of the doctoral thesis.</p>
-          <span class="module-status is-past">Completed · AutomotiveUI 2024</span>
+    <section class="block" id="projects">
+      <p class="eyebrow">Projects</p>
+      <h2 class="h-section">Current &amp; past work</h2>
+      <div class="cards">
+        <article class="card reveal">
+          <div class="card-media">
+            <div class="sole-art" aria-hidden="true">
+              <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice"><rect class="cell" x="-89" y="-63" width="26" height="26" rx="6" transform="rotate(45 -76 -50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.63s"/><rect class="cell" x="-51" y="-63" width="26" height="26" rx="6" transform="rotate(45 -38 -50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.28s"/><rect class="cell" x="-13" y="-63" width="26" height="26" rx="6" transform="rotate(45 0 -50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.95s"/><rect class="cell" x="25" y="-63" width="26" height="26" rx="6" transform="rotate(45 38 -50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.65s"/><rect class="cell" x="63" y="-63" width="26" height="26" rx="6" transform="rotate(45 76 -50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.38s"/><rect class="cell" x="101" y="-63" width="26" height="26" rx="6" transform="rotate(45 114 -50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.17s"/><rect class="cell" x="139" y="-63" width="26" height="26" rx="6" transform="rotate(45 152 -50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.02s"/><rect class="cell" x="177" y="-63" width="26" height="26" rx="6" transform="rotate(45 190 -50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.95s"/><rect class="cell" x="215" y="-63" width="26" height="26" rx="6" transform="rotate(45 228 -50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.97s"/><rect class="cell" x="253" y="-63" width="26" height="26" rx="6" transform="rotate(45 266 -50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.08s"/><rect class="cell" x="291" y="-63" width="26" height="26" rx="6" transform="rotate(45 304 -50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.26s"/><rect class="cell" x="329" y="-63" width="26" height="26" rx="6" transform="rotate(45 342 -50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.51s"/><rect class="cell" x="367" y="-63" width="26" height="26" rx="6" transform="rotate(45 380 -50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.79s"/><rect class="cell" x="405" y="-63" width="26" height="26" rx="6" transform="rotate(45 418 -50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.11s"/><rect class="cell" x="443" y="-63" width="26" height="26" rx="6" transform="rotate(45 456 -50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.45s"/><rect class="cell" x="481" y="-63" width="26" height="26" rx="6" transform="rotate(45 494 -50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.80s"/><rect class="cell" x="-70" y="-38" width="26" height="26" rx="6" transform="rotate(45 -57 -25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.31s"/><rect class="cell" x="-32" y="-38" width="26" height="26" rx="6" transform="rotate(45 -19 -25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.95s"/><rect class="cell" x="6" y="-38" width="26" height="26" rx="6" transform="rotate(45 19 -25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.61s"/><rect class="cell" x="44" y="-38" width="26" height="26" rx="6" transform="rotate(45 57 -25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.30s"/><rect class="cell" x="82" y="-38" width="26" height="26" rx="6" transform="rotate(45 95 -25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.04s"/><rect class="cell" x="120" y="-38" width="26" height="26" rx="6" transform="rotate(45 133 -25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.83s"/><rect class="cell" x="158" y="-38" width="26" height="26" rx="6" transform="rotate(45 171 -25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.70s"/><rect class="cell" x="196" y="-38" width="26" height="26" rx="6" transform="rotate(45 209 -25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.67s"/><rect class="cell" x="234" y="-38" width="26" height="26" rx="6" transform="rotate(45 247 -25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.75s"/><rect class="cell" x="272" y="-38" width="26" height="26" rx="6" transform="rotate(45 285 -25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.92s"/><rect class="cell" x="310" y="-38" width="26" height="26" rx="6" transform="rotate(45 323 -25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.16s"/><rect class="cell" x="348" y="-38" width="26" height="26" rx="6" transform="rotate(45 361 -25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.45s"/><rect class="cell" x="386" y="-38" width="26" height="26" rx="6" transform="rotate(45 399 -25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.77s"/><rect class="cell" x="424" y="-38" width="26" height="26" rx="6" transform="rotate(45 437 -25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.12s"/><rect class="cell" x="462" y="-38" width="26" height="26" rx="6" transform="rotate(45 475 -25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.48s"/><rect class="cell" x="500" y="-38" width="26" height="26" rx="6" transform="rotate(45 513 -25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.86s"/><rect class="cell" x="-89" y="-13" width="26" height="26" rx="6" transform="rotate(45 -76 0)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.37s"/><rect class="cell" x="-51" y="-13" width="26" height="26" rx="6" transform="rotate(45 -38 0)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.99s"/><rect class="cell" x="-13" y="-13" width="26" height="26" rx="6" transform="rotate(45 0 0)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.62s"/><rect class="cell" x="25" y="-13" width="26" height="26" rx="6" transform="rotate(45 38 0)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.27s"/><rect class="cell" x="63" y="-13" width="26" height="26" rx="6" transform="rotate(45 76 0)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.96s"/><rect class="cell" x="101" y="-13" width="26" height="26" rx="6" transform="rotate(45 114 0)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.69s"/><rect class="cell" x="139" y="-13" width="26" height="26" rx="6" transform="rotate(45 152 0)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.49s"/><rect class="cell" x="177" y="-13" width="26" height="26" rx="6" transform="rotate(45 190 0)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.39s"/><rect class="cell" x="215" y="-13" width="26" height="26" rx="6" transform="rotate(45 228 0)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.42s"/><rect class="cell" x="253" y="-13" width="26" height="26" rx="6" transform="rotate(45 266 0)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.57s"/><rect class="cell" x="291" y="-13" width="26" height="26" rx="6" transform="rotate(45 304 0)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.81s"/><rect class="cell" x="329" y="-13" width="26" height="26" rx="6" transform="rotate(45 342 0)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.10s"/><rect class="cell" x="367" y="-13" width="26" height="26" rx="6" transform="rotate(45 380 0)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.43s"/><rect class="cell" x="405" y="-13" width="26" height="26" rx="6" transform="rotate(45 418 0)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.79s"/><rect class="cell" x="443" y="-13" width="26" height="26" rx="6" transform="rotate(45 456 0)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.17s"/><rect class="cell" x="481" y="-13" width="26" height="26" rx="6" transform="rotate(45 494 0)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.55s"/><rect class="cell" x="-70" y="12" width="26" height="26" rx="6" transform="rotate(45 -57 25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.06s"/><rect class="cell" x="-32" y="12" width="26" height="26" rx="6" transform="rotate(45 -19 25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.67s"/><rect class="cell" x="6" y="12" width="26" height="26" rx="6" transform="rotate(45 19 25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.30s"/><rect class="cell" x="44" y="12" width="26" height="26" rx="6" transform="rotate(45 57 25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.94s"/><rect class="cell" x="82" y="12" width="26" height="26" rx="6" transform="rotate(45 95 25)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.61s"/><rect class="cell" x="120" y="12" width="26" height="26" rx="6" transform="rotate(45 133 25)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.34s"/><rect class="cell" x="158" y="12" width="26" height="26" rx="6" transform="rotate(45 171 25)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.16s"/><rect class="cell" x="196" y="12" width="26" height="26" rx="6" transform="rotate(45 209 25)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.11s"/><rect class="cell" x="234" y="12" width="26" height="26" rx="6" transform="rotate(45 247 25)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.23s"/><rect class="cell" x="272" y="12" width="26" height="26" rx="6" transform="rotate(45 285 25)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.46s"/><rect class="cell" x="310" y="12" width="26" height="26" rx="6" transform="rotate(45 323 25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.76s"/><rect class="cell" x="348" y="12" width="26" height="26" rx="6" transform="rotate(45 361 25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.11s"/><rect class="cell" x="386" y="12" width="26" height="26" rx="6" transform="rotate(45 399 25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.47s"/><rect class="cell" x="424" y="12" width="26" height="26" rx="6" transform="rotate(45 437 25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.86s"/><rect class="cell" x="462" y="12" width="26" height="26" rx="6" transform="rotate(45 475 25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.25s"/><rect class="cell" x="500" y="12" width="26" height="26" rx="6" transform="rotate(45 513 25)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.65s"/><rect class="cell" x="-89" y="37" width="26" height="26" rx="6" transform="rotate(45 -76 50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.18s"/><rect class="cell" x="-51" y="37" width="26" height="26" rx="6" transform="rotate(45 -38 50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.77s"/><rect class="cell" x="-13" y="37" width="26" height="26" rx="6" transform="rotate(45 0 50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.37s"/><rect class="cell" x="25" y="37" width="26" height="26" rx="6" transform="rotate(45 38 50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.98s"/><rect class="cell" x="63" y="37" width="26" height="26" rx="6" transform="rotate(45 76 50)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.61s"/><rect class="cell" x="101" y="37" width="26" height="26" rx="6" transform="rotate(45 114 50)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.27s"/><rect class="cell" x="139" y="37" width="26" height="26" rx="6" transform="rotate(45 152 50)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.99s"/><rect class="cell" x="177" y="37" width="26" height="26" rx="6" transform="rotate(45 190 50)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.84s"/><rect class="cell" x="215" y="37" width="26" height="26" rx="6" transform="rotate(45 228 50)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.89s"/><rect class="cell" x="253" y="37" width="26" height="26" rx="6" transform="rotate(45 266 50)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.11s"/><rect class="cell" x="291" y="37" width="26" height="26" rx="6" transform="rotate(45 304 50)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.42s"/><rect class="cell" x="329" y="37" width="26" height="26" rx="6" transform="rotate(45 342 50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.78s"/><rect class="cell" x="367" y="37" width="26" height="26" rx="6" transform="rotate(45 380 50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.17s"/><rect class="cell" x="405" y="37" width="26" height="26" rx="6" transform="rotate(45 418 50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.56s"/><rect class="cell" x="443" y="37" width="26" height="26" rx="6" transform="rotate(45 456 50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.96s"/><rect class="cell" x="481" y="37" width="26" height="26" rx="6" transform="rotate(45 494 50)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.37s"/><rect class="cell" x="-70" y="62" width="26" height="26" rx="6" transform="rotate(45 -57 75)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.91s"/><rect class="cell" x="-32" y="62" width="26" height="26" rx="6" transform="rotate(45 -19 75)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.50s"/><rect class="cell" x="6" y="62" width="26" height="26" rx="6" transform="rotate(45 19 75)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.09s"/><rect class="cell" x="44" y="62" width="26" height="26" rx="6" transform="rotate(45 57 75)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.68s"/><rect class="cell" x="82" y="62" width="26" height="26" rx="6" transform="rotate(45 95 75)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.29s"/><rect class="cell" x="120" y="62" width="26" height="26" rx="6" transform="rotate(45 133 75)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.93s"/><rect class="cell" x="158" y="62" width="26" height="26" rx="6" transform="rotate(45 171 75)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.64s"/><rect class="cell" x="196" y="62" width="26" height="26" rx="6" transform="rotate(45 209 75)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.56s"/><rect class="cell" x="234" y="62" width="26" height="26" rx="6" transform="rotate(45 247 75)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.76s"/><rect class="cell" x="272" y="62" width="26" height="26" rx="6" transform="rotate(45 285 75)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.09s"/><rect class="cell" x="310" y="62" width="26" height="26" rx="6" transform="rotate(45 323 75)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.47s"/><rect class="cell" x="348" y="62" width="26" height="26" rx="6" transform="rotate(45 361 75)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.87s"/><rect class="cell" x="386" y="62" width="26" height="26" rx="6" transform="rotate(45 399 75)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.28s"/><rect class="cell" x="424" y="62" width="26" height="26" rx="6" transform="rotate(45 437 75)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.69s"/><rect class="cell" x="462" y="62" width="26" height="26" rx="6" transform="rotate(45 475 75)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.11s"/><rect class="cell" x="500" y="62" width="26" height="26" rx="6" transform="rotate(45 513 75)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.52s"/><rect class="cell" x="-89" y="87" width="26" height="26" rx="6" transform="rotate(45 -76 100)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.08s"/><rect class="cell" x="-51" y="87" width="26" height="26" rx="6" transform="rotate(45 -38 100)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.66s"/><rect class="cell" x="-13" y="87" width="26" height="26" rx="6" transform="rotate(45 0 100)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.24s"/><rect class="cell" x="25" y="87" width="26" height="26" rx="6" transform="rotate(45 38 100)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.82s"/><rect class="cell" x="63" y="87" width="26" height="26" rx="6" transform="rotate(45 76 100)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.40s"/><rect class="cell" x="101" y="87" width="26" height="26" rx="6" transform="rotate(45 114 100)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.99s"/><rect class="cell" x="139" y="87" width="26" height="26" rx="6" transform="rotate(45 152 100)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.60s"/><rect class="cell" x="177" y="87" width="26" height="26" rx="6" transform="rotate(45 190 100)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.30s"/><rect class="cell" x="215" y="87" width="26" height="26" rx="6" transform="rotate(45 228 100)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.41s"/><rect class="cell" x="253" y="87" width="26" height="26" rx="6" transform="rotate(45 266 100)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.78s"/><rect class="cell" x="291" y="87" width="26" height="26" rx="6" transform="rotate(45 304 100)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.19s"/><rect class="cell" x="329" y="87" width="26" height="26" rx="6" transform="rotate(45 342 100)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.60s"/><rect class="cell" x="367" y="87" width="26" height="26" rx="6" transform="rotate(45 380 100)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.02s"/><rect class="cell" x="405" y="87" width="26" height="26" rx="6" transform="rotate(45 418 100)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.44s"/><rect class="cell" x="443" y="87" width="26" height="26" rx="6" transform="rotate(45 456 100)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.86s"/><rect class="cell" x="481" y="87" width="26" height="26" rx="6" transform="rotate(45 494 100)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.28s"/><rect class="cell" x="-70" y="112" width="26" height="26" rx="6" transform="rotate(45 -57 125)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.86s"/><rect class="cell" x="-32" y="112" width="26" height="26" rx="6" transform="rotate(45 -19 125)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.43s"/><rect class="cell" x="6" y="112" width="26" height="26" rx="6" transform="rotate(45 19 125)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.01s"/><rect class="cell" x="44" y="112" width="26" height="26" rx="6" transform="rotate(45 57 125)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.59s"/><rect class="cell" x="82" y="112" width="26" height="26" rx="6" transform="rotate(45 95 125)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.17s"/><rect class="cell" x="120" y="112" width="26" height="26" rx="6" transform="rotate(45 133 125)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.74s"/><rect class="cell" x="158" y="112" width="26" height="26" rx="6" transform="rotate(45 171 125)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.32s"/><rect class="cell" x="196" y="112" width="26" height="26" rx="6" transform="rotate(45 209 125)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.10s"/><rect class="cell" x="234" y="112" width="26" height="26" rx="6" transform="rotate(45 247 125)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.52s"/><rect class="cell" x="272" y="112" width="26" height="26" rx="6" transform="rotate(45 285 125)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.94s"/><rect class="cell" x="310" y="112" width="26" height="26" rx="6" transform="rotate(45 323 125)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.37s"/><rect class="cell" x="348" y="112" width="26" height="26" rx="6" transform="rotate(45 361 125)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.79s"/><rect class="cell" x="386" y="112" width="26" height="26" rx="6" transform="rotate(45 399 125)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.21s"/><rect class="cell" x="424" y="112" width="26" height="26" rx="6" transform="rotate(45 437 125)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.63s"/><rect class="cell" x="462" y="112" width="26" height="26" rx="6" transform="rotate(45 475 125)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.06s"/><rect class="cell" x="500" y="112" width="26" height="26" rx="6" transform="rotate(45 513 125)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.48s"/><rect class="cell" x="-89" y="137" width="26" height="26" rx="6" transform="rotate(45 -76 150)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.08s"/><rect class="cell" x="-51" y="137" width="26" height="26" rx="6" transform="rotate(45 -38 150)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.66s"/><rect class="cell" x="-13" y="137" width="26" height="26" rx="6" transform="rotate(45 0 150)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.24s"/><rect class="cell" x="25" y="137" width="26" height="26" rx="6" transform="rotate(45 38 150)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.82s"/><rect class="cell" x="63" y="137" width="26" height="26" rx="6" transform="rotate(45 76 150)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.41s"/><rect class="cell" x="101" y="137" width="26" height="26" rx="6" transform="rotate(45 114 150)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.00s"/><rect class="cell" x="139" y="137" width="26" height="26" rx="6" transform="rotate(45 152 150)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.60s"/><rect class="cell" x="177" y="137" width="26" height="26" rx="6" transform="rotate(45 190 150)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.30s"/><rect class="cell" x="215" y="137" width="26" height="26" rx="6" transform="rotate(45 228 150)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.42s"/><rect class="cell" x="253" y="137" width="26" height="26" rx="6" transform="rotate(45 266 150)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.79s"/><rect class="cell" x="291" y="137" width="26" height="26" rx="6" transform="rotate(45 304 150)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.19s"/><rect class="cell" x="329" y="137" width="26" height="26" rx="6" transform="rotate(45 342 150)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.60s"/><rect class="cell" x="367" y="137" width="26" height="26" rx="6" transform="rotate(45 380 150)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.02s"/><rect class="cell" x="405" y="137" width="26" height="26" rx="6" transform="rotate(45 418 150)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.44s"/><rect class="cell" x="443" y="137" width="26" height="26" rx="6" transform="rotate(45 456 150)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.86s"/><rect class="cell" x="481" y="137" width="26" height="26" rx="6" transform="rotate(45 494 150)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.28s"/><rect class="cell" x="-70" y="163" width="26" height="26" rx="6" transform="rotate(45 -57 176)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.91s"/><rect class="cell" x="-32" y="163" width="26" height="26" rx="6" transform="rotate(45 -19 176)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.50s"/><rect class="cell" x="6" y="163" width="26" height="26" rx="6" transform="rotate(45 19 176)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.09s"/><rect class="cell" x="44" y="163" width="26" height="26" rx="6" transform="rotate(45 57 176)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.69s"/><rect class="cell" x="82" y="163" width="26" height="26" rx="6" transform="rotate(45 95 176)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.29s"/><rect class="cell" x="120" y="163" width="26" height="26" rx="6" transform="rotate(45 133 176)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.93s"/><rect class="cell" x="158" y="163" width="26" height="26" rx="6" transform="rotate(45 171 176)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.65s"/><rect class="cell" x="196" y="163" width="26" height="26" rx="6" transform="rotate(45 209 176)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.57s"/><rect class="cell" x="234" y="163" width="26" height="26" rx="6" transform="rotate(45 247 176)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.77s"/><rect class="cell" x="272" y="163" width="26" height="26" rx="6" transform="rotate(45 285 176)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.10s"/><rect class="cell" x="310" y="163" width="26" height="26" rx="6" transform="rotate(45 323 176)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.48s"/><rect class="cell" x="348" y="163" width="26" height="26" rx="6" transform="rotate(45 361 176)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.88s"/><rect class="cell" x="386" y="163" width="26" height="26" rx="6" transform="rotate(45 399 176)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.28s"/><rect class="cell" x="424" y="163" width="26" height="26" rx="6" transform="rotate(45 437 176)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.69s"/><rect class="cell" x="462" y="163" width="26" height="26" rx="6" transform="rotate(45 475 176)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.11s"/><rect class="cell" x="500" y="163" width="26" height="26" rx="6" transform="rotate(45 513 176)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.52s"/><rect class="cell" x="-89" y="188" width="26" height="26" rx="6" transform="rotate(45 -76 201)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.18s"/><rect class="cell" x="-51" y="188" width="26" height="26" rx="6" transform="rotate(45 -38 201)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.77s"/><rect class="cell" x="-13" y="188" width="26" height="26" rx="6" transform="rotate(45 0 201)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.38s"/><rect class="cell" x="25" y="188" width="26" height="26" rx="6" transform="rotate(45 38 201)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.99s"/><rect class="cell" x="63" y="188" width="26" height="26" rx="6" transform="rotate(45 76 201)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.61s"/><rect class="cell" x="101" y="188" width="26" height="26" rx="6" transform="rotate(45 114 201)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.27s"/><rect class="cell" x="139" y="188" width="26" height="26" rx="6" transform="rotate(45 152 201)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.00s"/><rect class="cell" x="177" y="188" width="26" height="26" rx="6" transform="rotate(45 190 201)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.85s"/><rect class="cell" x="215" y="188" width="26" height="26" rx="6" transform="rotate(45 228 201)" fill="#141414" fill-opacity="0.75" style="animation-delay:-0.90s"/><rect class="cell" x="253" y="188" width="26" height="26" rx="6" transform="rotate(45 266 201)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.12s"/><rect class="cell" x="291" y="188" width="26" height="26" rx="6" transform="rotate(45 304 201)" fill="#141414" fill-opacity="0.75" style="animation-delay:-1.43s"/><rect class="cell" x="329" y="188" width="26" height="26" rx="6" transform="rotate(45 342 201)" fill="#141414" fill-opacity="0.35" style="animation-delay:-1.79s"/><rect class="cell" x="367" y="188" width="26" height="26" rx="6" transform="rotate(45 380 201)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.17s"/><rect class="cell" x="405" y="188" width="26" height="26" rx="6" transform="rotate(45 418 201)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.56s"/><rect class="cell" x="443" y="188" width="26" height="26" rx="6" transform="rotate(45 456 201)" fill="#141414" fill-opacity="0.35" style="animation-delay:-2.97s"/><rect class="cell" x="481" y="188" width="26" height="26" rx="6" transform="rotate(45 494 201)" fill="#141414" fill-opacity="0.35" style="animation-delay:-3.37s"/></svg>
+            </div>
+            <span class="card-status live">Ongoing</span>
+          </div>
+          <h3 class="card-title">Smart Shoe Sole with Real-Time Variable Stiffness</h3>
+          <p class="card-desc">A smart shoe sole whose stiffness can change in real time — extending the thesis work on soft, 3D-printed structures and smart wearables.</p>
+          <p class="card-meta">Current project</p>
+        </article>
+        <a class="card reveal" href="project.html">
+          <div class="card-media">
+            <img class="bw" src="Picture 1.jpg" alt="Textile-based touch interface with a diamond grid of tactile cells" />
+            <span class="card-status">Completed</span>
+          </div>
+          <h3 class="card-title">Textile-based Novel Cover Interfaces for Automotive Interiors</h3>
+          <p class="card-desc">3D touch-sensitive textile surfaces for automotive consoles — exploring tactile affordances and multi-surface interaction for in-vehicle HCI. Part of the doctoral thesis.</p>
+          <p class="card-meta">Past project · AutomotiveUI 2024 →</p>
         </a>
       </div>
     </section>
 
     <!-- PUBLICATIONS -->
-    <section class="primary-block section-anchor" id="publications">
-      <p class="block-eyebrow">Research Output</p>
-      <h2 class="block-title">Selected Publications</h2>
+    <section class="block" id="publications">
+      <p class="eyebrow">Research output</p>
+      <h2 class="h-section">Selected publications</h2>
+      <div class="pub-tools"><span class="pub-count">13 selected · newest first</span></div>
       <ul class="pub-list">
-        <li><a class="pub-item" href="https://ieeexplore.ieee.org/abstract/document/11544066/" target="_blank" rel="noopener">
-          <span class="pub-index">13</span>
-          <div><p class="pub-title">Soft, Scalable Spacer-Knitted Piezoresistive Pressure Sensors with Tunable Localized Sensitivity Enabled by Heat-Expandable Yarn Inlays</p><p class="pub-venue">IEEE Sensors Letters · 2026</p></div>
+        <li><a class="pub" href="https://ieeexplore.ieee.org/abstract/document/11544066/" target="_blank" rel="noopener">
+          <span class="pub-year">2026</span>
+          <span><span class="pub-title" style="display:block">Soft, Scalable Spacer-Knitted Piezoresistive Pressure Sensors with Tunable Localized Sensitivity Enabled by Heat-Expandable Yarn Inlays</span><span class="pub-venue" style="display:block">IEEE Sensors Letters</span></span>
           <span class="pub-arrow" aria-hidden="true">↗</span>
         </a></li>
-        <li><a class="pub-item" href="https://doi.org/10.1145/3772318.3791824" target="_blank" rel="noopener">
-          <span class="pub-index">12</span>
-          <div><p class="pub-title">InSense3D: Designing Smart 3D-Printed Structures Leveraging Ferromagnetic Filaments for Inductive Deformation Sensing</p><p class="pub-venue">ACM CHI · 2026</p></div>
+        <li><a class="pub" href="https://doi.org/10.1145/3772318.3791824" target="_blank" rel="noopener">
+          <span class="pub-year">2026</span>
+          <span><span class="pub-title" style="display:block">InSense3D: Designing Smart 3D-Printed Structures Leveraging Ferromagnetic Filaments for Inductive Deformation Sensing</span><span class="pub-venue" style="display:block">ACM CHI</span></span>
           <span class="pub-arrow" aria-hidden="true">↗</span>
         </a></li>
-        <li><a class="pub-item" href="https://doi.org/10.1109/LSENS.2025.3562455" target="_blank" rel="noopener">
-          <span class="pub-index">11</span>
-          <div><p class="pub-title">Inductive Pressure Sensors Using 3D-Printed Structures with Tunable Stiffness</p><p class="pub-venue">IEEE Sensors Letters · 2025</p></div>
+        <li><a class="pub" href="https://doi.org/10.1109/LSENS.2025.3562455" target="_blank" rel="noopener">
+          <span class="pub-year">2025</span>
+          <span><span class="pub-title" style="display:block">Inductive Pressure Sensors Using 3D-Printed Structures with Tunable Stiffness</span><span class="pub-venue" style="display:block">IEEE Sensors Letters</span></span>
           <span class="pub-arrow" aria-hidden="true">↗</span>
         </a></li>
-        <li><a class="pub-item" href="https://doi.org/10.1038/s44172-025-00373-x" target="_blank" rel="noopener">
-          <span class="pub-index">10</span>
-          <div><p class="pub-title">Submersible Touchless Interactivity in Conformable Textiles Enabled by Highly Selective Overbraided Magnetoresistive Sensors</p><p class="pub-venue">Communications Engineering · 2025</p></div>
+        <li><a class="pub" href="https://doi.org/10.1038/s44172-025-00373-x" target="_blank" rel="noopener">
+          <span class="pub-year">2025</span>
+          <span><span class="pub-title" style="display:block">Submersible Touchless Interactivity in Conformable Textiles Enabled by Highly Selective Overbraided Magnetoresistive Sensors</span><span class="pub-venue" style="display:block">Communications Engineering</span></span>
           <span class="pub-arrow" aria-hidden="true">↗</span>
         </a></li>
-        <li><a class="pub-item" href="https://doi.org/10.1145/3640792.3675707" target="_blank" rel="noopener">
-          <span class="pub-index">09</span>
-          <div><p class="pub-title">Interaction with a 3D Surface for an Innovative Input Experience on a Central Console</p><p class="pub-venue">ACM AutomotiveUI · 2024</p></div>
+        <li><a class="pub" href="https://doi.org/10.1145/3640792.3675707" target="_blank" rel="noopener">
+          <span class="pub-year">2024</span>
+          <span><span class="pub-title" style="display:block">Interaction with a 3D Surface for an Innovative Input Experience on a Central Console</span><span class="pub-venue" style="display:block">ACM AutomotiveUI</span></span>
           <span class="pub-arrow" aria-hidden="true">↗</span>
         </a></li>
-        <li><a class="pub-item" href="https://doi.org/10.3390/mti8070054" target="_blank" rel="noopener">
-          <span class="pub-index">08</span>
-          <div><p class="pub-title">Emotion-Aware In-Car Feedback: A Comparative Study</p><p class="pub-venue">Multimodal Technologies and Interaction · 2024</p></div>
+        <li><a class="pub" href="https://doi.org/10.3390/mti8070054" target="_blank" rel="noopener">
+          <span class="pub-year">2024</span>
+          <span><span class="pub-title" style="display:block">Emotion-Aware In-Car Feedback: A Comparative Study</span><span class="pub-venue" style="display:block">Multimodal Technologies and Interaction</span></span>
           <span class="pub-arrow" aria-hidden="true">↗</span>
         </a></li>
-        <li><a class="pub-item" href="https://doi.org/10.1016/j.procs.2023.01.047" target="_blank" rel="noopener">
-          <span class="pub-index">07</span>
-          <div><p class="pub-title">Smart Vernacular Architecture: A Framework for Assessment and Virtual Reality-based Visualisation of Indigenous Toda Dwellings</p><p class="pub-venue">Procedia Computer Science · 2023</p></div>
+        <li><a class="pub" href="https://doi.org/10.1016/j.procs.2023.01.047" target="_blank" rel="noopener">
+          <span class="pub-year">2023</span>
+          <span><span class="pub-title" style="display:block">Smart Vernacular Architecture: A Framework for Assessment and Virtual Reality-based Visualisation of Indigenous Toda Dwellings</span><span class="pub-venue" style="display:block">Procedia Computer Science</span></span>
           <span class="pub-arrow" aria-hidden="true">↗</span>
         </a></li>
-        <li><a class="pub-item" href="https://doi.org/10.1016/j.procs.2023.01.205" target="_blank" rel="noopener">
-          <span class="pub-index">06</span>
-          <div><p class="pub-title">An Intelligent ABM-based Framework for Developing Pandemic-Resilient Urban Spaces in Post-COVID Smart Cities</p><p class="pub-venue">Procedia Computer Science · 2023</p></div>
+        <li><a class="pub" href="https://doi.org/10.1016/j.procs.2023.01.205" target="_blank" rel="noopener">
+          <span class="pub-year">2023</span>
+          <span><span class="pub-title" style="display:block">An Intelligent ABM-based Framework for Developing Pandemic-Resilient Urban Spaces in Post-COVID Smart Cities</span><span class="pub-venue" style="display:block">Procedia Computer Science</span></span>
           <span class="pub-arrow" aria-hidden="true">↗</span>
         </a></li>
-        <li><a class="pub-item" href="https://doi.org/10.1016/j.procs.2023.01.031" target="_blank" rel="noopener">
-          <span class="pub-index">05</span>
-          <div><p class="pub-title">An Intelligent Virtual Environment for Designers with Reduced Motor Abilities</p><p class="pub-venue">Procedia Computer Science · 2023</p></div>
+        <li><a class="pub" href="https://doi.org/10.1016/j.procs.2023.01.031" target="_blank" rel="noopener">
+          <span class="pub-year">2023</span>
+          <span><span class="pub-title" style="display:block">An Intelligent Virtual Environment for Designers with Reduced Motor Abilities</span><span class="pub-venue" style="display:block">Procedia Computer Science</span></span>
           <span class="pub-arrow" aria-hidden="true">↗</span>
         </a></li>
-        <li><a class="pub-item" href="https://doi.org/10.1016/j.asoc.2021.107522" target="_blank" rel="noopener">
-          <span class="pub-index">04</span>
-          <div><p class="pub-title">A Deep-Learning Based Multimodal System for Covid-19 Diagnosis using Breathing Sounds and Chest X-ray Images</p><p class="pub-venue">Applied Soft Computing · 2021</p></div>
+        <li><a class="pub" href="https://doi.org/10.1016/j.asoc.2021.107522" target="_blank" rel="noopener">
+          <span class="pub-year">2021</span>
+          <span><span class="pub-title" style="display:block">A Deep-Learning Based Multimodal System for Covid-19 Diagnosis using Breathing Sounds and Chest X-ray Images</span><span class="pub-venue" style="display:block">Applied Soft Computing</span></span>
           <span class="pub-arrow" aria-hidden="true">↗</span>
         </a></li>
-        <li><a class="pub-item" href="https://link.springer.com/chapter/10.1007/978-981-15-8289-9_63" target="_blank" rel="noopener">
-          <span class="pub-index">03</span>
-          <div><p class="pub-title">An AI-based Pedagogical Tool for Creating Sketched Representation of Emotive Product Forms in the Conceptual Design Stages</p><p class="pub-venue">ICT4SD 2020 · Springer</p></div>
+        <li><a class="pub" href="https://link.springer.com/chapter/10.1007/978-981-15-8289-9_63" target="_blank" rel="noopener">
+          <span class="pub-year">2020</span>
+          <span><span class="pub-title" style="display:block">An AI-based Pedagogical Tool for Creating Sketched Representation of Emotive Product Forms in the Conceptual Design Stages</span><span class="pub-venue" style="display:block">ICT4SD · Springer</span></span>
           <span class="pub-arrow" aria-hidden="true">↗</span>
         </a></li>
-        <li><a class="pub-item" href="https://doi.org/10.1109/GHTC46095.2019.9033102" target="_blank" rel="noopener">
-          <span class="pub-index">02</span>
-          <div><p class="pub-title">An Inclusive Community Based Water Purification and Monitoring System for the Base of the Pyramid</p><p class="pub-venue">IEEE GHTC · 2019</p></div>
+        <li><a class="pub" href="https://doi.org/10.1109/GHTC46095.2019.9033102" target="_blank" rel="noopener">
+          <span class="pub-year">2019</span>
+          <span><span class="pub-title" style="display:block">An Inclusive Community Based Water Purification and Monitoring System for the Base of the Pyramid</span><span class="pub-venue" style="display:block">IEEE GHTC</span></span>
           <span class="pub-arrow" aria-hidden="true">↗</span>
         </a></li>
-        <li><a class="pub-item" href="https://doi.org/10.1007/978-981-13-5977-4_85" target="_blank" rel="noopener">
-          <span class="pub-index">01</span>
-          <div><p class="pub-title">A Gamified Model of Design Thinking for Fostering Learning in Children</p><p class="pub-venue">ICoRD 2019 · Springer</p></div>
+        <li><a class="pub" href="https://doi.org/10.1007/978-981-13-5977-4_85" target="_blank" rel="noopener">
+          <span class="pub-year">2019</span>
+          <span><span class="pub-title" style="display:block">A Gamified Model of Design Thinking for Fostering Learning in Children</span><span class="pub-venue" style="display:block">ICoRD · Springer</span></span>
           <span class="pub-arrow" aria-hidden="true">↗</span>
         </a></li>
       </ul>
-      <a class="scholar-cta" href="https://scholar.google.com/citations?user=PLE7BqQAAAAJ&hl=en" target="_blank" rel="noopener">View full list on Google Scholar →</a>
+      <div class="pub-more"><a class="link-arrow" href="https://scholar.google.com/citations?user=PLE7BqQAAAAJ&amp;hl=en" target="_blank" rel="noopener">Full list on Google Scholar <span>→</span></a></div>
     </section>
 
-    <!-- CONTACT -->
-    <section class="primary-block section-anchor" id="contact">
-      <p class="block-eyebrow">Get in Touch</p>
-      <h2 class="block-title">Contact</h2>
-      <div class="contact-grid">
-        <div class="contact-cell">
-          <p class="contact-cell-label">Email</p>
-          <p class="contact-cell-value"><a href="mailto:rbhaumik@unibz.it">rbhaumik@unibz.it</a></p>
+    <!-- EXPERIENCE -->
+    <section class="block" id="experience">
+      <p class="eyebrow">Background</p>
+      <h2 class="h-section">Experience &amp; education</h2>
+      <div class="xp-grid">
+        <div>
+          <p class="xp-col-title">Experience</p>
+          <div class="xp"><p class="xp-year">Current</p><div><p class="xp-role">Researcher</p><p class="xp-place">Media Interaction Lab, Free University of Bozen-Bolzano</p></div></div>
+          <div class="xp"><p class="xp-year">2018–2023</p><div><p class="xp-role">Assistant Professor</p><p class="xp-place">Faculty of Architecture &amp; Design, PES University, Bangalore</p></div></div>
         </div>
-        <div class="contact-cell">
-          <p class="contact-cell-label">Phone</p>
-          <p class="contact-cell-value">(+39) 324 836 5400</p>
-        </div>
-        <div class="contact-cell">
-          <p class="contact-cell-label">Institution</p>
-          <p class="contact-cell-value">Free University of Bozen-Bolzano, Italy</p>
-        </div>
-        <div class="contact-cell">
-          <p class="contact-cell-label">Google Scholar</p>
-          <p class="contact-cell-value"><a href="https://scholar.google.com/citations?user=PLE7BqQAAAAJ&amp;hl=en" target="_blank" rel="noopener">View profile →</a></p>
+        <div>
+          <p class="xp-col-title">Education</p>
+          <div class="xp"><p class="xp-year">2023–2026</p><div><p class="xp-role">PhD — Computer Science</p><p class="xp-place">Free University of Bozen-Bolzano, Italy<br><a href="https://hdl.handle.net/10863/52531" target="_blank" rel="noopener">Thesis: Affordances of Soft Interfaces</a></p></div></div>
+          <div class="xp"><p class="xp-year">2016–2018</p><div><p class="xp-role">M.Des — Product Design &amp; Engineering</p><p class="xp-place">Indian Institute of Science, Bangalore</p></div></div>
+          <div class="xp"><p class="xp-year">2010–2015</p><div><p class="xp-role">B.Arch</p><p class="xp-place">School of Planning and Architecture, New Delhi</p></div></div>
         </div>
       </div>
     </section>
 
-    <footer class="cta-block">
-      <span>Explore more:</span>
-      <a href="#research">Research</a>
-      <a href="#publications">Publications</a>
-      <a href="#projects">Projects</a>
-    </footer>
+    <!-- CONTACT -->
+    <section class="block" id="contact">
+      <p class="eyebrow">Get in touch</p>
+      <h2 class="h-section">Let’s collaborate.</h2>
+      <a class="contact-big" href="mailto:rahul.bhaumik@unibz.it">rahul.bhaumik@unibz.it</a>
+      <div class="contact-grid">
+        <div><p class="meta-k">Phone</p><p class="meta-v">(+39) 324 836 5400</p></div>
+        <div><p class="meta-k">Institution</p><p class="meta-v">Media Interaction Lab<br>Free University of Bozen-Bolzano, Italy</p></div>
+        <div><p class="meta-k">Scholar</p><p class="meta-v"><a href="https://scholar.google.com/citations?user=PLE7BqQAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar profile</a></p></div>
+      </div>
+    </section>
 
   </main>
 </div>
 
-<!-- ── GLOBAL FOOTER ── -->
+<!-- ── FOOTER ── -->
 <footer class="g-footer">
   <div class="g-footer-inner">
+    <p class="g-footer-big">Soft interfaces, <em>tangible</em> futures.</p>
     <div>
-      <p class="g-footer-section-title">Navigation</p>
-      <ul class="g-footer-list">
-        <li><a href="#about">Overview</a></li>
+      <h4>Sections</h4>
+      <ul>
         <li><a href="#research">Research</a></li>
-        <li><a href="#thesis">Doctoral Thesis</a></li>
-        <li><a href="#experience">Experience &amp; Education</a></li>
+        <li><a href="#thesis">Doctoral thesis</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#publications">Publications</a></li>
-        <li><a href="#contact">Contact</a></li>
       </ul>
     </div>
     <div>
-      <p class="g-footer-section-title">External</p>
-      <ul class="g-footer-list">
+      <h4>Elsewhere</h4>
+      <ul>
         <li><a href="https://scholar.google.com/citations?user=PLE7BqQAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a></li>
-        <li><a href="mailto:rbhaumik@unibz.it">rbhaumik@unibz.it</a></li>
-        <li><a href="https://www.unibz.it" target="_blank" rel="noopener">Free University of Bozen-Bolzano</a></li>
+        <li><a href="mailto:rahul.bhaumik@unibz.it">rahul.bhaumik@unibz.it</a></li>
+        <li><a href="https://www.unibz.it" target="_blank" rel="noopener">unibz</a></li>
       </ul>
     </div>
   </div>
   <div class="g-footer-meta">
-    <span class="g-footer-copy">© 2026 Rahul Bhaumik</span>
-    <a class="g-footer-back" href="#top">Back to top ↑</a>
+    <span>© 2026 Rahul Bhaumik</span>
+    <a href="#top">Back to top ↑</a>
   </div>
 </footer>
 
@@ -1287,22 +679,32 @@
     show(items[0]);
   })();
 
-  // Scroll spy for rail nav
-  const sections = document.querySelectorAll('.section-anchor');
-  const navItems = document.querySelectorAll('.rail-nav-list li');
 
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        navItems.forEach(li => li.classList.remove('active'));
+  // Scroll spy (rail + header nav)
+  (function () {
+    const sections = document.querySelectorAll('.block[id]');
+    const railItems = document.querySelectorAll('.rail-nav li');
+    const headerLinks = document.querySelectorAll('.g-nav a');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
         const id = entry.target.id;
-        const active = document.querySelector(`.rail-nav-list li a[href="#${id}"]`);
-        if (active) active.closest('li').classList.add('active');
-      }
-    });
-  }, { rootMargin: '-20% 0px -70% 0px' });
+        railItems.forEach(li => li.classList.toggle('active', li.querySelector('a').getAttribute('href') === '#' + id));
+        headerLinks.forEach(a => a.classList.toggle('is-current', a.getAttribute('href') === '#' + id));
+      });
+    }, { rootMargin: '-25% 0px -65% 0px' });
+    sections.forEach(s => obs.observe(s));
+  })();
 
-  sections.forEach(s => observer.observe(s));
+  // Reveal on scroll
+  (function () {
+    const els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) { els.forEach(e => e.classList.add('in')); return; }
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    els.forEach(e => obs.observe(e));
+  })();
 </script>
 
 </body>
