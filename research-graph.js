@@ -1,9 +1,12 @@
 /* ─────────────────────────────────────────────────────────────
-   Research Constellation — 2D force graph
-   • Centre node = the "rb" mark from the site header
-   • Clickable nodes look raised (soft shadow + light-from-top gradient)
-     and emit faint, staggered ripples that fade into the background
-   • Zoom is clamped relative to the initial "fit" view (50 % – 200 %)
+   Research Constellation — 2D map
+   • Centre = the "rb" mark from the site header
+   • Themes sit on a fixed ring, ordered so semantically related themes are neighbours
+   • Clicking a theme makes its publications pop OUTWARD onto an outer orbit, fanned
+     around that theme; links still connect each publication to every theme it belongs to
+   • Nodes look raised and emit faint ripples (they invite a click without any instructions)
+   • Details panel only exists once something is clicked
+   • Zoom is clamped (50 % – 200 % of the fitted view)
 ───────────────────────────────────────────────────────────── */
 
 const graphContainer = document.getElementById("researchGraph");
@@ -11,64 +14,46 @@ const infoPanel = document.getElementById("researchInfoPanel");
 
 const INK = "#141414";
 const ACCENT = "#f24e1e";
-const ZOOM_MIN_FACTOR = 0.5;   // can shrink to 50 % of the fitted view
-const ZOOM_MAX_FACTOR = 2.0;   // can enlarge to 200 % of the fitted view
+const FONT = "'Inter Tight', 'Helvetica Neue', Arial, sans-serif";
+const RING_R = 200;                 // theme ring
+const ORBIT_R = 300;                // publication orbit
+const MIN_GAP = 0.075;              // min angle between neighbouring publications (radians)
+const ZOOM_MIN_FACTOR = 0.5;
+const ZOOM_MAX_FACTOR = 2.0;
 const REDUCED_MOTION = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 if (graphContainer) {
   fetch("data/researchGraph.json")
-    .then(response => {
-      if (!response.ok) throw new Error("Could not load researchGraph.json");
-      return response.json();
-    })
+    .then(r => { if (!r.ok) throw new Error("Could not load researchGraph.json"); return r.json(); })
     .then(data => {
       const allNodes = data.nodes;
       const allLinks = data.links;
-      const expandedThemes = new Set();
+      const byId = Object.fromEntries(allNodes.map(n => [n.id, n]));
+      const idOf = end => (typeof end === "object" ? end.id : end);
+
+      const expandOrder = [];       // themes in the order they were opened
       let hoverNode = null;
       let selectedNode = null;
 
-      // Stable per-node phase so ripples are staggered, not synchronised
       allNodes.forEach((n, i) => { n.__phase = (i * 0.618) % 1; });
 
-      function getVisibleData() {
-        const visible = new Set();
-        allNodes.forEach(n => { if (n.type === "center" || n.type === "theme") visible.add(n.id); });
-        allLinks.forEach(link => {
-          const s = typeof link.source === "object" ? link.source.id : link.source;
-          const t = typeof link.target === "object" ? link.target.id : link.target;
-          if (expandedThemes.has(s) || expandedThemes.has(t)) {
-            const paper = allNodes.find(n => (n.id === t || n.id === s) && n.type === "paper");
-            if (paper) visible.add(paper.id);
-          }
-        });
-        return {
-          nodes: allNodes.filter(n => visible.has(n.id)),
-          links: allLinks.filter(link => {
-            const s = typeof link.source === "object" ? link.source.id : link.source;
-            const t = typeof link.target === "object" ? link.target.id : link.target;
-            return visible.has(s) && visible.has(t);
-          })
-        };
-      }
-
-      /* ── Semantic ring: order themes so similar ones are neighbours ──
-         Similarity = shared publications (cosine, 75 %) + shared description words (25 %).
-         The best circular order is found exactly (Held–Karp, fine for ≤ 16 themes). */
-      const RING_R = 200;
+      /* ── Theme ↔ publication index ───────────────────────── */
       const themes = allNodes.filter(n => n.type === "theme");
-      const byId = Object.fromEntries(allNodes.map(n => [n.id, n]));
       const papersOf = {};
       themes.forEach(t => { papersOf[t.id] = new Set(); });
       allLinks.forEach(l => {
-        const s = l.source.id || l.source, t = l.target.id || l.target;
+        const s = idOf(l.source), t = idOf(l.target);
         if (papersOf[s] && byId[t] && byId[t].type === "paper") papersOf[s].add(t);
         if (papersOf[t] && byId[s] && byId[s].type === "paper") papersOf[t].add(s);
       });
+
+      /* ── Semantic ring order ─────────────────────────────────
+         similarity = shared publications (cosine, 75 %) + shared description words (25 %);
+         the best circular order is solved exactly (Held–Karp, fine for ≤ 16 themes). */
       const STOP = new Set("and the of for in a to with on design systems system interaction interactive".split(" "));
-      const wordsOf = n => new Set(((n.label || "") + " " + (n.description || "")).toLowerCase()
-        .match(/[a-z]+/g).filter(w => w.length > 2 && !STOP.has(w)));
-      const words = Object.fromEntries(themes.map(t => [t.id, wordsOf(t)]));
+      const words = Object.fromEntries(themes.map(t => [t.id, new Set(
+        ((t.label || "") + " " + (t.description || "")).toLowerCase().match(/[a-z]+/g)
+          .filter(w => w.length > 2 && !STOP.has(w)))]));
       const cos = (A, B) => {
         if (!A.size || !B.size) return 0;
         let i = 0; A.forEach(x => { if (B.has(x)) i++; });
@@ -83,7 +68,7 @@ if (graphContainer) {
         const size = 1 << n;
         const dp = new Float64Array(size * n).fill(-Infinity);
         const par = new Int8Array(size * n).fill(-1);
-        dp[1 * n + 0] = 0;
+        dp[n] = 0; // mask=1, j=0
         for (let mask = 1; mask < size; mask += 2) {
           for (let j = 0; j < n; j++) {
             const v = dp[mask * n + j];
@@ -103,42 +88,117 @@ if (graphContainer) {
         }
         const order = [];
         let mask = full, j = best;
-        while (j !== -1 && j !== 0) { order.push(j); const pj = par[mask * n + j]; mask ^= (1 << j); j = pj; }
+        while (j > 0) { order.push(j); const pj = par[mask * n + j]; mask ^= (1 << j); j = pj; }
         order.push(0);
         return order.reverse().map(i => items[i]);
       }
 
+      const pin = (n, x, y) => { n.x = n.fx = x; n.y = n.fy = y; };
       const center = allNodes.find(n => n.type === "center");
-      if (center) { center.fx = 0; center.fy = 0; }
+      if (center) pin(center, 0, 0);
       circularOrder(themes).forEach((t, i, arr) => {
-        const a = -Math.PI / 2 + (i / arr.length) * 2 * Math.PI;   // start at 12 o'clock
-        t.fx = RING_R * Math.cos(a);
-        t.fy = RING_R * Math.sin(a);
+        t.__angle = -Math.PI / 2 + (i / arr.length) * 2 * Math.PI;   // start at 12 o'clock
+        pin(t, RING_R * Math.cos(t.__angle), RING_R * Math.sin(t.__angle));
       });
 
-      const radiusOf = n => n.type === "center" ? 24 : n.type === "theme" ? 10 : 6;
+      /* ── Publication layout: fan outward around the theme that opened them ── */
+      function visiblePapers() {
+        const owner = new Map();                       // paper id → theme that brought it in
+        expandOrder.forEach(tid => {
+          [...papersOf[tid]]
+            .sort((a, b) => (byId[b].year || 0) - (byId[a].year || 0))
+            .forEach(pid => { if (!owner.has(pid)) owner.set(pid, tid); });
+        });
+        return owner;
+      }
 
-      const getWidth  = () => graphContainer.clientWidth  || 900;
+      function layoutPapers(owner) {
+        // ideal angle = owner's angle; keep each owner's papers together, then spread
+        const groups = {};
+        owner.forEach((tid, pid) => { (groups[tid] = groups[tid] || []).push(pid); });
+        const items = [];
+        Object.entries(groups).forEach(([tid, pids]) => {
+          const a0 = byId[tid].__angle;
+          pids.forEach((pid, i) => items.push({ pid, a: a0 + (i - (pids.length - 1) / 2) * MIN_GAP }));
+        });
+        // unwrap to a continuous range starting at 12 o'clock, then sort
+        items.forEach(it => { while (it.a < -Math.PI / 2) it.a += 2 * Math.PI; while (it.a >= 1.5 * Math.PI) it.a -= 2 * Math.PI; });
+        items.sort((p, q) => p.a - q.a);
+        // relax so neighbours are at least MIN_GAP apart
+        for (let iter = 0; iter < 200; iter++) {
+          let moved = false;
+          for (let i = 1; i < items.length; i++) {
+            const d = items[i].a - items[i - 1].a;
+            if (d < MIN_GAP) { const push = (MIN_GAP - d) / 2; items[i - 1].a -= push; items[i].a += push; moved = true; }
+          }
+          if (!moved) break;
+        }
+        const targets = new Map();
+        items.forEach((it, i) => {
+          const r = ORBIT_R;
+          targets.set(it.pid, { x: r * Math.cos(it.a), y: r * Math.sin(it.a) });
+        });
+        return targets;
+      }
+
+      // Smooth "pop out" animation: papers travel from their theme to their orbit slot
+      let tween = null;
+      function animateTo(targets, owner) {
+        const start = performance.now(), dur = REDUCED_MOTION ? 1 : 650;
+        const from = new Map();
+        targets.forEach((_, pid) => {
+          const p = byId[pid];
+          if (!Number.isFinite(p.x) || !p.__shown) { const t = byId[owner.get(pid)]; pin(p, t.x, t.y); }
+          p.__shown = true;
+          from.set(pid, { x: p.x, y: p.y });
+        });
+        const easeOutBack = t => { const c1 = 1.4, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
+        const step = now => {
+          const k = Math.min(1, (now - start) / dur), e = easeOutBack(k);
+          targets.forEach((to, pid) => {
+            const f = from.get(pid);
+            pin(byId[pid], f.x + (to.x - f.x) * e, f.y + (to.y - f.y) * e);
+          });
+          if (k < 1) tween = requestAnimationFrame(step);
+        };
+        cancelAnimationFrame(tween);
+        tween = requestAnimationFrame(step);
+      }
+
+      function refresh() {
+        const owner = visiblePapers();
+        allNodes.forEach(n => { if (n.type === "paper" && !owner.has(n.id)) n.__shown = false; });
+        const targets = layoutPapers(owner);
+        const ids = new Set(allNodes.filter(n => n.type !== "paper").map(n => n.id).concat([...owner.keys()]));
+        animateTo(targets, owner);
+        Graph.graphData({
+          nodes: allNodes.filter(n => ids.has(n.id)),
+          links: allLinks.filter(l => ids.has(idOf(l.source)) && ids.has(idOf(l.target)))
+        });
+        fit(650, targets);
+      }
+
+      /* ── Graph ───────────────────────────────────────────── */
+      const radiusOf = n => n.type === "center" ? 24 : n.type === "theme" ? 10 : 6;
+      const getWidth = () => graphContainer.clientWidth || 900;
       const getHeight = () => graphContainer.clientHeight || 600;
 
       const Graph = ForceGraph()(graphContainer)
         .width(getWidth())
         .height(getHeight())
         .backgroundColor("#ffffff")
-        .autoPauseRedraw(false)          // keep ripples animating
+        .autoPauseRedraw(false)
         .nodeId("id")
         .nodeVal(n => radiusOf(n))
         .nodeLabel(n => n.type === "center" ? "Enter 3D view" : "")
         .linkColor(link => {
-          const s = typeof link.source === "object" ? link.source : null;
-          const t = typeof link.target === "object" ? link.target : null;
-          const active = (s && (s === hoverNode || s === selectedNode)) || (t && (t === hoverNode || t === selectedNode));
-          return active ? "rgba(242,78,30,0.55)" : "rgba(20,20,20,0.12)";
+          const s = link.source, t = link.target;
+          const active = [s, t].some(n => n && (n === hoverNode || n === selectedNode));
+          return active ? "rgba(242,78,30,0.6)" : "rgba(20,20,20,0.11)";
         })
         .linkWidth(link => (link.strength || 1) * 0.9)
-        .enableNodeDrag(true)
-        .enableZoomInteraction(true)
-        .enablePanInteraction(true)
+        .enableNodeDrag(false)
+        .d3AlphaDecay(1)                 // layout is fully positional — no physics drift
         .nodeCanvasObject(drawNode)
         .nodePointerAreaPaint((node, color, ctx) => {
           ctx.fillStyle = color;
@@ -153,52 +213,40 @@ if (graphContainer) {
         .onNodeClick(node => {
           if (node.type === "center") { window.location.href = "graph3d.html"; return; }
           selectedNode = node;
-          if (node.type === "theme") {
-            expandedThemes.has(node.id) ? expandedThemes.delete(node.id) : expandedThemes.add(node.id);
-            Graph.graphData(getVisibleData());
-            setTimeout(() => fit(600), 400);
-          } else {
-            Graph.centerAt(node.x, node.y, 600);
-          }
           showNodeDetails(node);
           openPanel();
+          if (node.type === "theme") {
+            const i = expandOrder.indexOf(node.id);
+            i >= 0 ? expandOrder.splice(i, 1) : expandOrder.push(node.id);
+            refresh();
+          }
         })
         .onBackgroundClick(() => { selectedNode = null; closePanel(); });
 
-      /* ── Side panel visibility (hidden until something is selected) ── */
-      const layoutEl = graphContainer.closest(".graph-layout");
-      const isOpen = () => layoutEl && layoutEl.classList.contains("panel-open");
-      // Re-fit once the panel has finished sliding, so nothing ends up hidden behind it
-      function openPanel()  { if (!layoutEl || isOpen()) return; layoutEl.classList.add("panel-open"); setTimeout(() => fit(500), 500); }
-      function closePanel() { if (!layoutEl || !isOpen()) return; layoutEl.classList.remove("panel-open"); setTimeout(() => fit(500), 500); }
-      infoPanel.addEventListener("click", e => {
-        if (e.target.closest(".panel-close")) { selectedNode = null; closePanel(); }
-      });
-      // Keep the canvas sized to its box as the panel slides in/out
-      if (window.ResizeObserver) {
-        new ResizeObserver(() => Graph.width(getWidth()).height(getHeight())).observe(graphContainer);
-      }
+      // Positions are fully controlled (pinned); keep the link force only to resolve ids → nodes
+      Graph.d3Force("charge", null);
+      Graph.d3Force("center", null);
+      Graph.d3Force("link").strength(0);
 
       /* ── Drawing ─────────────────────────────────────────── */
       function drawNode(node, ctx, scale) {
         if (!Number.isFinite(node.x) || !Number.isFinite(node.y)) return;
         const isCenter = node.type === "center";
         const isTheme = node.type === "theme";
-        const isExpanded = isTheme && expandedThemes.has(node.id);
+        const isExpanded = isTheme && expandOrder.includes(node.id);
         const isHover = node === hoverNode;
         const isSelected = node === selectedNode;
         const r = radiusOf(node) * (isHover ? 1.12 : 1);
         const t = Date.now() / 1000;
 
-        // 1 · Ripples — faint rings that expand and fade out (clickable nodes that invite action)
-        const rippleNode = true;  // every node is clickable; strength varies by type
-        if (rippleNode && !REDUCED_MOTION) {
+        // Ripples — faint rings that expand and fade into the background
+        if (!REDUCED_MOTION) {
           const period = isCenter ? 3.2 : 2.8;
           const reach = isCenter ? 26 : isTheme ? 16 : 9;
           const strength = isHover ? 0.45 : isCenter ? 0.22 : isExpanded ? 0.1 : isTheme ? 0.18 : 0.12;
-          const col = isExpanded || isHover && !isCenter ? "242,78,30" : "20,20,20";
+          const col = isExpanded || (isHover && !isCenter) ? "242,78,30" : "20,20,20";
           for (let k = 0; k < 2; k++) {
-            const p = ((t / period) + node.__phase + k * 0.5) % 1;      // 0 → 1
+            const p = ((t / period) + node.__phase + k * 0.5) % 1;
             const ease = 1 - Math.pow(1 - p, 3);
             ctx.beginPath();
             ctx.arc(node.x, node.y, r + 2 + ease * reach, 0, 2 * Math.PI);
@@ -208,13 +256,13 @@ if (graphContainer) {
           }
         }
 
-        // 2 · Raised body: soft drop shadow + top-lit gradient
+        // Raised body: soft drop shadow + top-lit gradient
         const base = isCenter ? INK : isExpanded ? ACCENT : isTheme ? "#a8a8a8" : INK;
         const light = isCenter ? "#3a3a3a" : isExpanded ? "#ff7a4d" : isTheme ? "#cfcfcf" : "#4a4a4a";
         ctx.save();
         ctx.shadowColor = "rgba(0,0,0,0.22)";
-        ctx.shadowBlur = (isHover ? 14 : 8);
-        ctx.shadowOffsetY = (isHover ? 4 : 2.5);
+        ctx.shadowBlur = isHover ? 14 : 8;
+        ctx.shadowOffsetY = isHover ? 4 : 2.5;
         const g = ctx.createRadialGradient(node.x - r * 0.35, node.y - r * 0.45, r * 0.1, node.x, node.y, r);
         g.addColorStop(0, light);
         g.addColorStop(1, base);
@@ -223,15 +271,12 @@ if (graphContainer) {
         ctx.fillStyle = g;
         ctx.fill();
         ctx.restore();
-
-        // Thin top highlight rim sells the "raised" feel
         ctx.beginPath();
         ctx.arc(node.x, node.y, r - 0.6, Math.PI * 1.1, Math.PI * 1.9);
         ctx.strokeStyle = "rgba(255,255,255,0.35)";
         ctx.lineWidth = 1 / scale;
         ctx.stroke();
 
-        // Selected: accent ring
         if (isSelected && !isCenter) {
           ctx.beginPath();
           ctx.arc(node.x, node.y, r + 3.5, 0, 2 * Math.PI);
@@ -240,106 +285,120 @@ if (graphContainer) {
           ctx.stroke();
         }
 
-        // 3 · Centre mark "rb"
         if (isCenter) {
           ctx.fillStyle = "#ffffff";
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
-          ctx.font = `800 ${r * 0.78}px 'Inter Tight', 'Helvetica Neue', Arial, sans-serif`;
+          ctx.font = `800 ${r * 0.78}px ${FONT}`;
           ctx.fillText("rb", node.x, node.y + 0.5);
           return;
         }
 
-        // 4 · Labels (always shown for every visible node)
-                const label = node.shortLabel || node.label;
-        const fontSize = (isTheme ? 11 : 9.5) / Math.min(Math.max(scale, 0.8), 1.4);
-        ctx.font = `${isTheme ? 600 : 500} ${fontSize}px 'Inter Tight', 'Helvetica Neue', Arial, sans-serif`;
-        ctx.textAlign = "center";
-        let lx = node.x, ly = node.y + r + 5;
-        ctx.textBaseline = "top";
-        if (!isTheme) {
-          // Publications sit on the outer orbit: put their label on the outward side,
-          // so it never covers the theme labels inside the ring
-          const ang = Math.atan2(node.y, node.x), c = Math.cos(ang), sn = Math.sin(ang);
-          lx = node.x + c * (r + 5);
-          ly = node.y + sn * (r + 5);
-          ctx.textAlign = c > 0.35 ? "left" : c < -0.35 ? "right" : "center";
-          ctx.textBaseline = Math.abs(c) > 0.35 ? "middle" : sn > 0 ? "top" : "bottom";
-        }
+        // Labels: themes read INWARD (towards the centre, horizontal);
+        // publications read OUTWARD along their ray (sunburst style) so they never collide.
+        const label = node.shortLabel || node.label;
+        const ang = Math.atan2(node.y, node.x), c = Math.cos(ang), s = Math.sin(ang);
         ctx.lineJoin = "round";
         ctx.lineWidth = 4 / scale;
         ctx.strokeStyle = "rgba(255,255,255,0.95)";
-        ctx.strokeText(label, lx, ly);
-        ctx.fillStyle = isExpanded || isSelected ? ACCENT : isTheme ? INK : "#555";
-        ctx.fillText(label, lx, ly);
+        ctx.fillStyle = isExpanded || isSelected ? ACCENT : isTheme ? INK : "#4d4d4d";
+        if (isTheme) {
+          ctx.font = `600 ${12 / scale}px ${FONT}`;
+          const off = r + 8 / scale;
+          const lx = node.x - c * off, ly = node.y - s * off;
+          ctx.textAlign = -c > 0.6 ? "left" : -c < -0.6 ? "right" : "center";
+          ctx.textBaseline = Math.abs(c) > 0.6 ? "middle" : -s > 0 ? "top" : "bottom";
+          ctx.strokeText(label, lx, ly);
+          ctx.fillText(label, lx, ly);
+        } else {
+          ctx.font = `${isSelected || isHover ? 600 : 500} ${10.5 / scale}px ${FONT}`;
+          const flip = c < 0;                                    // keep text upright on the left half
+          ctx.save();
+          ctx.translate(node.x, node.y);
+          ctx.rotate(flip ? ang + Math.PI : ang);
+          ctx.textAlign = flip ? "right" : "left";
+          ctx.textBaseline = "middle";
+          const off = (r + 6 / scale) * (flip ? -1 : 1);
+          ctx.strokeText(label, off, 0);
+          ctx.fillText(label, off, 0);
+          ctx.restore();
+        }
       }
 
-      /* ── Forces ──────────────────────────────────────────── */
-      Graph.d3Force("charge").strength(-240);
-      Graph.d3Force("link").distance(link => {
-        const s = typeof link.source === "object" ? link.source.type : "";
-        const tt = typeof link.target === "object" ? link.target.type : "";
-        if (s === "center" || tt === "center") return 135;
-        if (s === "paper" || tt === "paper") return 85;
-        return 110;
-      });
-      if (window.d3) {
-        Graph.d3Force("radial", d3.forceRadial(n => n.type === "paper" ? RING_R + 95 : 0, 0, 0)
-          .strength(n => n.type === "paper" ? 0.35 : 0));
-        Graph.d3Force("collision", d3.forceCollide(n => radiusOf(n) + (n.type === "paper" ? 9 : 16)).strength(0.85));
-      }
-
-      /* ── Zoom limits ─────────────────────────────────────── */
+      /* ── Fit + zoom limits ───────────────────────────────── */
       let fitMin = null, fitInitial = null;
-      function applyZoomLimits() {
-        const k = Graph.zoom();
+      const measure = document.createElement("canvas").getContext("2d");
+      function labelWidth(n) {              // on-screen px (labels are drawn at constant screen size)
+        measure.font = `${n.type === "theme" ? 600 : 500} ${n.type === "theme" ? 12 : 10.5}px ${FONT}`;
+        return measure.measureText(n.shortLabel || n.label).width;
+      }
+      function fit(ms, targets) {
+        const nodes = Graph.graphData().nodes;
+        if (!nodes.length) return;
+        const pos = n => (targets && targets.get(n.id)) || { x: n.fx ?? n.x, y: n.fy ?? n.y };
+        const W = getWidth(), H = getHeight(), pad = 18;
+        // Iterate: bounds depend on k because labels have a fixed on-screen length
+        let k = 1, box;
+        for (let it = 0; it < 4; it++) {
+          box = { x0: Infinity, x1: -Infinity, y0: Infinity, y1: -Infinity };
+          nodes.forEach(n => {
+            const p = pos(n);
+            const ext = [[p.x, p.y]];
+            if (n.type === "paper") {
+              const a = Math.atan2(p.y, p.x), L = (labelWidth(n) + 10) / k;
+              ext.push([p.x + Math.cos(a) * L, p.y + Math.sin(a) * L]);
+            } else {
+              const half = (n.type === "center" ? 30 : 16) / k;
+              ext.push([p.x - half, p.y - half], [p.x + half, p.y + half]);
+            }
+            ext.forEach(([x, y]) => {
+              box.x0 = Math.min(box.x0, x); box.x1 = Math.max(box.x1, x);
+              box.y0 = Math.min(box.y0, y); box.y1 = Math.max(box.y1, y);
+            });
+          });
+          k = Math.min((W - 2 * pad) / Math.max(1, box.x1 - box.x0), (H - 2 * pad) / Math.max(1, box.y1 - box.y0));
+        }
+        k = Math.max(0.15, Math.min(k, 2.2));
         if (!fitInitial) fitInitial = k;
-        // Lower bound follows the smallest fitted view, so fitting an expanded graph is never blocked
         fitMin = fitMin ? Math.min(fitMin, k) : k;
-        Graph.minZoom(fitMin * ZOOM_MIN_FACTOR).maxZoom(fitInitial * ZOOM_MAX_FACTOR);
-      }
-      function fit(ms) {
-        Graph.zoomToFit(ms, 100);   // extra padding leaves room for outward labels
-        setTimeout(applyZoomLimits, ms + 60);
+        Graph.minZoom(fitMin * ZOOM_MIN_FACTOR).maxZoom(Math.max(fitInitial, k) * ZOOM_MAX_FACTOR);
+        Graph.centerAt((box.x0 + box.x1) / 2, (box.y0 + box.y1) / 2, ms);
+        Graph.zoom(k, ms);
       }
 
-      Graph.graphData(getVisibleData());
-      setTimeout(() => fit(700), 700);
-      setTimeout(() => fit(700), 1700);
-
-      window.addEventListener("resize", () => {
-        Graph.width(getWidth()).height(getHeight());
-        fitMin = fitInitial = null;
-        setTimeout(() => fit(400), 200);
+      /* ── Panel (not in the layout until something is clicked) ── */
+      const layoutEl = graphContainer.closest(".graph-layout");
+      const isOpen = () => layoutEl && layoutEl.classList.contains("panel-open");
+      function openPanel() { if (layoutEl && !isOpen()) layoutEl.classList.add("panel-open"); }
+      function closePanel() { if (layoutEl && isOpen()) layoutEl.classList.remove("panel-open"); }
+      infoPanel.addEventListener("click", e => {
+        if (e.target.closest(".panel-close")) { selectedNode = null; closePanel(); }
       });
+      // Canvas follows its box whenever the panel appears/disappears or the window resizes
+      let lastW = 0;
+      const onResize = () => {
+        const w = getWidth();
+        Graph.width(w).height(getHeight());
+        if (Math.abs(w - lastW) > 2) { lastW = w; fit(350); }
+      };
+      if (window.ResizeObserver) new ResizeObserver(onResize).observe(graphContainer);
+      else window.addEventListener("resize", onResize);
 
-      /* ── Side panel ──────────────────────────────────────── */
       function showNodeDetails(node) {
         const type = node.type === "theme" ? "Theme" : "Publication";
         const meta = [node.venue, node.year].filter(Boolean).join(" · ");
         let related = "";
         if (node.type === "theme") {
-          const papers = allLinks
-            .map(l => {
-              const src = typeof l.source === "object" ? l.source : allNodes.find(n => n.id === l.source);
-              const tgt = typeof l.target === "object" ? l.target : allNodes.find(n => n.id === l.target);
-              if (src && src.id === node.id) return tgt;
-              if (tgt && tgt.id === node.id) return src;
-              return null;
-            })
-            .filter(n => n && n.type === "paper");
-          const uniq = [...new Map(papers.map(p => [p.id, p])).values()];
-          related = uniq.length
-            ? `<p class="panel-count">${uniq.length} publication${uniq.length > 1 ? "s" : ""}</p>
-               <ul class="panel-papers">${uniq
-                 .sort((a, b) => (b.year || 0) - (a.year || 0))
-                 .map(p => `<li><a href="${p.url}" target="_blank" rel="noopener noreferrer"><span>${p.year || ""}</span>${p.shortLabel || p.label}</a></li>`)
-                 .join("")}</ul>`
-            : "";
+          const list = [...papersOf[node.id]].map(id => byId[id]).sort((a, b) => (b.year || 0) - (a.year || 0));
+          related = list.length ? `
+            <p class="panel-count">${list.length} publication${list.length > 1 ? "s" : ""}</p>
+            <ul class="panel-papers">${list.map(p =>
+              `<li><a href="${p.url}" target="_blank" rel="noopener noreferrer"><span>${p.year || ""}</span>${p.shortLabel || p.label}</a></li>`).join("")}</ul>` : "";
+        } else {
+          const inThemes = themes.filter(t => papersOf[t.id].has(node.id)).map(t => t.shortLabel || t.label);
+          related = inThemes.length ? `<p class="panel-count">${inThemes.join(" · ")}</p>` : "";
         }
-        const link = node.url
-          ? `<a class="paper-link" href="${node.url}" target="_blank" rel="noopener noreferrer">Open publication ↗</a>`
-          : "";
+        const link = node.url ? `<a class="paper-link" href="${node.url}" target="_blank" rel="noopener noreferrer">Open publication ↗</a>` : "";
         infoPanel.innerHTML = `
           <button class="panel-close" type="button" aria-label="Close details">×</button>
           <p class="panel-label">${type}</p>
@@ -347,10 +406,14 @@ if (graphContainer) {
           ${meta ? `<p class="panel-meta">${meta}</p>` : ""}
           <p>${node.description || ""}</p>
           ${related}
-          ${link}
-        `;
+          ${link}`;
       }
 
+      Graph.graphData({
+        nodes: allNodes.filter(n => n.type !== "paper"),
+        links: allLinks.filter(l => byId[idOf(l.source)].type !== "paper" && byId[idOf(l.target)].type !== "paper")
+      });
+      setTimeout(() => fit(0), 50);
     })
     .catch(error => {
       console.error("Research graph error:", error);
