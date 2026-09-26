@@ -2,8 +2,8 @@
   "nodes": [
     {
       "id": "rahul-research",
-      "label": "Me",
-      "shortLabel": "Me",
+      "label": "Rahul Bhaumik",
+      "shortLabel": "rb",
       "type": "center",
       "description": "A central node representing Rahul Bhaumik's research identity and its connections across themes, methods, materials, applications, and publications."
     },
