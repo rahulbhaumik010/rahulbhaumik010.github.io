@@ -214,11 +214,30 @@ if (graphContainer) {
         .enableNodeDrag(false)
         .d3AlphaDecay(1)                 // layout is fully positional — no physics drift
         .nodeCanvasObject(drawNode)
-        .nodePointerAreaPaint((node, color, ctx) => {
+        .nodePointerAreaPaint((node, color, ctx, scale) => {
+          // Hit area = the dot AND its text label, so clicking/hovering a label works too
           ctx.fillStyle = color;
           ctx.beginPath();
           ctx.arc(node.x, node.y, radiusOf(node) + 6, 0, 2 * Math.PI);
           ctx.fill();
+          if (node.type === "center" || !Number.isFinite(node.x)) return;
+          const r = radiusOf(node);
+          const ang = Math.atan2(node.y, node.x), c = Math.cos(ang), s = Math.sin(ang);
+          if (node.type === "paper") {
+            const w = labelWidth(node) / scale, h = 16 / scale;
+            const flip = c < 0, off = r + 6 / scale;
+            ctx.save();
+            ctx.translate(node.x, node.y);
+            ctx.rotate(flip ? ang + Math.PI : ang);
+            ctx.fillRect(flip ? -off - w : off - 2 / scale, -h / 2, w + 4 / scale, h);
+            ctx.restore();
+          } else {
+            const w = labelWidth(node) / scale + 6 / scale, h = 18 / scale;
+            const off = r + 8 / scale, lx = node.x - c * off, ly = node.y - s * off;
+            const alignX = -c > 0.6 ? 0 : -c < -0.6 ? -w : -w / 2;               // left / right / centre
+            const alignY = Math.abs(c) > 0.6 ? -h / 2 : -s > 0 ? 0 : -h;         // middle / top / bottom
+            ctx.fillRect(lx + alignX, ly + alignY, w, h);
+          }
         })
         .onNodeHover(node => {
           hoverNode = node || null;
