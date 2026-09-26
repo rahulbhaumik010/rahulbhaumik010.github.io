@@ -103,8 +103,10 @@ if (graphContainer) {
 
       /* ── Publication layout: fan outward around the theme that opened them ── */
       function visiblePapers() {
-        const owner = new Map();                       // paper id → theme that brought it in
-        expandOrder.forEach(tid => {
+        // paper id → theme it fans out from = the MOST RECENTLY opened theme it belongs to,
+        // so clicking a theme always makes its publications spring out right next to it
+        const owner = new Map();
+        [...expandOrder].reverse().forEach(tid => {
           [...papersOf[tid]]
             .sort((a, b) => (byId[b].year || 0) - (byId[a].year || 0))
             .forEach(pid => { if (!owner.has(pid)) owner.set(pid, tid); });
@@ -165,8 +167,10 @@ if (graphContainer) {
         tween = requestAnimationFrame(step);
       }
 
+      let currentOwner = new Map();
       function refresh() {
         const owner = visiblePapers();
+        currentOwner = owner;
         allNodes.forEach(n => { if (n.type === "paper" && !owner.has(n.id)) n.__shown = false; });
         const targets = layoutPapers(owner);
         const ids = new Set(allNodes.filter(n => n.type !== "paper").map(n => n.id).concat([...owner.keys()]));
@@ -194,9 +198,19 @@ if (graphContainer) {
         .linkColor(link => {
           const s = link.source, t = link.target;
           const active = [s, t].some(n => n && (n === hoverNode || n === selectedNode));
-          return active ? "rgba(242,78,30,0.6)" : "rgba(20,20,20,0.11)";
+          if (active) return "rgba(242,78,30,0.6)";
+          const paper = [s, t].find(n => n && n.type === "paper");
+          if (!paper) return "rgba(20,20,20,0.11)";                       // centre ↔ theme spokes
+          const theme = paper === s ? t : s;
+          // Link to the theme it fans out from reads clearly; cross-links to other themes stay a whisper
+          return currentOwner.get(paper.id) === theme.id ? "rgba(20,20,20,0.28)" : "rgba(20,20,20,0.05)";
         })
-        .linkWidth(link => (link.strength || 1) * 0.9)
+        .linkWidth(link => {
+          const paper = [link.source, link.target].find(n => n && n.type === "paper");
+          if (!paper) return 0.9;
+          const theme = paper === link.source ? link.target : link.source;
+          return currentOwner.get(paper.id) === theme.id ? 1 : 0.7;
+        })
         .enableNodeDrag(false)
         .d3AlphaDecay(1)                 // layout is fully positional — no physics drift
         .nodeCanvasObject(drawNode)
