@@ -182,6 +182,30 @@ if (graphContainer) {
         fit(650, targets);
       }
 
+      /* ── Reset: double-click on empty space collapses everything ── */
+      function resetGraph() {
+        if (!expandOrder.length && !selectedNode) return;
+        const shown = Graph.graphData().nodes.filter(n => n.type === "paper");
+        const owner = currentOwner;
+        expandOrder.length = 0;
+        selectedNode = null;
+        closePanel();
+        // Papers fold back into their theme, then disappear
+        const start = performance.now(), dur = REDUCED_MOTION ? 1 : 380;
+        const from = new Map(shown.map(p => [p.id, { x: p.x, y: p.y }]));
+        cancelAnimationFrame(tween);
+        const step = now => {
+          const k = Math.min(1, (now - start) / dur), e = k * k;
+          shown.forEach(p => {
+            const t = byId[owner.get(p.id)] || center, f = from.get(p.id);
+            pin(p, f.x + (t.x - f.x) * e, f.y + (t.y - f.y) * e);
+          });
+          if (k < 1) tween = requestAnimationFrame(step);
+          else refresh();
+        };
+        tween = requestAnimationFrame(step);
+      }
+
       /* ── Graph ───────────────────────────────────────────── */
       const radiusOf = n => n.type === "center" ? 24 : n.type === "theme" ? 10 : 6;
       const getWidth = () => graphContainer.clientWidth || 900;
@@ -260,6 +284,19 @@ if (graphContainer) {
       Graph.d3Force("charge", null);
       Graph.d3Force("center", null);
       Graph.d3Force("link").strength(0);
+
+      // Capture phase: runs before the canvas's own double-click-to-zoom, which we suppress
+      graphContainer.addEventListener("dblclick", e => {
+        e.preventDefault();
+        e.stopPropagation();
+        // Only on empty space: hit-test the double-click position against the visible nodes
+        const rect = graphContainer.getBoundingClientRect();
+        const p = Graph.screen2GraphCoords(e.clientX - rect.left, e.clientY - rect.top);
+        const k = Graph.zoom();
+        const onNode = Graph.graphData().nodes.some(n =>
+          Math.hypot(n.x - p.x, n.y - p.y) < radiusOf(n) + 10 / k);
+        if (!onNode) resetGraph();
+      }, true);
 
       /* ── Drawing ─────────────────────────────────────────── */
       function drawNode(node, ctx, scale) {
