@@ -1,13 +1,12 @@
 {
   "nodes": [
     {
-  "id": "rahul-research",
-  "label": "Me",
-  "shortLabel": "Me",
-  "type": "center",
-  "description": "A central node representing Rahul Bhaumik's research identity and its connections across themes, methods, materials, applications, and publications."
-},
-
+      "id": "rahul-research",
+      "label": "Me",
+      "shortLabel": "Me",
+      "type": "center",
+      "description": "A central node representing Rahul Bhaumik's research identity and its connections across themes, methods, materials, applications, and publications."
+    },
     {
       "id": "hci-interaction-design",
       "label": "HCI and Interaction Design",
@@ -99,7 +98,16 @@
       "type": "theme",
       "description": "Digital learning, gamified learning, online-learning support, and technology-enhanced education."
     },
-
+    {
+      "id": "paper-spacer-knitted-sensors",
+      "label": "Soft, Scalable Spacer-Knitted Piezoresistive Pressure Sensors with Tunable Localized Sensitivity Enabled by Heat-Expandable Yarn Inlays",
+      "shortLabel": "Spacer-Knitted Sensors",
+      "type": "paper",
+      "year": "2026",
+      "venue": "IEEE Sensors Letters",
+      "url": "https://ieeexplore.ieee.org/abstract/document/11544066/",
+      "description": "A fully textile-based spacer-knitted piezoresistive pressure sensor, fabricated in a single step on a V-bed flat knitting machine, with tunable localized sensitivity."
+    },
     {
       "id": "paper-inductive-pressure",
       "label": "Inductive Pressure Sensors Using 3D-Printed Structures With Tunable Stiffness",
@@ -140,7 +148,6 @@
       "url": "https://doi.org/10.1016/j.asoc.2021.107522",
       "description": "A deep-learning based multimodal system for COVID-19 diagnosis using breathing sounds and chest X-ray images."
     },
-
     {
       "id": "paper-insense3d",
       "label": "InSense3D: Designing Smart 3D-Printed Structures Leveraging Ferromagnetic Filaments for Inductive Deformation Sensing",
@@ -227,7 +234,7 @@
       "shortLabel": "Maternal Healthcare Device",
       "type": "paper",
       "year": "2021",
-      "venue": "Design for Tomorrow / Springer",
+      "venue": "ICoRD 2021 (Design for Tomorrow) / Springer",
       "url": "https://doi.org/10.1007/978-981-16-0084-5_40",
       "description": "A maternal healthcare monitoring device designed for pregnant women."
     },
@@ -237,8 +244,8 @@
       "shortLabel": "AI Sketch Tool",
       "type": "paper",
       "year": "2020",
-      "venue": "Springer",
-      "url": "https://doi.org/10.1007/978-981-15-8289-9",
+      "venue": "ICT4SD 2020 / Springer",
+      "url": "https://doi.org/10.1007/978-981-15-8289-9_63",
       "description": "An AI-based pedagogical tool for creating sketched representations of emotive product forms."
     },
     {
@@ -332,103 +339,386 @@
       "description": "A gamified model of design thinking for fostering learning in children."
     }
   ],
-
   "links": [
-    { "source": "rahul-research", "target": "hci-interaction-design", "strength": 2 },
-    { "source": "rahul-research", "target": "soft-interfaces", "strength": 2 },
-    { "source": "rahul-research", "target": "smart-textiles", "strength": 2 },
-    { "source": "rahul-research", "target": "inductive-sensing", "strength": 2 },
-    { "source": "rahul-research", "target": "3d-printed-sensors", "strength": 2 },
-    { "source": "rahul-research", "target": "automotive-hci", "strength": 2 },
-    { "source": "rahul-research", "target": "design-pedagogy", "strength": 2 },
-    { "source": "rahul-research", "target": "xr-virtual-environments", "strength": 2 },
-    { "source": "rahul-research", "target": "ai-ml-systems", "strength": 2 },
-    { "source": "rahul-research", "target": "sustainable-social-design", "strength": 2 },
-    { "source": "rahul-research", "target": "healthcare-assistive-tech", "strength": 2 },
-    { "source": "rahul-research", "target": "smart-cities-built-environment", "strength": 2 },
-    { "source": "rahul-research", "target": "education-learning-tech", "strength": 2 },
-
-    { "source": "paper-inductive-pressure", "target": "inductive-sensing", "strength": 1.5 },
-    { "source": "paper-inductive-pressure", "target": "3d-printed-sensors", "strength": 1.5 },
-    { "source": "paper-inductive-pressure", "target": "soft-interfaces", "strength": 1.5 },
-    { "source": "paper-inductive-pressure", "target": "hci-interaction-design", "strength": 1 },
-
-    { "source": "paper-submersible-touchless-textiles", "target": "smart-textiles", "strength": 1.5 },
-    { "source": "paper-submersible-touchless-textiles", "target": "soft-interfaces", "strength": 1.2 },
-    { "source": "paper-submersible-touchless-textiles", "target": "hci-interaction-design", "strength": 1 },
-
-    { "source": "paper-emotion-aware-incar", "target": "automotive-hci", "strength": 1.5 },
-    { "source": "paper-emotion-aware-incar", "target": "hci-interaction-design", "strength": 1.2 },
-    { "source": "paper-emotion-aware-incar", "target": "ai-ml-systems", "strength": 1 },
-
-    { "source": "paper-covid-diagnosis", "target": "ai-ml-systems", "strength": 1.5 },
-    { "source": "paper-covid-diagnosis", "target": "healthcare-assistive-tech", "strength": 1.3 },
-
-    { "source": "paper-insense3d", "target": "inductive-sensing", "strength": 1.5 },
-    { "source": "paper-insense3d", "target": "3d-printed-sensors", "strength": 1.5 },
-    { "source": "paper-insense3d", "target": "soft-interfaces", "strength": 1.5 },
-    { "source": "paper-insense3d", "target": "hci-interaction-design", "strength": 1.2 },
-
-    { "source": "paper-gamified-ideation-board", "target": "design-pedagogy", "strength": 1.5 },
-    { "source": "paper-gamified-ideation-board", "target": "education-learning-tech", "strength": 1.2 },
-    { "source": "paper-gamified-ideation-board", "target": "hci-interaction-design", "strength": 1 },
-
-    { "source": "paper-3d-console", "target": "automotive-hci", "strength": 1.5 },
-    { "source": "paper-3d-console", "target": "soft-interfaces", "strength": 1.1 },
-    { "source": "paper-3d-console", "target": "hci-interaction-design", "strength": 1.5 },
-
-    { "source": "paper-ar-chemistry", "target": "xr-virtual-environments", "strength": 1.5 },
-    { "source": "paper-ar-chemistry", "target": "education-learning-tech", "strength": 1.4 },
-
-    { "source": "paper-toda-dwellings", "target": "xr-virtual-environments", "strength": 1.3 },
-    { "source": "paper-toda-dwellings", "target": "sustainable-social-design", "strength": 1.4 },
-    { "source": "paper-toda-dwellings", "target": "smart-cities-built-environment", "strength": 1 },
-
-    { "source": "paper-virtual-designers", "target": "xr-virtual-environments", "strength": 1.5 },
-    { "source": "paper-virtual-designers", "target": "healthcare-assistive-tech", "strength": 1.2 },
-    { "source": "paper-virtual-designers", "target": "hci-interaction-design", "strength": 1.2 },
-
-    { "source": "paper-pandemic-urban", "target": "smart-cities-built-environment", "strength": 1.5 },
-    { "source": "paper-pandemic-urban", "target": "ai-ml-systems", "strength": 1.2 },
-    { "source": "paper-pandemic-urban", "target": "sustainable-social-design", "strength": 1.1 },
-
-    { "source": "paper-online-learning", "target": "education-learning-tech", "strength": 1.5 },
-    { "source": "paper-online-learning", "target": "design-pedagogy", "strength": 1.1 },
-    { "source": "paper-online-learning", "target": "hci-interaction-design", "strength": 1 },
-
-    { "source": "paper-maternal-healthcare", "target": "healthcare-assistive-tech", "strength": 1.5 },
-    { "source": "paper-maternal-healthcare", "target": "sustainable-social-design", "strength": 1 },
-
-    { "source": "paper-ai-sketch-tool", "target": "ai-ml-systems", "strength": 1.5 },
-    { "source": "paper-ai-sketch-tool", "target": "design-pedagogy", "strength": 1.4 },
-    { "source": "paper-ai-sketch-tool", "target": "hci-interaction-design", "strength": 1 },
-
-    { "source": "paper-emergency-essentials-kit", "target": "sustainable-social-design", "strength": 1.4 },
-    { "source": "paper-emergency-essentials-kit", "target": "healthcare-assistive-tech", "strength": 1.2 },
-
-    { "source": "paper-visually-impaired-device", "target": "healthcare-assistive-tech", "strength": 1.5 },
-    { "source": "paper-visually-impaired-device", "target": "hci-interaction-design", "strength": 1.2 },
-
-    { "source": "paper-accident-emergency-app", "target": "healthcare-assistive-tech", "strength": 1.4 },
-    { "source": "paper-accident-emergency-app", "target": "hci-interaction-design", "strength": 1 },
-
-    { "source": "paper-daylight-smart-buildings", "target": "smart-cities-built-environment", "strength": 1.5 },
-    { "source": "paper-daylight-smart-buildings", "target": "sustainable-social-design", "strength": 1 },
-
-    { "source": "paper-memhans-dementia", "target": "healthcare-assistive-tech", "strength": 1.5 },
-    { "source": "paper-memhans-dementia", "target": "hci-interaction-design", "strength": 1 },
-
-    { "source": "paper-water-purification", "target": "sustainable-social-design", "strength": 1.5 },
-    { "source": "paper-water-purification", "target": "healthcare-assistive-tech", "strength": 1 },
-
-    { "source": "paper-iisc-dbox", "target": "design-pedagogy", "strength": 1.5 },
-    { "source": "paper-iisc-dbox", "target": "education-learning-tech", "strength": 1.3 },
-
-    { "source": "paper-eye-gaze-trackers", "target": "healthcare-assistive-tech", "strength": 1.5 },
-    { "source": "paper-eye-gaze-trackers", "target": "hci-interaction-design", "strength": 1.3 },
-
-    { "source": "paper-design-thinking-game", "target": "design-pedagogy", "strength": 1.5 },
-    { "source": "paper-design-thinking-game", "target": "education-learning-tech", "strength": 1.4 },
-    { "source": "paper-design-thinking-game", "target": "hci-interaction-design", "strength": 1 }
+    {
+      "source": "rahul-research",
+      "target": "hci-interaction-design",
+      "strength": 2
+    },
+    {
+      "source": "rahul-research",
+      "target": "soft-interfaces",
+      "strength": 2
+    },
+    {
+      "source": "rahul-research",
+      "target": "smart-textiles",
+      "strength": 2
+    },
+    {
+      "source": "rahul-research",
+      "target": "inductive-sensing",
+      "strength": 2
+    },
+    {
+      "source": "rahul-research",
+      "target": "3d-printed-sensors",
+      "strength": 2
+    },
+    {
+      "source": "rahul-research",
+      "target": "automotive-hci",
+      "strength": 2
+    },
+    {
+      "source": "rahul-research",
+      "target": "design-pedagogy",
+      "strength": 2
+    },
+    {
+      "source": "rahul-research",
+      "target": "xr-virtual-environments",
+      "strength": 2
+    },
+    {
+      "source": "rahul-research",
+      "target": "ai-ml-systems",
+      "strength": 2
+    },
+    {
+      "source": "rahul-research",
+      "target": "sustainable-social-design",
+      "strength": 2
+    },
+    {
+      "source": "rahul-research",
+      "target": "healthcare-assistive-tech",
+      "strength": 2
+    },
+    {
+      "source": "rahul-research",
+      "target": "smart-cities-built-environment",
+      "strength": 2
+    },
+    {
+      "source": "rahul-research",
+      "target": "education-learning-tech",
+      "strength": 2
+    },
+    {
+      "source": "paper-inductive-pressure",
+      "target": "inductive-sensing",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-inductive-pressure",
+      "target": "3d-printed-sensors",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-inductive-pressure",
+      "target": "soft-interfaces",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-inductive-pressure",
+      "target": "hci-interaction-design",
+      "strength": 1
+    },
+    {
+      "source": "paper-submersible-touchless-textiles",
+      "target": "smart-textiles",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-submersible-touchless-textiles",
+      "target": "soft-interfaces",
+      "strength": 1.2
+    },
+    {
+      "source": "paper-submersible-touchless-textiles",
+      "target": "hci-interaction-design",
+      "strength": 1
+    },
+    {
+      "source": "paper-emotion-aware-incar",
+      "target": "automotive-hci",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-emotion-aware-incar",
+      "target": "hci-interaction-design",
+      "strength": 1.2
+    },
+    {
+      "source": "paper-emotion-aware-incar",
+      "target": "ai-ml-systems",
+      "strength": 1
+    },
+    {
+      "source": "paper-covid-diagnosis",
+      "target": "ai-ml-systems",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-covid-diagnosis",
+      "target": "healthcare-assistive-tech",
+      "strength": 1.3
+    },
+    {
+      "source": "paper-insense3d",
+      "target": "inductive-sensing",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-insense3d",
+      "target": "3d-printed-sensors",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-insense3d",
+      "target": "soft-interfaces",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-insense3d",
+      "target": "hci-interaction-design",
+      "strength": 1.2
+    },
+    {
+      "source": "paper-gamified-ideation-board",
+      "target": "design-pedagogy",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-gamified-ideation-board",
+      "target": "education-learning-tech",
+      "strength": 1.2
+    },
+    {
+      "source": "paper-gamified-ideation-board",
+      "target": "hci-interaction-design",
+      "strength": 1
+    },
+    {
+      "source": "paper-3d-console",
+      "target": "automotive-hci",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-3d-console",
+      "target": "soft-interfaces",
+      "strength": 1.1
+    },
+    {
+      "source": "paper-3d-console",
+      "target": "hci-interaction-design",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-ar-chemistry",
+      "target": "xr-virtual-environments",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-ar-chemistry",
+      "target": "education-learning-tech",
+      "strength": 1.4
+    },
+    {
+      "source": "paper-toda-dwellings",
+      "target": "xr-virtual-environments",
+      "strength": 1.3
+    },
+    {
+      "source": "paper-toda-dwellings",
+      "target": "sustainable-social-design",
+      "strength": 1.4
+    },
+    {
+      "source": "paper-toda-dwellings",
+      "target": "smart-cities-built-environment",
+      "strength": 1
+    },
+    {
+      "source": "paper-virtual-designers",
+      "target": "xr-virtual-environments",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-virtual-designers",
+      "target": "healthcare-assistive-tech",
+      "strength": 1.2
+    },
+    {
+      "source": "paper-virtual-designers",
+      "target": "hci-interaction-design",
+      "strength": 1.2
+    },
+    {
+      "source": "paper-pandemic-urban",
+      "target": "smart-cities-built-environment",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-pandemic-urban",
+      "target": "ai-ml-systems",
+      "strength": 1.2
+    },
+    {
+      "source": "paper-pandemic-urban",
+      "target": "sustainable-social-design",
+      "strength": 1.1
+    },
+    {
+      "source": "paper-online-learning",
+      "target": "education-learning-tech",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-online-learning",
+      "target": "design-pedagogy",
+      "strength": 1.1
+    },
+    {
+      "source": "paper-online-learning",
+      "target": "hci-interaction-design",
+      "strength": 1
+    },
+    {
+      "source": "paper-maternal-healthcare",
+      "target": "healthcare-assistive-tech",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-maternal-healthcare",
+      "target": "sustainable-social-design",
+      "strength": 1
+    },
+    {
+      "source": "paper-ai-sketch-tool",
+      "target": "ai-ml-systems",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-ai-sketch-tool",
+      "target": "design-pedagogy",
+      "strength": 1.4
+    },
+    {
+      "source": "paper-ai-sketch-tool",
+      "target": "hci-interaction-design",
+      "strength": 1
+    },
+    {
+      "source": "paper-emergency-essentials-kit",
+      "target": "sustainable-social-design",
+      "strength": 1.4
+    },
+    {
+      "source": "paper-emergency-essentials-kit",
+      "target": "healthcare-assistive-tech",
+      "strength": 1.2
+    },
+    {
+      "source": "paper-visually-impaired-device",
+      "target": "healthcare-assistive-tech",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-visually-impaired-device",
+      "target": "hci-interaction-design",
+      "strength": 1.2
+    },
+    {
+      "source": "paper-accident-emergency-app",
+      "target": "healthcare-assistive-tech",
+      "strength": 1.4
+    },
+    {
+      "source": "paper-accident-emergency-app",
+      "target": "hci-interaction-design",
+      "strength": 1
+    },
+    {
+      "source": "paper-daylight-smart-buildings",
+      "target": "smart-cities-built-environment",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-daylight-smart-buildings",
+      "target": "sustainable-social-design",
+      "strength": 1
+    },
+    {
+      "source": "paper-memhans-dementia",
+      "target": "healthcare-assistive-tech",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-memhans-dementia",
+      "target": "hci-interaction-design",
+      "strength": 1
+    },
+    {
+      "source": "paper-water-purification",
+      "target": "sustainable-social-design",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-water-purification",
+      "target": "healthcare-assistive-tech",
+      "strength": 1
+    },
+    {
+      "source": "paper-iisc-dbox",
+      "target": "design-pedagogy",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-iisc-dbox",
+      "target": "education-learning-tech",
+      "strength": 1.3
+    },
+    {
+      "source": "paper-eye-gaze-trackers",
+      "target": "healthcare-assistive-tech",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-eye-gaze-trackers",
+      "target": "hci-interaction-design",
+      "strength": 1.3
+    },
+    {
+      "source": "paper-design-thinking-game",
+      "target": "design-pedagogy",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-design-thinking-game",
+      "target": "education-learning-tech",
+      "strength": 1.4
+    },
+    {
+      "source": "paper-design-thinking-game",
+      "target": "hci-interaction-design",
+      "strength": 1
+    },
+    {
+      "source": "paper-spacer-knitted-sensors",
+      "target": "smart-textiles",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-spacer-knitted-sensors",
+      "target": "soft-interfaces",
+      "strength": 1.5
+    },
+    {
+      "source": "paper-spacer-knitted-sensors",
+      "target": "hci-interaction-design",
+      "strength": 1.0
+    }
   ]
 }

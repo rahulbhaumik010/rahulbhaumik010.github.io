@@ -3,10 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Rahul Bhaumik – Designer & Researcher exploring HCI, XR, soft interfaces, and design pedagogy at the Free University of Bozen-Bolzano." />
+  <meta name="description" content="Dr. Rahul Bhaumik – designer and HCI researcher working on soft interfaces, 3D-printed and textile sensing, automotive UX, XR and design pedagogy at the Free University of Bozen-Bolzano." />
+  <meta name="author" content="Rahul Bhaumik" />
+  <link rel="canonical" href="https://rahulbhaumik010.github.io/" />
+  <meta property="og:type" content="profile" />
+  <meta property="og:title" content="Dr. Rahul Bhaumik – Designer &amp; Researcher" />
+  <meta property="og:description" content="HCI researcher at the Free University of Bozen-Bolzano: soft interfaces, 3D-printed and textile sensing, automotive UX, XR and design pedagogy." />
+  <meta property="og:url" content="https://rahulbhaumik010.github.io/" />
+  <meta property="og:image" content="https://rahulbhaumik010.github.io/profile.jpeg" />
   <title>Rahul Bhaumik – Designer & Researcher</title>
-  <!-- Neue Haas Grotesk Display — same Typekit kit as MIT Media Lab -->
-  <link rel="stylesheet" href="https://use.typekit.net/yuf7oeh.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
@@ -129,7 +134,8 @@
       overflow: hidden;
     }
 
-    .hero-media video {
+    .hero-media video,
+    .hero-media img {
       position: absolute;
       inset: 0;
       width: 100%;
@@ -143,13 +149,13 @@
     }
 
     /* Active video fades in on top */
-    .hero-media video.is-active {
+    .hero-media .is-active {
       opacity: 1;
       z-index: 2;
     }
 
     /* Leaving video stays fully visible underneath during crossfade */
-    .hero-media video.is-leaving {
+    .hero-media .is-leaving {
       opacity: 1;
       z-index: 1;
     }
@@ -525,6 +531,40 @@
     }
 
     /* ──────────────────────────────────────────
+       DOCTORAL THESIS
+    ────────────────────────────────────────── */
+    .thesis-title {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      line-height: 1.15;
+      color: var(--black);
+      margin-bottom: 1rem;
+      max-width: 640px;
+    }
+    .thesis-meta {
+      display: flex; flex-wrap: wrap; gap: 0.35rem 1.5rem;
+      font-size: 0.8rem; color: var(--mid);
+      padding: 0.9rem 0; margin-bottom: 1.75rem;
+      border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    }
+    .thesis-meta strong { color: var(--black); font-weight: 500; }
+    .thesis-parts {
+      list-style: none; counter-reset: part;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--rule); border: 1px solid var(--rule);
+      margin: 1.75rem 0;
+    }
+    .thesis-parts li { background: var(--white); padding: 1.25rem; counter-increment: part; }
+    .thesis-parts li::before {
+      content: counter(part, decimal-leading-zero);
+      display: block; font-family: var(--serif); font-style: italic;
+      font-size: 1.6rem; color: var(--accent); line-height: 1; margin-bottom: 0.6rem;
+    }
+    .thesis-parts h3 { font-family: var(--sans); font-size: 0.88rem; font-weight: 700; margin-bottom: 0.4rem; line-height: 1.35; }
+    .thesis-parts p { font-size: 0.8rem; color: var(--mid); line-height: 1.6; }
+    .thesis-parts a { text-decoration: underline; text-underline-offset: 2px; color: var(--black); }
+
+    /* ──────────────────────────────────────────
        PROJECT MODULES  (feed-block style)
     ────────────────────────────────────────── */
     .module-grid {
@@ -601,6 +641,16 @@
       transition: color 0.2s, transform 0.2s;
     }
 
+    .module-grid--single { grid-template-columns: 1fr; }
+    .module-status.is-past::before { background: #aaa; }
+    .module-item.is-static { cursor: default; }
+    .projects-subhead {
+      font-family: var(--sans); font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase; color: var(--mid);
+      margin: 2.25rem 0 0.9rem;
+    }
+    .projects-subhead:first-of-type { margin-top: 0; }
+
     .module-item:hover .module-arrow {
       color: var(--accent);
       transform: translate(2px, -2px);
@@ -622,7 +672,7 @@
       transition: background 0.15s;
     }
 
-    .pub-item:first-child { border-top: 1px solid var(--rule); }
+    .pub-list li:first-child .pub-item { border-top: 1px solid var(--rule); }
 
     .pub-index {
       font-family: var(--serif);
@@ -833,6 +883,7 @@
       .xp-grid { grid-template-columns: 1fr; gap: 2rem; }
       .module-grid { grid-template-columns: 1fr; }
       .graph-layout { grid-template-columns: 1fr; }
+      .thesis-parts { grid-template-columns: 1fr; }
       #researchGraph { height: 500px; }
       .g-header-nav { display: none; }
       .hero-content { padding: 0 1.5rem 2.5rem; }
@@ -864,6 +915,7 @@
     <ul class="g-header-nav">
       <li><a href="#about">Overview</a></li>
       <li><a href="#research">Research</a></li>
+      <li><a href="#thesis">Thesis</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#publications">Publications</a></li>
@@ -878,14 +930,14 @@
     <video class="is-active" autoplay muted playsinline preload="auto" src="hero-1.mp4"></video>
     <video muted playsinline preload="none" src="hero-2.mp4"></video>
     <video muted playsinline preload="none" src="hero-3.mp4"></video>
-    <video muted playsinline preload="none" src="hero-4.mp4"></video>
+    <img src="hero-4.jpg" alt="" aria-hidden="true" />
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <div class="hero-avatar"><img src="profile.jpeg" alt="Rahul Bhaumik" /></div>
+    <div class="hero-avatar"><img src="profile.jpeg" alt="Portrait of Rahul Bhaumik" width="200" height="200" /></div>
     <div class="hero-text">
       <h1 class="hero-name">Dr. Rahul Bhaumik</h1>
-      <p class="hero-title">PhD in Computer Science · Free University of Bozen-Bolzano &nbsp;·&nbsp; HCI, Tangible Interfaces, Soft Interfaces, XR, Design Pedagogy</p>
+      <p class="hero-title">Researcher · Human-Centered Technologies Lab, Free University of Bozen-Bolzano &nbsp;·&nbsp; HCI, Soft &amp; Tangible Interfaces, XR, AI in Design, Design Pedagogy</p>
     </div>
   </div>
 </div>
@@ -898,6 +950,7 @@
     <ul class="rail-nav-list">
       <li class="active"><a href="#about">Overview</a></li>
       <li><a href="#research">Research</a></li>
+      <li><a href="#thesis">Thesis</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#publications">Publications</a></li>
@@ -916,7 +969,7 @@
 
     <div class="rail-affil">
       <p class="rail-affil-label">Affiliation</p>
-      <p class="rail-affil-name">Free University of<br>Bozen-Bolzano<br>PhD, 2023–</p>
+      <p class="rail-affil-name">Human-Centered Technologies Lab<br>Free University of Bozen-Bolzano<br>NOI Techpark, Bolzano</p>
     </div>
   </aside>
 
@@ -927,9 +980,9 @@
     <section class="primary-block section-anchor" id="about">
       <p class="block-eyebrow">Overview</p>
       <div class="main-copy">
-        <p>Rahul Bhaumik is a designer and researcher working at the intersection of human-computer interaction, extended reality, soft interfaces, and design pedagogy. He holds a PhD in Computer Science (specializing in Human-Computer Interaction) from the Free University of Bozen-Bolzano, Italy, where his research explores soft, pressure-sensitive 3D printed structures and novel textile-based interfaces for everyday interactions, including automotive contexts.</p>
+        <p>Rahul Bhaumik is a designer and researcher working at the intersection of human-computer interaction, extended reality, soft interfaces, and design pedagogy. He is a researcher at the Human-Centered Technologies Lab of the Free University of Bozen-Bolzano (unibz), based at NOI Techpark in Bolzano, Italy. He completed his PhD at unibz in 2026 with the thesis <em>Affordances of Soft Interfaces: A Design and Fabrication Approach</em>, which investigates soft, passive interfaces — from textiles to 3D-printed smart structures that sense pressure and deformation — for everyday and automotive interactions. His work has appeared at ACM CHI and ACM AutomotiveUI and in IEEE Sensors Letters and Communications Engineering.</p>
         <p>Trained as an architect and product designer, Bhaumik's work focuses on the tactile, material, and experiential dimensions of human-technology relationships — drawing upon emerging fabrication technologies and morphological principles to create interfaces that are both functionally innovative and perceptually engaging.</p>
-        <p>Prior to his doctoral studies, he served as Assistant Professor at the Faculty of Architecture &amp; Design, PES University, Bangalore (2018–2023), where he taught and researched at the confluence of digital design tools, learning systems, and interaction design. He holds an M.Des in Product Design and Engineering from the Indian Institute of Science, Bangalore, and a B.Arch from the School of Planning and Architecture, New Delhi.</p>
+        <p>Before his doctoral studies, he was an Assistant Professor at the Faculty of Architecture &amp; Design, PES University, Bangalore (2018–2023), where he taught and researched at the confluence of digital design tools, learning systems, and interaction design. He holds an M.Des in Product Design and Engineering from the Indian Institute of Science, Bangalore, and a B.Arch from the School of Planning and Architecture, New Delhi.</p>
       </div>
     </section>
 
@@ -948,6 +1001,35 @@
       </div>
     </section>
 
+    <!-- DOCTORAL THESIS -->
+    <section class="primary-block section-anchor" id="thesis">
+      <p class="block-eyebrow">Doctoral Thesis · 2026</p>
+      <h2 class="thesis-title">Affordances of Soft Interfaces: A Design and Fabrication Approach</h2>
+      <div class="thesis-meta">
+        <span><strong>PhD</strong>, Faculty of Engineering, Free University of Bozen-Bolzano</span>
+        <span><strong>Supervisors</strong> Prof. Michael Haller · Prof. Antonella De Angeli</span>
+        <span><strong>Awarded</strong> 12 June 2026</span>
+      </div>
+      <div class="main-copy">
+        <p>The thesis investigates how to design and fabricate soft, passive interfaces, and how their affordances emerge from geometry, surface and material. It spans textile interfaces and 3D-printed smart structures that detect touch and pressure while offering soft, deformable surfaces for everyday interaction — asking how an interface's overall form, the visual and tactile qualities of its surface, and the flexibility of its material shape the gestures people perform on it.</p>
+      </div>
+      <ol class="thesis-parts">
+        <li>
+          <h3>Form: interacting with 3D surfaces</h3>
+          <p>Experiments on a touch-sensitive, three-dimensional middle console for cars, evaluating how surface geometry affects usability and which gestural patterns people perform on 3D interfaces. <a href="https://doi.org/10.1145/3640792.3675707" target="_blank" rel="noopener">AutomotiveUI ’24</a></p>
+        </li>
+        <li>
+          <h3>Surface: textiles that guide touch</h3>
+          <p>How visual and tactile surface features guide on-surface gestures, explored through the design and prototyping of functional and non-functional textile-based interfaces.</p>
+        </li>
+        <li>
+          <h3>Material: soft 3D-printed sensing</h3>
+          <p>Deformable 3D-printed structures with ferromagnetic filaments that use inductive sensing for pressure and out-of-plane gestures — evaluated for mechanics, sensing performance and long-term stability, and demonstrated as controllers, weighing systems and smart shoes. <a href="https://doi.org/10.1109/LSENS.2025.3562455" target="_blank" rel="noopener">IEEE Sens. Lett. ’25</a> · <a href="https://doi.org/10.1145/3772318.3791824" target="_blank" rel="noopener">CHI ’26</a></p>
+        </li>
+      </ol>
+      <a class="scholar-cta" href="https://hdl.handle.net/10863/52531" target="_blank" rel="noopener">View thesis record →</a>
+    </section>
+
     <!-- EXPERIENCE & EDUCATION -->
     <section class="primary-block section-anchor" id="experience">
       <p class="block-eyebrow">Background</p>
@@ -956,10 +1038,10 @@
         <div>
           <p class="xp-col-title">Experience</p>
           <div class="xp-item">
-            <div class="xp-year">2023 –<br>present</div>
+            <div class="xp-year">Current</div>
             <div>
-              <p class="xp-role">PhD in Computer Science</p>
-              <p class="xp-place">Free University of Bozen-Bolzano, Italy</p>
+              <p class="xp-role">Researcher</p>
+              <p class="xp-place">Human-Centered Technologies Lab, Free University of Bozen-Bolzano · NOI Techpark, Bolzano</p>
             </div>
           </div>
           <div class="xp-item">
@@ -972,6 +1054,13 @@
         </div>
         <div>
           <p class="xp-col-title">Education</p>
+          <div class="xp-item">
+            <div class="xp-year">2023 –<br>2026</div>
+            <div>
+              <p class="xp-role">PhD — Advanced-Systems Engineering</p>
+              <p class="xp-place">Free University of Bozen-Bolzano, Italy<br><a href="https://bia.unibz.it/esploro/outputs/doctoral/Affordances-of-Soft-Interfaces-A-Design/991007370725901241" target="_blank" rel="noopener" style="text-decoration:underline;text-underline-offset:2px">Thesis: Affordances of Soft Interfaces: A Design and Fabrication Approach</a></p>
+            </div>
+          </div>
           <div class="xp-item">
             <div class="xp-year">2016 –<br>2018</div>
             <div>
@@ -993,21 +1082,24 @@
     <!-- PROJECTS -->
     <section class="primary-block section-anchor" id="projects">
       <p class="block-eyebrow">Selected Work</p>
-      <h2 class="block-title">Active Projects</h2>
-      <div class="module-grid">
-        <a href="project.html" class="module-item">
+      <h2 class="block-title">Projects</h2>
+      <p class="projects-subhead">Current</p>
+      <div class="module-grid module-grid--single">
+        <div class="module-item is-static">
           <p class="module-num">01</p>
-          <span class="module-arrow">↗</span>
-          <h3 class="module-title">Textile-based Novel Cover Interfaces for Automotive Interiors</h3>
-          <p class="module-desc">3D touch-sensitive textile surfaces for automotive consoles — exploring tactile affordances, inductive sensing, and multi-surface interaction for next-generation vehicle HCI.</p>
-          <span class="module-status">Ongoing · Prototyping phase</span>
-        </a>
-        <a href="sustainable-ux-ai.html" class="module-item">
+          <h3 class="module-title">Smart Shoe Sole with Real-Time Variable Stiffness</h3>
+          <p class="module-desc">A smart shoe sole whose stiffness can change in real time — extending the thesis work on soft, 3D-printed structures and smart wearables.</p>
+          <span class="module-status">Ongoing</span>
+        </div>
+      </div>
+      <p class="projects-subhead">Past</p>
+      <div class="module-grid module-grid--single">
+        <a href="project.html" class="module-item">
           <p class="module-num">02</p>
           <span class="module-arrow">↗</span>
-          <h3 class="module-title">AI-Driven Sustainable Practices in UI/UX Design</h3>
-          <p class="module-desc">A conceptual framework integrating AI-assisted tools and energy-aware design strategies into the UI/UX process, addressing the carbon footprint of digital interfaces.</p>
-          <span class="module-status">Ongoing · Framework development</span>
+          <h3 class="module-title">Textile-based Novel Cover Interfaces for Automotive Interiors</h3>
+          <p class="module-desc">3D touch-sensitive textile surfaces for automotive consoles — exploring tactile affordances and multi-surface interaction for in-vehicle HCI. Part of the doctoral thesis.</p>
+          <span class="module-status is-past">Completed · AutomotiveUI 2024</span>
         </a>
       </div>
     </section>
@@ -1017,53 +1109,73 @@
       <p class="block-eyebrow">Research Output</p>
       <h2 class="block-title">Selected Publications</h2>
       <ul class="pub-list">
-        <li class="pub-item">
-          <span class="pub-index">09</span>
+        <li><a class="pub-item" href="https://ieeexplore.ieee.org/abstract/document/11544066/" target="_blank" rel="noopener">
+          <span class="pub-index">13</span>
+          <div><p class="pub-title">Soft, Scalable Spacer-Knitted Piezoresistive Pressure Sensors with Tunable Localized Sensitivity Enabled by Heat-Expandable Yarn Inlays</p><p class="pub-venue">IEEE Sensors Letters · 2026</p></div>
+          <span class="pub-arrow" aria-hidden="true">↗</span>
+        </a></li>
+        <li><a class="pub-item" href="https://doi.org/10.1145/3772318.3791824" target="_blank" rel="noopener">
+          <span class="pub-index">12</span>
           <div><p class="pub-title">InSense3D: Designing Smart 3D-Printed Structures Leveraging Ferromagnetic Filaments for Inductive Deformation Sensing</p><p class="pub-venue">ACM CHI · 2026</p></div>
-          <span class="pub-arrow">↗</span>
-        </li>
-        <li class="pub-item" onclick="window.open('https://dl.acm.org/doi/10.1145/3640792.3675707','_blank')">
-          <span class="pub-index">08</span>
+          <span class="pub-arrow" aria-hidden="true">↗</span>
+        </a></li>
+        <li><a class="pub-item" href="https://doi.org/10.1109/LSENS.2025.3562455" target="_blank" rel="noopener">
+          <span class="pub-index">11</span>
+          <div><p class="pub-title">Inductive Pressure Sensors Using 3D-Printed Structures with Tunable Stiffness</p><p class="pub-venue">IEEE Sensors Letters · 2025</p></div>
+          <span class="pub-arrow" aria-hidden="true">↗</span>
+        </a></li>
+        <li><a class="pub-item" href="https://doi.org/10.1038/s44172-025-00373-x" target="_blank" rel="noopener">
+          <span class="pub-index">10</span>
+          <div><p class="pub-title">Submersible Touchless Interactivity in Conformable Textiles Enabled by Highly Selective Overbraided Magnetoresistive Sensors</p><p class="pub-venue">Communications Engineering · 2025</p></div>
+          <span class="pub-arrow" aria-hidden="true">↗</span>
+        </a></li>
+        <li><a class="pub-item" href="https://doi.org/10.1145/3640792.3675707" target="_blank" rel="noopener">
+          <span class="pub-index">09</span>
           <div><p class="pub-title">Interaction with a 3D Surface for an Innovative Input Experience on a Central Console</p><p class="pub-venue">ACM AutomotiveUI · 2024</p></div>
-          <span class="pub-arrow">↗</span>
-        </li>
-        <li class="pub-item" onclick="window.open('https://www.sciencedirect.com/science/article/pii/S1877050923000479','_blank')">
+          <span class="pub-arrow" aria-hidden="true">↗</span>
+        </a></li>
+        <li><a class="pub-item" href="https://doi.org/10.3390/mti8070054" target="_blank" rel="noopener">
+          <span class="pub-index">08</span>
+          <div><p class="pub-title">Emotion-Aware In-Car Feedback: A Comparative Study</p><p class="pub-venue">Multimodal Technologies and Interaction · 2024</p></div>
+          <span class="pub-arrow" aria-hidden="true">↗</span>
+        </a></li>
+        <li><a class="pub-item" href="https://doi.org/10.1016/j.procs.2023.01.047" target="_blank" rel="noopener">
           <span class="pub-index">07</span>
-          <div><p class="pub-title">Smart Vernacular Architecture: a Framework for VR-based Visualisation of Indigenous Toda Dwellings</p><p class="pub-venue">Procedia Computer Science · 2023</p></div>
-          <span class="pub-arrow">↗</span>
-        </li>
-        <li class="pub-item" onclick="window.open('https://www.sciencedirect.com/science/article/pii/S1877050923002053','_blank')">
+          <div><p class="pub-title">Smart Vernacular Architecture: A Framework for Assessment and Virtual Reality-based Visualisation of Indigenous Toda Dwellings</p><p class="pub-venue">Procedia Computer Science · 2023</p></div>
+          <span class="pub-arrow" aria-hidden="true">↗</span>
+        </a></li>
+        <li><a class="pub-item" href="https://doi.org/10.1016/j.procs.2023.01.205" target="_blank" rel="noopener">
           <span class="pub-index">06</span>
-          <div><p class="pub-title">An Intelligent ABM-based Framework for Pandemic-Resilient Urban Spaces in Post-COVID Smart Cities</p><p class="pub-venue">Procedia Computer Science · 2023</p></div>
-          <span class="pub-arrow">↗</span>
-        </li>
-        <li class="pub-item" onclick="window.open('https://www.sciencedirect.com/science/article/pii/S1877050923000315','_blank')">
+          <div><p class="pub-title">An Intelligent ABM-based Framework for Developing Pandemic-Resilient Urban Spaces in Post-COVID Smart Cities</p><p class="pub-venue">Procedia Computer Science · 2023</p></div>
+          <span class="pub-arrow" aria-hidden="true">↗</span>
+        </a></li>
+        <li><a class="pub-item" href="https://doi.org/10.1016/j.procs.2023.01.031" target="_blank" rel="noopener">
           <span class="pub-index">05</span>
           <div><p class="pub-title">An Intelligent Virtual Environment for Designers with Reduced Motor Abilities</p><p class="pub-venue">Procedia Computer Science · 2023</p></div>
-          <span class="pub-arrow">↗</span>
-        </li>
-        <li class="pub-item" onclick="window.open('https://www.sciencedirect.com/science/article/pii/S1568494621004452','_blank')">
+          <span class="pub-arrow" aria-hidden="true">↗</span>
+        </a></li>
+        <li><a class="pub-item" href="https://doi.org/10.1016/j.asoc.2021.107522" target="_blank" rel="noopener">
           <span class="pub-index">04</span>
           <div><p class="pub-title">A Deep-Learning Based Multimodal System for Covid-19 Diagnosis using Breathing Sounds and Chest X-ray Images</p><p class="pub-venue">Applied Soft Computing · 2021</p></div>
-          <span class="pub-arrow">↗</span>
-        </li>
-        <li class="pub-item" onclick="window.open('https://ieeexplore.ieee.org/abstract/document/9033102','_blank')">
+          <span class="pub-arrow" aria-hidden="true">↗</span>
+        </a></li>
+        <li><a class="pub-item" href="https://link.springer.com/chapter/10.1007/978-981-15-8289-9_63" target="_blank" rel="noopener">
           <span class="pub-index">03</span>
-          <div><p class="pub-title">An Inclusive Community Based Water Purification and Monitoring System for the Base of the Pyramid</p><p class="pub-venue">IEEE · 2020</p></div>
-          <span class="pub-arrow">↗</span>
-        </li>
-        <li class="pub-item" onclick="window.open('https://link.springer.com/chapter/10.1007/978-981-15-8289-9_63','_blank')">
+          <div><p class="pub-title">An AI-based Pedagogical Tool for Creating Sketched Representation of Emotive Product Forms in the Conceptual Design Stages</p><p class="pub-venue">ICT4SD 2020 · Springer</p></div>
+          <span class="pub-arrow" aria-hidden="true">↗</span>
+        </a></li>
+        <li><a class="pub-item" href="https://doi.org/10.1109/GHTC46095.2019.9033102" target="_blank" rel="noopener">
           <span class="pub-index">02</span>
-          <div><p class="pub-title">An AI-based Pedagogical Tool for Creating Sketched Representation of Emotive Product Forms</p><p class="pub-venue">Springer · 2020</p></div>
-          <span class="pub-arrow">↗</span>
-        </li>
-        <li class="pub-item" onclick="window.open('https://link.springer.com/chapter/10.1007/978-981-13-5977-4_85','_blank')">
+          <div><p class="pub-title">An Inclusive Community Based Water Purification and Monitoring System for the Base of the Pyramid</p><p class="pub-venue">IEEE GHTC · 2019</p></div>
+          <span class="pub-arrow" aria-hidden="true">↗</span>
+        </a></li>
+        <li><a class="pub-item" href="https://doi.org/10.1007/978-981-13-5977-4_85" target="_blank" rel="noopener">
           <span class="pub-index">01</span>
-          <div><p class="pub-title">A Gamified Model of Design Thinking for Fostering Learning in Children</p><p class="pub-venue">Springer · 2019</p></div>
-          <span class="pub-arrow">↗</span>
-        </li>
+          <div><p class="pub-title">A Gamified Model of Design Thinking for Fostering Learning in Children</p><p class="pub-venue">ICoRD 2019 · Springer</p></div>
+          <span class="pub-arrow" aria-hidden="true">↗</span>
+        </a></li>
       </ul>
-      <a class="scholar-cta" href="https://scholar.google.co.in/citations?user=PLE7BqQAAAAJ&hl=en" target="_blank" rel="noopener">View full list on Google Scholar →</a>
+      <a class="scholar-cta" href="https://scholar.google.com/citations?user=PLE7BqQAAAAJ&hl=en" target="_blank" rel="noopener">View full list on Google Scholar →</a>
     </section>
 
     <!-- CONTACT -->
@@ -1085,7 +1197,7 @@
         </div>
         <div class="contact-cell">
           <p class="contact-cell-label">Google Scholar</p>
-          <p class="contact-cell-value"><a href="https://scholar.google.co.in/citations?user=PLE7BqQAAAAJ&hl=en" target="_blank" rel="noopener">View profile →</a></p>
+          <p class="contact-cell-value"><a href="https://scholar.google.com/citations?user=PLE7BqQAAAAJ&amp;hl=en" target="_blank" rel="noopener">View profile →</a></p>
         </div>
       </div>
     </section>
@@ -1108,6 +1220,7 @@
       <ul class="g-footer-list">
         <li><a href="#about">Overview</a></li>
         <li><a href="#research">Research</a></li>
+        <li><a href="#thesis">Doctoral Thesis</a></li>
         <li><a href="#experience">Experience &amp; Education</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#publications">Publications</a></li>
@@ -1117,7 +1230,7 @@
     <div>
       <p class="g-footer-section-title">External</p>
       <ul class="g-footer-list">
-        <li><a href="https://scholar.google.co.in/citations?user=PLE7BqQAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a></li>
+        <li><a href="https://scholar.google.com/citations?user=PLE7BqQAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar</a></li>
         <li><a href="mailto:rbhaumik@unibz.it">rbhaumik@unibz.it</a></li>
         <li><a href="https://www.unibz.it" target="_blank" rel="noopener">Free University of Bozen-Bolzano</a></li>
       </ul>
@@ -1131,46 +1244,47 @@
 
 <!-- ── SCRIPTS ── -->
 <script src="https://unpkg.com/d3@7/dist/d3.min.js"></script>
-<script src="https://unpkg.com/force-graph"></script>
+<script src="https://unpkg.com/force-graph@1"></script>
 <script src="research-graph.js"></script>
 
 <script>
-  // Hero background: cycle through video1 -> video2 -> video3 -> video4 -> repeat
+  // Hero background: cycle videos (advance on 'ended') and still images (advance after a delay)
   (function () {
-    const items = Array.from(document.querySelectorAll('.hero-media video'));
+    const items = Array.from(document.querySelectorAll('.hero-media video, .hero-media img'));
     if (!items.length) return;
+    const IMAGE_MS = 6000;
+    let current = 0, timer = null;
 
-    let current = 0;
+    function show(el) {
+      el.classList.add('is-active');
+      clearTimeout(timer);
+      if (el.tagName === 'VIDEO') {
+        el.currentTime = 0;
+        el.play().catch(() => { timer = setTimeout(advance, IMAGE_MS); });
+      } else {
+        timer = setTimeout(advance, IMAGE_MS);
+      }
+      const next = items[(items.indexOf(el) + 1) % items.length];
+      if (next.tagName === 'VIDEO' && next.preload === 'none') next.preload = 'auto';
+    }
 
     function advance() {
       const outgoing = items[current];
       current = (current + 1) % items.length;
-      const incoming = items[current];
-
-      // Keep outgoing fully visible underneath during crossfade
       outgoing.classList.remove('is-active');
       outgoing.classList.add('is-leaving');
-
-      // Bring incoming in on top
-      incoming.currentTime = 0;
-      incoming.play().catch(() => {});
-      incoming.classList.add('is-active');
-
-      // Clean up outgoing after crossfade completes
       setTimeout(() => outgoing.classList.remove('is-leaving'), 1400);
-
-      // Preload the one after next
-      const afterNext = items[(current + 1) % items.length];
-      if (afterNext.preload === 'none') afterNext.preload = 'auto';
+      show(items[current]);
     }
 
-    items.forEach(el => el.addEventListener('ended', advance));
-
-    // Start first video
-    items[0].classList.add('is-active');
-    items[0].play().catch(() => {});
-    // Preload second
-    if (items[1]) items[1].preload = 'auto';
+    items.forEach(el => {
+      if (el.tagName === 'VIDEO') {
+        el.addEventListener('ended', advance);
+        el.addEventListener('error', advance);   // skip a missing/broken file instead of stalling
+      }
+    });
+    items.forEach(el => el.classList.remove('is-active'));
+    show(items[0]);
   })();
 
   // Scroll spy for rail nav
