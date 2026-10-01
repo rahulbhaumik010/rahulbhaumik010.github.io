@@ -285,6 +285,25 @@ if (graphContainer) {
       Graph.d3Force("center", null);
       Graph.d3Force("link").strength(0);
 
+      // Scrolling the page must never get stuck on the map:
+      // a plain two-finger swipe / mouse wheel scrolls the PAGE; pinch (trackpad) or ⌘/Ctrl + scroll zooms the map.
+      // (A trackpad pinch arrives as a wheel event with ctrlKey = true.)
+      const zoomHint = document.createElement("div");
+      zoomHint.className = "graph-zoom-hint";
+      zoomHint.setAttribute("aria-hidden", "true");
+      zoomHint.textContent = /Mac|iPhone|iPad/.test(navigator.platform) ? "Pinch or ⌘ + scroll to zoom" : "Pinch or Ctrl + scroll to zoom";
+      (graphContainer.closest(".graph-layout") || graphContainer).appendChild(zoomHint);
+      let hintTimer = null, hintShown = 0;
+      graphContainer.addEventListener("wheel", e => {
+        if (e.ctrlKey || e.metaKey) return;          // let the map zoom
+        e.stopPropagation();                          // keep it from the map's zoom handler → page scrolls normally
+        if (hintShown < 2 && Math.abs(e.deltaY) > 4) {
+          zoomHint.classList.add("show");
+          clearTimeout(hintTimer);
+          hintTimer = setTimeout(() => { zoomHint.classList.remove("show"); hintShown++; }, 1400);
+        }
+      }, { capture: true, passive: true });
+
       // Capture phase: runs before the canvas's own double-click-to-zoom, which we suppress
       graphContainer.addEventListener("dblclick", e => {
         e.preventDefault();
