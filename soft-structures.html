@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D-Printed Soft Sensitive Structures – Rahul Bhaumik</title>
+  <meta name="description" content="Soft, 3D-printed lattice structures in TPU with a ferromagnetic PETG core that sense pressure through inductive sensing — tunable stiffness, long-term stability and a joystick demonstrator." />
+  <meta property="og:title" content="3D-Printed Soft Sensitive Structures" />
+  <meta property="og:image" content="https://rahulbhaumik010.github.io/projects/soft-structures/cover.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #ffffff; --ink: #141414; --ink-2: #3d3d3d; --mute: #767676; --rule: #e6e6e6; --tint: #f4f4f4; --accent: #f24e1e;
+      --header-h: 64px; --max: 1120px; --pad: clamp(1rem, 3vw, 2.5rem);
+      --display: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --body: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+    body { font-family: var(--body); line-height: 1.6; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    img, video { display: block; max-width: 100%; }
+    ::selection { background: var(--accent); color: #fff; }
+
+    .g-header { position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--header-h); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--pad); background: rgba(255,255,255,.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--rule); }
+    .wordmark { display: flex; align-items: center; gap: .75rem; }
+    .wordmark-mark { width: 34px; height: 34px; background: var(--ink); color: #fff; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: .95rem; letter-spacing: -.04em; transition: background .2s; }
+    .wordmark:hover .wordmark-mark { background: var(--accent); }
+    .wordmark-name { font-family: var(--display); font-weight: 700; }
+    .back { font-family: var(--display); font-weight: 500; font-size: .9rem; color: var(--ink-2); }
+    .back:hover { color: var(--accent); }
+
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+    .eyebrow { display: flex; align-items: center; gap: .6rem; font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); margin-bottom: 1rem; }
+    .eyebrow::before { content: ''; width: 8px; height: 8px; background: var(--accent); }
+
+    /* Hero */
+    .hero { padding: calc(var(--header-h) + 3.5rem) 0 2.5rem; }
+    .title { font-family: var(--display); font-weight: 700; font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: .98; letter-spacing: -.045em; max-width: 14ch; }
+    .title em { font-style: normal; color: var(--accent); }
+    .lede { font-family: var(--display); font-weight: 500; font-size: clamp(1.15rem, 2vw, 1.5rem); line-height: 1.32; letter-spacing: -.01em; color: var(--ink-2); max-width: 40ch; margin-top: 1.5rem; }
+    .meta { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--ink); margin-top: 2.5rem; }
+    .meta > div { padding: .9rem 1rem 0 0; }
+    .k { font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); margin-bottom: .25rem; }
+    .v { font-size: .92rem; line-height: 1.45; }
+    .v a { border-bottom: 1px solid currentColor; }
+    .v a:hover { color: var(--accent); }
+    .cover { margin-top: 2.5rem; aspect-ratio: 16 / 8; overflow: hidden; background: var(--tint); }
+    .cover img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Sections */
+    .sec { display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: 2.5rem; padding: 4.5rem 0; border-bottom: 1px solid var(--rule); }
+    .sec-num { font-family: var(--mono); font-size: .75rem; color: var(--mute); }
+    .sec-title { font-family: var(--display); font-weight: 700; font-size: 1.6rem; line-height: 1.1; letter-spacing: -.025em; margin-top: .35rem; position: sticky; top: calc(var(--header-h) + 1.5rem); }
+    .sec-head { align-self: start; position: sticky; top: calc(var(--header-h) + 1.5rem); }
+    .prose p { color: var(--ink-2); font-size: 1.04rem; margin-bottom: 1rem; max-width: 66ch; }
+    .prose strong { color: var(--ink); font-weight: 600; }
+    figure { margin: 2rem 0 0; }
+    figcaption { font-family: var(--mono); font-size: .72rem; color: var(--mute); margin-top: .6rem; line-height: 1.5; }
+    .fig-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .fig-plain { display: flex; flex-direction: column; }
+    .fig-plain img { width: 100%; height: 320px; object-fit: contain; background: #fff; border: 1px solid var(--rule); padding: 1rem; }
+    video { width: 100%; background: #000; }
+    .video-tall { max-width: 360px; }
+
+    .facts { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--ink); margin-top: 2rem; }
+    .fact { padding: 1rem 1rem 0 0; }
+    .fact-num { font-family: var(--display); font-weight: 700; font-size: clamp(1.5rem, 3vw, 2.2rem); letter-spacing: -.04em; line-height: 1; }
+    .fact-num small { font-size: .55em; letter-spacing: -.01em; }
+    .fact-label { font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--mute); margin-top: .45rem; }
+
+    .steps { list-style: none; counter-reset: s; border-top: 1px solid var(--ink); margin-top: 1.5rem; }
+    .steps li { counter-increment: s; display: grid; grid-template-columns: 2.5rem 1fr; gap: .5rem; padding: .9rem 0; border-bottom: 1px solid var(--rule); color: var(--ink-2); }
+    .steps li::before { content: counter(s, decimal-leading-zero); font-family: var(--mono); font-size: .75rem; color: var(--accent); padding-top: .2rem; }
+    .steps strong { color: var(--ink); font-weight: 600; }
+
+    .pubs { list-style: none; border-top: 1px solid var(--ink); }
+    .pubs a { display: grid; grid-template-columns: 4rem 1fr 1.5rem; gap: 1rem; padding: 1.1rem 0; border-bottom: 1px solid var(--rule); align-items: baseline; transition: background .2s, padding .25s; }
+    .pubs a:hover { background: var(--tint); padding-left: .75rem; padding-right: .75rem; }
+    .pubs a:hover .pt { color: var(--accent); }
+    .py { font-family: var(--mono); font-size: .8rem; color: var(--mute); }
+    .pt { font-family: var(--display); font-weight: 600; font-size: 1.05rem; line-height: 1.3; }
+    .pv { display: block; font-family: var(--body); font-weight: 400; font-size: .82rem; color: var(--mute); margin-top: .2rem; }
+
+    .g-footer { background: var(--ink); color: rgba(255,255,255,.6); margin-top: 5rem; }
+    .g-footer .wrap { display: flex; justify-content: space-between; padding-top: 2rem; padding-bottom: 2rem; font-family: var(--mono); font-size: .72rem; }
+    .g-footer a:hover { color: #fff; }
+
+    @media (max-width: 860px) {
+      .sec { grid-template-columns: 1fr; gap: 1rem; padding: 3rem 0; }
+      .sec-head, .sec-title { position: static; }
+      .meta { grid-template-columns: 1fr 1fr; row-gap: .5rem; }
+      .fig-grid, .facts { grid-template-columns: 1fr; }
+      .cover { aspect-ratio: 4 / 3; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="g-header">
+  <a class="wordmark" href="index.html" aria-label="Rahul Bhaumik — home">
+    <span class="wordmark-mark">rb</span><span class="wordmark-name">Rahul Bhaumik</span>
+  </a>
+  <a class="back" href="index.html#projects">← All projects</a>
+</header>
+
+<main>
+  <section class="hero wrap">
+    <p class="eyebrow">Completed project · Doctoral research</p>
+    <h1 class="title">3D-Printed <em>Soft</em> Sensitive Structures</h1>
+    <p class="lede">Soft, customizable pressure sensors made entirely by 3D printing — a flexible lattice that squeezes and springs back, with a ferromagnetic core that a coil can “feel” moving.</p>
+    <div class="meta">
+      <div><p class="k">Role</p><p class="v">Design, fabrication &amp; evaluation (first author)</p></div>
+      <div><p class="k">Lab</p><p class="v">Media Interaction Lab<br>Free University of Bozen-Bolzano</p></div>
+      <div><p class="k">Materials</p><p class="v">TPU (flexible) · ferromagnetic PETG</p></div>
+      <div><p class="k">Published</p><p class="v"><a href="https://doi.org/10.1109/LSENS.2025.3562455" target="_blank" rel="noopener">IEEE Sensors Letters 2025</a></p></div>
+    </div>
+    <div class="cover"><img src="projects/soft-structures/cover.jpg" alt="A flexible white 3D-printed lattice sheet bending, with small blue ferromagnetic inserts" /></div>
+  </section>
+
+  <div class="wrap">
+
+    <section class="sec">
+      <div class="sec-head"><p class="sec-num">01</p><h2 class="sec-title">Why</h2></div>
+      <div class="prose">
+        <p>There is a growing need for <strong>soft, customizable pressure sensors</strong> — in wearables, controllers and everyday objects. Most soft sensors depend on special materials, delicate wiring or complex assembly.</p>
+        <p>This project asks whether a sensor can be <strong>made entirely by 3D printing</strong> from off-the-shelf filaments, with its softness set by geometry, and easily connected to electronics — by using <strong>inductive sensing</strong>.</p>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head"><p class="sec-num">02</p><h2 class="sec-title">Softness from structure</h2></div>
+      <div class="prose">
+        <p>Softness comes from two things working together. The material is <strong>TPU</strong>, a flexible thermoplastic polyurethane filament. The form is a <strong>lattice built from BCC (body-centred cubic) unit cells</strong> — thin beams that bend and buckle under pressure, then return the structure to its original shape when the pressure is released.</p>
+        <p>Because the lattice does the work, stiffness can be <strong>tuned by geometry rather than material</strong>. Changing only the beam thickness (1.0, 1.2 and 1.4 mm) produced three sensors with clearly different stiffness, from the same filament and printer.</p>
+        <div class="fig-grid">
+          <figure class="fig-plain"><img src="projects/soft-structures/bcc-unit-cell.jpg" alt="Render of a single BCC lattice unit cell" loading="lazy" /><figcaption>BCC unit cell — the building block of the lattice.</figcaption></figure>
+          <figure class="fig-plain"><img src="projects/soft-structures/lattice-sensor-render.jpg" alt="Render of the lattice sensor with a solid core plate between two lattice blocks" loading="lazy" /><figcaption>TPU lattice with the ferromagnetic PETG core in the middle.</figcaption></figure>
+        </div>
+        <figure><img src="projects/soft-structures/three-stiffnesses.jpg" alt="Three printed lattice sensors with different beam thicknesses" loading="lazy" /><figcaption>Three sensors of varied stiffness, made by changing only the beam thickness.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head"><p class="sec-num">03</p><h2 class="sec-title">Sensing by induction</h2></div>
+      <div class="prose">
+        <p>Inside the soft TPU lattice sits a core printed in <strong>ferromagnetic PETG</strong> — a filament that is magnetically detectable. Below the structure is a flat <strong>PCB coil</strong> (29 mm diameter) read by an LDC1614 inductance-to-digital converter.</p>
+        <p>When the lattice is pressed, the ferromagnetic core moves closer to the coil and its <strong>effective inductance changes</strong>; when the pressure is released, the lattice recovers and the signal returns. The readout electronics sit underneath the structure, so the soft part itself stays simple to print and replace.</p>
+        <ol class="steps">
+          <li><span><strong>Print</strong> the TPU lattice and the ferromagnetic PETG core.</span></li>
+          <li><span><strong>Snap</strong> the rigid core into the flexible lattice using a snap mechanism that joins the two materials.</span></li>
+          <li><span><strong>Place</strong> the structure on the PCB coil; pressure now reads as a change in inductance.</span></li>
+        </ol>
+        <figure class="video-tall">
+          <video src="projects/soft-structures/snap-assembly.mp4" poster="projects/soft-structures/snap-assembly-poster.jpg" muted loop playsinline autoplay preload="metadata"></video>
+          <figcaption>Snap mechanism: embedding the ferromagnetic PETG core in the flexible TPU lattice.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head"><p class="sec-num">04</p><h2 class="sec-title">Tested &amp; characterized</h2></div>
+      <div class="prose">
+        <p>An automated test setup pressed each of the three sensors under varying loads to measure <strong>elasticity</strong> (Young’s moduli across strain ranges), <strong>sensitivity</strong> (change in effective inductance with applied pressure) and <strong>stability</strong> over repeated compression. Different beam thicknesses respond best to different pressure ranges.</p>
+        <div class="facts">
+          <div class="fact"><p class="fact-num">112–368<small> kPa</small></p><p class="fact-label">Tunable stiffness</p></div>
+          <div class="fact"><p class="fact-num">−0.17 to −0.11<small> %/kPa</small></p><p class="fact-label">Sensitivity</p></div>
+          <div class="fact"><p class="fact-num">10,000</p><p class="fact-label">Compression cycles, stable</p></div>
+        </div>
+        <figure>
+          <video src="projects/soft-structures/live-sensing.mp4" poster="projects/soft-structures/live-sensing-poster.jpg" muted loop playsinline autoplay preload="metadata"></video>
+          <figcaption>Pressing the printed sensor while its readout is visualised on screen.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head"><p class="sec-num">05</p><h2 class="sec-title">Application: a joystick</h2></div>
+      <div class="prose">
+        <p>Arranging the lattice around a handle with two sensing channels turns it into a <strong>soft joystick with 2-axis sensing</strong>. Tilting it up, down, left or right compresses different parts of the structure and produces a distinct signal for each direction.</p>
+        <figure>
+          <video src="projects/soft-structures/joystick.mp4" poster="projects/soft-structures/joystick-poster.jpg" muted loop playsinline autoplay preload="metadata"></video>
+          <figcaption>The 3D-printed lattice joystick in use.</figcaption>
+        </figure>
+        <div class="fig-grid">
+          <figure><img src="projects/soft-structures/joystick.jpg" alt="Hand tilting the lattice joystick mounted on a PCB" loading="lazy" /><figcaption>Joystick on its PCB coils.</figcaption></figure>
+          <figure><img src="projects/soft-structures/joystick-signals.jpg" alt="Plot of normalized change in inductance on two channels over time" loading="lazy" /><figcaption>Distinct inductance changes on the two channels for up, down, left and right.</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head"><p class="sec-num">06</p><h2 class="sec-title">Publications</h2></div>
+      <div>
+        <ul class="pubs">
+          <li><a href="https://doi.org/10.1109/LSENS.2025.3562455" target="_blank" rel="noopener"><span class="py">2025</span><span class="pt">Inductive Pressure Sensors Using 3D-Printed Structures with Tunable Stiffness<span class="pv">R. Bhaumik, T. Preindl, A. Ion, C. Ayala-Garcia, N. Cohen, M. Haller, N. Münzenrieder · IEEE Sensors Letters</span></span><span aria-hidden="true">↗</span></a></li>
+          <li><a href="https://doi.org/10.1145/3772318.3791824" target="_blank" rel="noopener"><span class="py">2026</span><span class="pt">InSense3D: Designing Smart 3D-Printed Structures Leveraging Ferromagnetic Filaments for Inductive Deformation Sensing<span class="pv">R. Bhaumik, C. Ayala-Garcia, N. Münzenrieder, M. Haller, A. Ion · ACM CHI</span></span><span aria-hidden="true">↗</span></a></li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer class="g-footer">
+  <div class="wrap"><span>© 2026 Rahul Bhaumik</span><a href="index.html#projects">← Back to projects</a></div>
+</footer>
+
+<script>
+  // Videos only play while on screen (saves battery/data); respect reduced motion
+  (function () {
+    const vids = document.querySelectorAll('video');
+    const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { vids.forEach(v => { v.removeAttribute('autoplay'); v.pause(); v.controls = true; }); return; }
+    if (!('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(es => es.forEach(e => { e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause(); }), { threshold: 0.25 });
+    vids.forEach(v => io.observe(v));
+  })();
+</script>
+</body>
+</html>
