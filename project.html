@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Textile Interfaces for Automotive Interiors – Rahul Bhaumik</title>
-  <meta name="description" content="From the form of a 3D central console to embroidered, touch-sensitive textile surfaces: user studies, embroidery prototypes and capacitive sensing for in-car interaction." />
+  <meta name="description" content="From gestures on a 3D central console to embroidered, touch-sensitive textile surfaces: user studies, embroidery prototypes, and capacitive and resistive sensing for in-car interaction." />
   <meta property="og:title" content="Textile Interfaces for Automotive Interiors" />
   <meta property="og:image" content="https://rahulbhaumik010.github.io/Picture%201.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -101,6 +101,8 @@
     .takeaways { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-top: 1.75rem; }
     .takeaways li { background: #fff; padding: 1rem 1.1rem; font-family: var(--display); font-weight: 600; font-size: 1rem; letter-spacing: -.01em; }
     .takeaways li span { display: block; font-family: var(--mono); font-weight: 400; font-size: .68rem; color: var(--accent); letter-spacing: .06em; text-transform: uppercase; margin-bottom: .3rem; }
+    .fig-grid figure img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+    .video-mid { max-width: 640px; }
     .prose figure + p { margin-top: 1.75rem; }
     .quote { border-left: 3px solid var(--accent); padding: .2rem 0 .2rem 1rem; margin: 1.5rem 0 0; font-family: var(--display); font-weight: 500; font-size: 1.15rem; line-height: 1.35; color: var(--ink); max-width: 46ch; }
     @media (max-width: 860px) { .fig-3, .fig-row, .takeaways { grid-template-columns: 1fr; } }
@@ -119,11 +121,11 @@
   <section class="hero wrap">
     <p class="eyebrow">Completed project · Doctoral research</p>
     <h1 class="title">Textile Interfaces for <em>Automotive</em> Interiors</h1>
-    <p class="lede">What if the central console — where the driver’s arm already rests — became a soft, three-dimensional, touch-sensitive surface? This project moved from the console’s form, to the textile surface that covers it, to the sensing woven into it.</p>
+    <p class="lede">What if the central console — where the driver’s arm already rests — became a soft, three-dimensional, touch-sensitive surface? This project moved from the console’s form, to the textile surface that covers it, to the sensing embedded into it.</p>
     <div class="meta">
       <div><p class="k">Role</p><p class="v">Design, prototyping &amp; user studies (first author)</p></div>
       <div><p class="k">Lab</p><p class="v">Media Interaction Lab<br>Free University of Bozen-Bolzano</p></div>
-      <div><p class="k">Methods</p><p class="v">User studies · embroidery · capacitive sensing</p></div>
+      <div><p class="k">Methods</p><p class="v">User studies · embroidery · capacitive &amp; resistive sensing</p></div>
       <div><p class="k">Published</p><p class="v"><a href="https://doi.org/10.1145/3640792.3675707" target="_blank" rel="noopener">ACM AutomotiveUI 2024</a></p></div>
     </div>
     <div class="cover"><img src="Picture 1.jpg" alt="A finger touching an embroidered textile surface with a diamond grid of tactile cells" /></div>
@@ -144,23 +146,17 @@
     </section>
 
     <section class="sec">
-      <div class="sec-head"><p class="sec-num">02</p><h2 class="sec-title">Form: understanding the 3D console</h2></div>
+      <div class="sec-head"><p class="sec-num">02</p><h2 class="sec-title">Form: gestures on a 3D console</h2></div>
       <div class="prose">
-        <p>Three user studies (12 participants) asked what shape the console should have and how people would use it.</p>
-        <p><strong>Pointing study.</strong> Three console variants with the front surface inclined at 45°, 90° and 135° were compared on a pointing task against a car-simulator display. The <strong>135° console</strong> was rated easiest to use and most useful; task completion time differed significantly across designs (F(2,22) = 5.19, p = 0.014).</p>
-        <p><strong>Reachability study.</strong> On the 135° console, the front and top surfaces offered the largest interaction areas, while the side surface was limited by the thumb’s biomechanics.</p>
-        <p><strong>Gesture elicitation.</strong> Participants proposed swipes, taps, presses, rotations and combined gestures for in-car tasks — navigation, a 2D menu, a radial menu and seat adjustment. There was strong consensus for pan, scroll and select, and more varied gestures for seat adjustment and radial scrolling.</p>
-        <div class="fig-row">
-          <figure><img src="projects/textile-interfaces/pointing-study.jpg" alt="Participant performing a pointing task on the console in a driving simulator" loading="lazy" /><figcaption>Pointing study in the driving simulator.</figcaption></figure>
-          <figure><video src="projects/textile-interfaces/gesture-study.mp4" poster="projects/textile-interfaces/gesture-study-poster.jpg" muted loop playsinline autoplay preload="metadata"></video><figcaption>Gesture elicitation on the 3D surface.</figcaption></figure>
+        <p>How would people actually interact with a three-dimensional console surface? A guessability-style <strong>gesture elicitation study</strong> (12 participants) asked them to propose gestures for in-car tasks — navigation, a 2D menu, a radial menu and seat adjustment.</p>
+        <p>Participants used swipes, taps and double taps, presses, rotations and <strong>combined gestures</strong> across the console’s surfaces. There was strong consensus for pan, scroll and select, and more varied gestures for seat adjustment and radial scrolling — so the console should <strong>match 3D gestures to tasks</strong> and <strong>recognize multiple gestures</strong>.</p>
+        <div class="fig-grid">
+          <figure><video src="projects/textile-interfaces/gesture-study.mp4" poster="projects/textile-interfaces/gesture-study-poster.jpg" muted loop playsinline autoplay preload="metadata"></video></figure>
+          <figure><video src="projects/textile-interfaces/gesture-30.mp4" poster="projects/textile-interfaces/gesture-30-poster.jpg" muted loop playsinline autoplay preload="metadata"></video></figure>
+          <figure><video src="projects/textile-interfaces/gesture-31.mp4" poster="projects/textile-interfaces/gesture-31-poster.jpg" muted loop playsinline autoplay preload="metadata"></video></figure>
+          <figure><video src="projects/textile-interfaces/gesture-32.mp4" poster="projects/textile-interfaces/gesture-32-poster.jpg" muted loop playsinline autoplay preload="metadata"></video></figure>
         </div>
-        <figure><img src="projects/textile-interfaces/reachability.jpg" alt="Heatmap of participants' finger impressions on the console surfaces" loading="lazy" /><figcaption>Reachability: collective finger impressions on the console surfaces.</figcaption></figure>
-        <ul class="takeaways">
-          <li><span>Takeaway</span>Incline for comfort</li>
-          <li><span>Takeaway</span>Touch zones as per reachability</li>
-          <li><span>Takeaway</span>Match 3D gestures with tasks</li>
-          <li><span>Takeaway</span>Recognize multiple gestures</li>
-        </ul>
+        <figcaption>Gesture elicitation on the 3D console surface.</figcaption>
       </div>
     </section>
 
@@ -182,11 +178,8 @@
       <div class="prose">
         <p>Functional prototypes replaced regular yarn with <strong>conductive yarn</strong>, turning embroidered patterns into <strong>capacitive touch</strong> zones — and revealed the constraints of the embroidery process.</p>
         <p>For continuous sliding detection, each conductive feature should be narrower than an average fingertip, with the gap between features kept minimal and smaller than the feature itself — while staying above the machine’s resolution (about 2 mm). Connections are a design problem too: long, closely spaced or crossing paths (for example in concentric shapes) either disturb the aesthetics or need an extra textile layer.</p>
-        <div class="fig-row">
-          <figure><video src="projects/textile-interfaces/conductive-slider.mp4" poster="projects/textile-interfaces/conductive-slider-poster.jpg" muted loop playsinline autoplay preload="metadata"></video><figcaption>An embroidered conductive slider read by a microcontroller.</figcaption></figure>
-          <figure><img src="projects/textile-interfaces/conductive-samples.jpg" alt="Four embroidered conductive pattern samples" loading="lazy" /><figcaption>Conductive pattern studies.</figcaption></figure>
-        </div>
-        <figure><img src="projects/textile-interfaces/spiral-pads.jpg" alt="Embroidered conductive spiral and concentric pads on dark fabric" loading="lazy" /><figcaption>Spiral and concentric conductive pads.</figcaption></figure>
+        <figure class="video-mid"><video src="projects/textile-interfaces/conductive-slider.mp4" poster="projects/textile-interfaces/conductive-slider-poster.jpg" muted loop playsinline autoplay preload="metadata"></video><figcaption>An embroidered conductive slider read by a microcontroller.</figcaption></figure>
+        <figure class="video-mid"><img src="projects/textile-interfaces/conductive-samples.jpg" alt="Four embroidered conductive pattern samples" loading="lazy" /><figcaption>Conductive pattern studies.</figcaption></figure>
         <p>The final design had to meet both sides: affordance- and aesthetics-led exploration, and sensing-led prototyping — with each feature matching the function it stands for.</p>
         <p class="quote">5 out of 5 people related the slider pattern to volume, rather than lighting or temperature.</p>
       </div>
@@ -202,10 +195,7 @@
           <figure><img src="projects/textile-interfaces/texture-slider-2.jpg" alt="Two fingers sliding along an embroidered pattern" loading="lazy" /></figure>
         </div>
         <figcaption>Visual and textural features explored on textile samples.</figcaption>
-        <div class="fig-row">
-          <figure><video src="projects/textile-interfaces/seat-control.mp4" poster="projects/textile-interfaces/seat-control-poster.jpg" muted loop playsinline autoplay preload="metadata"></video><figcaption>Seat control: a touch-sensitive embroidered textile interface.</figcaption></figure>
-          <figure><img src="projects/textile-interfaces/seat-control-print.jpg" alt="Embroidered seat-shaped control pattern on fabric" loading="lazy" /><figcaption>The seat-control pattern.</figcaption></figure>
-        </div>
+        <figure><video src="projects/textile-interfaces/seat-control.mp4" poster="projects/textile-interfaces/seat-control-poster.jpg" muted loop playsinline autoplay preload="metadata"></video><figcaption>Seat control: a touch-sensitive embroidered textile interface.</figcaption></figure>
         <figure><video src="projects/textile-interfaces/textile-console-demo.mp4" poster="projects/textile-interfaces/textile-console-demo-poster.jpg" muted loop playsinline autoplay preload="metadata"></video><figcaption>The textile interface in use alongside a driving simulation.</figcaption></figure>
       </div>
     </section>
