@@ -102,6 +102,9 @@
     .takeaways li { background: #fff; padding: 1rem 1.1rem; font-family: var(--display); font-weight: 600; font-size: 1rem; letter-spacing: -.01em; }
     .takeaways li span { display: block; font-family: var(--mono); font-weight: 400; font-size: .68rem; color: var(--accent); letter-spacing: .06em; text-transform: uppercase; margin-bottom: .3rem; }
     .fig-grid figure img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
+    /* Side-by-side pair with equal heights: columns proportional to each image's aspect ratio */
+    .fig-pair { grid-template-columns: 1.2805fr 0.92fr; }
+    .fig-pair img { width: 100%; height: auto; }
     .video-mid { max-width: 640px; }
     .prose figure + p { margin-top: 1.75rem; }
     .quote { border-left: 3px solid var(--accent); padding: .2rem 0 .2rem 1rem; margin: 1.5rem 0 0; font-family: var(--display); font-weight: 500; font-size: 1.15rem; line-height: 1.35; color: var(--ink); max-width: 46ch; }
@@ -166,7 +169,7 @@
         <p>A soft console needs a cover — and the cover itself can tell people how to interact. Two design objectives guided the textile surface: <strong>visual features</strong> (patterns and textures) should convey the intended interaction, and <strong>tactile features</strong> should reinforce those visual cues on touch.</p>
         <p>Prototypes were made on a <strong>commercial embroidery machine</strong>. Non-functional samples, embroidered with regular yarns, were used to study how people interact with the embroidered features and to explore a geometry-driven design space of patterns and textures.</p>
         <figure><img src="projects/textile-interfaces/embroidery-machine.jpg" alt="Multi-head commercial embroidery machine stitching a textile sample" loading="lazy" /><figcaption>Textile prototypes on a commercial embroidery machine.</figcaption></figure>
-        <div class="fig-row">
+        <div class="fig-row fig-pair">
           <figure><img src="projects/textile-interfaces/nonfunctional-samples.jpg" alt="Grid of embroidered textile samples with dot, ring and spiral patterns" loading="lazy" /><figcaption>Non-functional samples: patterns and textures in regular yarn.</figcaption></figure>
           <figure><img src="projects/textile-interfaces/ring-pattern.jpg" alt="Finger tracing an embroidered ring pattern" loading="lazy" /><figcaption>Probing the affordance of a circular pattern.</figcaption></figure>
         </div>
