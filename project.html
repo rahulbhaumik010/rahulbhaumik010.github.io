@@ -1,51 +1,249 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Textile-based Novel Cover Interfaces for Automotive Interiors</title>
-  
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Textile Interfaces for Automotive Interiors – Rahul Bhaumik</title>
+  <meta name="description" content="From the form of a 3D central console to embroidered, touch-sensitive textile surfaces: user studies, embroidery prototypes and capacitive sensing for in-car interaction." />
+  <meta property="og:title" content="Textile Interfaces for Automotive Interiors" />
+  <meta property="og:image" content="https://rahulbhaumik010.github.io/Picture%201.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #ffffff; --ink: #141414; --ink-2: #3d3d3d; --mute: #767676; --rule: #e6e6e6; --tint: #f4f4f4; --accent: #f24e1e;
+      --header-h: 64px; --max: 1120px; --pad: clamp(1rem, 3vw, 2.5rem);
+      --display: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --body: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+    body { font-family: var(--body); line-height: 1.6; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    img, video { display: block; max-width: 100%; }
+    ::selection { background: var(--accent); color: #fff; }
+
+    .g-header { position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--header-h); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--pad); background: rgba(255,255,255,.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--rule); }
+    .wordmark { display: flex; align-items: center; gap: .75rem; }
+    .wordmark-mark { width: 34px; height: 34px; background: var(--ink); color: #fff; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: .95rem; letter-spacing: -.04em; transition: background .2s; }
+    .wordmark:hover .wordmark-mark { background: var(--accent); }
+    .wordmark-name { font-family: var(--display); font-weight: 700; }
+    .back { font-family: var(--display); font-weight: 500; font-size: .9rem; color: var(--ink-2); }
+    .back:hover { color: var(--accent); }
+
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+    .eyebrow { display: flex; align-items: center; gap: .6rem; font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); margin-bottom: 1rem; }
+    .eyebrow::before { content: ''; width: 8px; height: 8px; background: var(--accent); }
+
+    /* Hero */
+    .hero { padding: calc(var(--header-h) + 3.5rem) 0 2.5rem; }
+    .title { font-family: var(--display); font-weight: 700; font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: .98; letter-spacing: -.045em; max-width: 14ch; }
+    .title em { font-style: normal; color: var(--accent); }
+    .lede { font-family: var(--display); font-weight: 500; font-size: clamp(1.15rem, 2vw, 1.5rem); line-height: 1.32; letter-spacing: -.01em; color: var(--ink-2); max-width: 40ch; margin-top: 1.5rem; }
+    .meta { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--ink); margin-top: 2.5rem; }
+    .meta > div { padding: .9rem 1rem 0 0; }
+    .k { font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); margin-bottom: .25rem; }
+    .v { font-size: .92rem; line-height: 1.45; }
+    .v a { border-bottom: 1px solid currentColor; }
+    .v a:hover { color: var(--accent); }
+    .cover { margin-top: 2.5rem; aspect-ratio: 16 / 8; overflow: hidden; background: var(--tint); }
+    .cover img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Sections */
+    .sec { display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: 2.5rem; padding: 4.5rem 0; border-bottom: 1px solid var(--rule); }
+    .sec-num { font-family: var(--mono); font-size: .75rem; color: var(--mute); }
+    .sec-title { font-family: var(--display); font-weight: 700; font-size: 1.6rem; line-height: 1.1; letter-spacing: -.025em; margin-top: .35rem; position: sticky; top: calc(var(--header-h) + 1.5rem); }
+    .sec-head { align-self: start; position: sticky; top: calc(var(--header-h) + 1.5rem); }
+    .prose p { color: var(--ink-2); font-size: 1.04rem; margin-bottom: 1rem; max-width: 66ch; }
+    .prose strong { color: var(--ink); font-weight: 600; }
+    figure { margin: 2rem 0 0; }
+    figcaption { font-family: var(--mono); font-size: .72rem; color: var(--mute); margin-top: .6rem; line-height: 1.5; }
+    .fig-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .fig-plain { display: flex; flex-direction: column; }
+    .fig-plain img { width: 100%; height: 320px; object-fit: contain; background: #fff; border: 1px solid var(--rule); padding: 1rem; }
+    video { width: 100%; background: #000; }
+    .video-tall { max-width: 360px; }
+
+    .facts { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--ink); margin-top: 2rem; }
+    .fact { padding: 1rem 1rem 0 0; }
+    .fact-num { font-family: var(--display); font-weight: 700; font-size: clamp(1.5rem, 3vw, 2.2rem); letter-spacing: -.04em; line-height: 1; }
+    .fact-num small { font-size: .55em; letter-spacing: -.01em; }
+    .fact-label { font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--mute); margin-top: .45rem; }
+
+    .steps { list-style: none; counter-reset: s; border-top: 1px solid var(--ink); margin-top: 1.5rem; }
+    .steps li { counter-increment: s; display: grid; grid-template-columns: 2.5rem 1fr; gap: .5rem; padding: .9rem 0; border-bottom: 1px solid var(--rule); color: var(--ink-2); }
+    .steps li::before { content: counter(s, decimal-leading-zero); font-family: var(--mono); font-size: .75rem; color: var(--accent); padding-top: .2rem; }
+    .steps strong { color: var(--ink); font-weight: 600; }
+
+    .pubs { list-style: none; border-top: 1px solid var(--ink); }
+    .pubs a { display: grid; grid-template-columns: 4rem 1fr 1.5rem; gap: 1rem; padding: 1.1rem 0; border-bottom: 1px solid var(--rule); align-items: baseline; transition: background .2s, padding .25s; }
+    .pubs a:hover { background: var(--tint); padding-left: .75rem; padding-right: .75rem; }
+    .pubs a:hover .pt { color: var(--accent); }
+    .py { font-family: var(--mono); font-size: .8rem; color: var(--mute); }
+    .pt { font-family: var(--display); font-weight: 600; font-size: 1.05rem; line-height: 1.3; }
+    .pv { display: block; font-family: var(--body); font-weight: 400; font-size: .82rem; color: var(--mute); margin-top: .2rem; }
+
+    .g-footer { background: var(--ink); color: rgba(255,255,255,.6); margin-top: 5rem; }
+    .g-footer .wrap { display: flex; justify-content: space-between; padding-top: 2rem; padding-bottom: 2rem; font-family: var(--mono); font-size: .72rem; }
+    .g-footer a:hover { color: #fff; }
+
+    @media (max-width: 860px) {
+      .sec { grid-template-columns: 1fr; gap: 1rem; padding: 3rem 0; }
+      .sec-head, .sec-title { position: static; }
+      .meta { grid-template-columns: 1fr 1fr; row-gap: .5rem; }
+      .fig-grid, .facts { grid-template-columns: 1fr; }
+      .cover { aspect-ratio: 4 / 3; }
+    }
+      .fig-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .fig-row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1.25rem; align-items: start; }
+    .takeaways { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-top: 1.75rem; }
+    .takeaways li { background: #fff; padding: 1rem 1.1rem; font-family: var(--display); font-weight: 600; font-size: 1rem; letter-spacing: -.01em; }
+    .takeaways li span { display: block; font-family: var(--mono); font-weight: 400; font-size: .68rem; color: var(--accent); letter-spacing: .06em; text-transform: uppercase; margin-bottom: .3rem; }
+    .prose figure + p { margin-top: 1.75rem; }
+    .quote { border-left: 3px solid var(--accent); padding: .2rem 0 .2rem 1rem; margin: 1.5rem 0 0; font-family: var(--display); font-weight: 500; font-size: 1.15rem; line-height: 1.35; color: var(--ink); max-width: 46ch; }
+    @media (max-width: 860px) { .fig-3, .fig-row, .takeaways { grid-template-columns: 1fr; } }
+</style>
 </head>
 <body>
-  
-  <header>
-    <h1>Textile-based Novel Cover Interfaces for Automotive Interiors</h1>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-      </ul>
-    </nav>
-  </header>
-  <div class="project-image">
-    <img src="Picture 1.jpg" alt="Textile-based Interface" />
-  </div>
-  <section>
-    <h2>Project Overview</h2>
-    <p>This project, part of my doctoral research, explored the design and development of innovative textile-based interfaces for automotive interiors. The goal was to create a 3-dimensional, touch-sensitive cover for the middle console that integrates seamlessly into the car's design and enhances user interaction.</p>
-    <h3>Key Features</h3>
-    <ul>
-      <li>Explored the affordances of textile surfaces for tactile interaction.</li>
-      <li>Integration of textiles in 3D surfaces for an intuitive multi-surface interaction.</li>
-      <li>Focus on enhancing the user experience within automotive environments.</li>
-    </ul>
-    <h3>Status</h3>
-    <p>Completed. The work is part of the doctoral thesis <a href="https://hdl.handle.net/10863/52531" target="_blank">Affordances of Soft Interfaces: A Design and Fabrication Approach</a> (2026), and the in-car 3D-surface study was published at ACM AutomotiveUI 2024.</p>
-    
-    <video width="600" controls autoplay loop muted>
-      <source src="My_Video_textile.webm" type="video/webm">
-      Your browser does not support the video tag.
-    </video>
-    
-    <h3>Publications</h3>
-    <ul>
-    <li><a href="https://dl.acm.org/doi/10.1145/3640792.3675707" target="_blank">Interaction with a 3D Surface for an Innovative Input Experience on a Central Console</a></li>
-  </ul>
 
+<header class="g-header">
+  <a class="wordmark" href="index.html" aria-label="Rahul Bhaumik — home">
+    <span class="wordmark-mark">rb</span><span class="wordmark-name">Rahul Bhaumik</span>
+  </a>
+  <a class="back" href="index.html#projects">← All projects</a>
+</header>
+
+<main>
+  <section class="hero wrap">
+    <p class="eyebrow">Completed project · Doctoral research</p>
+    <h1 class="title">Textile Interfaces for <em>Automotive</em> Interiors</h1>
+    <p class="lede">What if the central console — where the driver’s arm already rests — became a soft, three-dimensional, touch-sensitive surface? This project moved from the console’s form, to the textile surface that covers it, to the sensing woven into it.</p>
+    <div class="meta">
+      <div><p class="k">Role</p><p class="v">Design, prototyping &amp; user studies (first author)</p></div>
+      <div><p class="k">Lab</p><p class="v">Media Interaction Lab<br>Free University of Bozen-Bolzano</p></div>
+      <div><p class="k">Methods</p><p class="v">User studies · embroidery · capacitive sensing</p></div>
+      <div><p class="k">Published</p><p class="v"><a href="https://doi.org/10.1145/3640792.3675707" target="_blank" rel="noopener">ACM AutomotiveUI 2024</a></p></div>
+    </div>
+    <div class="cover"><img src="Picture 1.jpg" alt="A finger touching an embroidered textile surface with a diamond grid of tactile cells" /></div>
   </section>
 
-  <footer>
-    <p>&copy; 2026 Rahul Bhaumik</p>
-  </footer>
+  <div class="wrap">
+
+    <section class="sec">
+      <div class="sec-head"><p class="sec-num">01</p><h2 class="sec-title">Why</h2></div>
+      <div class="prose">
+        <p>Touchscreens are convenient, but in a moving car they ask the driver to <strong>reach over</strong> to the interface — which can cause unintended inputs or jitter from hand movement, and pulls attention away from driving.</p>
+        <p>Today’s central console is crowded with buttons, dials and knobs for non-driving activities such as entertainment and climate. The idea was to replace them with <strong>interaction on a three-dimensional surface</strong> right where the arm is resting.</p>
+        <div class="fig-grid">
+          <figure><img src="projects/textile-interfaces/today-console.jpg" alt="Hand on a rotary controller in a conventional car console" loading="lazy" /><figcaption>Today: dials and buttons on the central console.</figcaption></figure>
+          <figure><img src="projects/textile-interfaces/console-prototype.jpg" alt="Prototype of a 3D console surface in a car mock-up" loading="lazy" /><figcaption>The envisioned console: one continuous 3D surface.</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head"><p class="sec-num">02</p><h2 class="sec-title">Form: understanding the 3D console</h2></div>
+      <div class="prose">
+        <p>Three user studies (12 participants) asked what shape the console should have and how people would use it.</p>
+        <p><strong>Pointing study.</strong> Three console variants with the front surface inclined at 45°, 90° and 135° were compared on a pointing task against a car-simulator display. The <strong>135° console</strong> was rated easiest to use and most useful; task completion time differed significantly across designs (F(2,22) = 5.19, p = 0.014).</p>
+        <p><strong>Reachability study.</strong> On the 135° console, the front and top surfaces offered the largest interaction areas, while the side surface was limited by the thumb’s biomechanics.</p>
+        <p><strong>Gesture elicitation.</strong> Participants proposed swipes, taps, presses, rotations and combined gestures for in-car tasks — navigation, a 2D menu, a radial menu and seat adjustment. There was strong consensus for pan, scroll and select, and more varied gestures for seat adjustment and radial scrolling.</p>
+        <div class="fig-row">
+          <figure><img src="projects/textile-interfaces/pointing-study.jpg" alt="Participant performing a pointing task on the console in a driving simulator" loading="lazy" /><figcaption>Pointing study in the driving simulator.</figcaption></figure>
+          <figure><video src="projects/textile-interfaces/gesture-study.mp4" poster="projects/textile-interfaces/gesture-study-poster.jpg" muted loop playsinline autoplay preload="metadata"></video><figcaption>Gesture elicitation on the 3D surface.</figcaption></figure>
+        </div>
+        <figure><img src="projects/textile-interfaces/reachability.jpg" alt="Heatmap of participants' finger impressions on the console surfaces" loading="lazy" /><figcaption>Reachability: collective finger impressions on the console surfaces.</figcaption></figure>
+        <ul class="takeaways">
+          <li><span>Takeaway</span>Incline for comfort</li>
+          <li><span>Takeaway</span>Touch zones as per reachability</li>
+          <li><span>Takeaway</span>Match 3D gestures with tasks</li>
+          <li><span>Takeaway</span>Recognize multiple gestures</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head"><p class="sec-num">03</p><h2 class="sec-title">Surface: textiles that guide touch</h2></div>
+      <div class="prose">
+        <p>A soft console needs a cover — and the cover itself can tell people how to interact. Two design objectives guided the textile surface: <strong>visual features</strong> (patterns and textures) should convey the intended interaction, and <strong>tactile features</strong> should reinforce those visual cues on touch.</p>
+        <p>Prototypes were made on a <strong>commercial embroidery machine</strong>. Non-functional samples, embroidered with regular yarns, were used to study how people interact with the embroidered features and to explore a geometry-driven design space of patterns and textures.</p>
+        <figure><img src="projects/textile-interfaces/embroidery-machine.jpg" alt="Multi-head commercial embroidery machine stitching a textile sample" loading="lazy" /><figcaption>Textile prototypes on a commercial embroidery machine.</figcaption></figure>
+        <div class="fig-row">
+          <figure><img src="projects/textile-interfaces/nonfunctional-samples.jpg" alt="Grid of embroidered textile samples with dot, ring and spiral patterns" loading="lazy" /><figcaption>Non-functional samples: patterns and textures in regular yarn.</figcaption></figure>
+          <figure><img src="projects/textile-interfaces/ring-pattern.jpg" alt="Finger tracing an embroidered ring pattern" loading="lazy" /><figcaption>Probing the affordance of a circular pattern.</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head"><p class="sec-num">04</p><h2 class="sec-title">Sensing: conductive embroidery</h2></div>
+      <div class="prose">
+        <p>Functional prototypes replaced regular yarn with <strong>conductive yarn</strong>, turning embroidered patterns into <strong>capacitive touch</strong> zones — and revealed the constraints of the embroidery process.</p>
+        <p>For continuous sliding detection, each conductive feature should be narrower than an average fingertip, with the gap between features kept minimal and smaller than the feature itself — while staying above the machine’s resolution (about 2 mm). Connections are a design problem too: long, closely spaced or crossing paths (for example in concentric shapes) either disturb the aesthetics or need an extra textile layer.</p>
+        <div class="fig-row">
+          <figure><video src="projects/textile-interfaces/conductive-slider.mp4" poster="projects/textile-interfaces/conductive-slider-poster.jpg" muted loop playsinline autoplay preload="metadata"></video><figcaption>An embroidered conductive slider read by a microcontroller.</figcaption></figure>
+          <figure><img src="projects/textile-interfaces/conductive-samples.jpg" alt="Four embroidered conductive pattern samples" loading="lazy" /><figcaption>Conductive pattern studies.</figcaption></figure>
+        </div>
+        <figure><img src="projects/textile-interfaces/spiral-pads.jpg" alt="Embroidered conductive spiral and concentric pads on dark fabric" loading="lazy" /><figcaption>Spiral and concentric conductive pads.</figcaption></figure>
+        <p>The final design had to meet both sides: affordance- and aesthetics-led exploration, and sensing-led prototyping — with each feature matching the function it stands for.</p>
+        <p class="quote">5 out of 5 people related the slider pattern to volume, rather than lighting or temperature.</p>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head"><p class="sec-num">05</p><h2 class="sec-title">A functional, sensitive textile interface</h2></div>
+      <div class="prose">
+        <p>Visual and textural features were explored on textile samples tailored to automotive interfaces, then brought together into <strong>functional, touch-sensitive textile controls</strong> — such as a seat-control interface whose embroidered shape mirrors the seat it adjusts.</p>
+        <div class="fig-3">
+          <figure><img src="projects/textile-interfaces/texture-grid.jpg" alt="Hand touching a diamond grid embroidered on leather" loading="lazy" /></figure>
+          <figure><img src="projects/textile-interfaces/texture-slider.jpg" alt="Finger on an embroidered gradient slider" loading="lazy" /></figure>
+          <figure><img src="projects/textile-interfaces/texture-slider-2.jpg" alt="Two fingers sliding along an embroidered pattern" loading="lazy" /></figure>
+        </div>
+        <figcaption>Visual and textural features explored on textile samples.</figcaption>
+        <div class="fig-row">
+          <figure><video src="projects/textile-interfaces/seat-control.mp4" poster="projects/textile-interfaces/seat-control-poster.jpg" muted loop playsinline autoplay preload="metadata"></video><figcaption>Seat control: a touch-sensitive embroidered textile interface.</figcaption></figure>
+          <figure><img src="projects/textile-interfaces/seat-control-print.jpg" alt="Embroidered seat-shaped control pattern on fabric" loading="lazy" /><figcaption>The seat-control pattern.</figcaption></figure>
+        </div>
+        <figure><video src="projects/textile-interfaces/textile-console-demo.mp4" poster="projects/textile-interfaces/textile-console-demo-poster.jpg" muted loop playsinline autoplay preload="metadata"></video><figcaption>The textile interface in use alongside a driving simulation.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head"><p class="sec-num">06</p><h2 class="sec-title">Over 3D forms</h2></div>
+      <div class="prose">
+        <p>The last step wrapped the textile over the console itself — designing <strong>visual and tactile features on the 3D surface to guide gestures</strong>, and exploring gesture recognition with textile-based resistive sensing, towards a fully interactive 3D console.</p>
+        <figure class="video-tall"><video src="projects/textile-interfaces/console-cover.mp4" poster="projects/textile-interfaces/console-cover-poster.jpg" muted loop playsinline autoplay preload="metadata"></video><figcaption>A textile-based sensitive surface over the 3D console form.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head"><p class="sec-num">07</p><h2 class="sec-title">Publications</h2></div>
+      <div>
+        <ul class="pubs">
+          <li><a href="https://doi.org/10.1145/3640792.3675707" target="_blank" rel="noopener"><span class="py">2024</span><span class="pt">Interaction with a 3D Surface for an Innovative Input Experience on a Central Console<span class="pv">R. Bhaumik, K. F. Mwaita, F. Solaroli, A. Ahmed, A. De Angeli, M. Haller · ACM AutomotiveUI</span></span><span aria-hidden="true">↗</span></a></li>
+          <li><a href="https://hdl.handle.net/10863/52531" target="_blank" rel="noopener"><span class="py">2026</span><span class="pt">Affordances of Soft Interfaces: A Design and Fabrication Approach<span class="pv">R. Bhaumik · Doctoral thesis, Free University of Bozen-Bolzano</span></span><span aria-hidden="true">↗</span></a></li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+</main>
+<footer class="g-footer">
+  <div class="wrap"><span>© 2026 Rahul Bhaumik</span><a href="index.html#projects">← Back to projects</a></div>
+</footer>
+
+<script>
+  // Videos only play while on screen (saves battery/data); respect reduced motion
+  (function () {
+    const vids = document.querySelectorAll('video');
+    const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { vids.forEach(v => { v.removeAttribute('autoplay'); v.pause(); v.controls = true; }); return; }
+    if (!('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver(es => es.forEach(e => { e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause(); }), { threshold: 0.25 });
+    vids.forEach(v => io.observe(v));
+  })();
+</script>
 </body>
 </html>
