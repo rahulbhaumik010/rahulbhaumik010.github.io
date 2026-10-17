@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Research Constellation in 3D – Rahul Bhaumik</title>
+  <title>Research overview, 3D view – Rahul Bhaumik</title>
   <meta name="description" content="Rahul Bhaumik's research themes and publications as a three-dimensional map." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -41,13 +41,10 @@
     .eyebrow { display: inline-block; font-family: var(--mono); font-size: .72rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; background: var(--accent); padding: .32rem .6rem .28rem; margin-bottom: .9rem; }
     .title h1 { font-family: var(--display); font-weight: 700; font-size: clamp(1.7rem, 3vw, 2.6rem); line-height: 1; letter-spacing: -.035em; max-width: 12ch; }
 
-    .legend { position: fixed; z-index: 20; left: var(--pad); bottom: 1.5rem; list-style: none; display: grid; gap: .55rem; font-size: .82rem; color: var(--ink-2); pointer-events: none; }
-    .legend li { display: flex; align-items: center; gap: .65rem; }
-    .dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 2px 4px rgba(0,0,0,.2); }
-    .dot-center { width: 22px; height: 22px; margin: 0 -5px; background: radial-gradient(circle at 35% 30%, #3a3a3a, var(--ink)); color: #fff; font-family: var(--display); font-weight: 800; font-size: .6rem; display: grid; place-items: center; letter-spacing: -.03em; }
-    .dot-theme { background: radial-gradient(circle at 35% 30%, #d6d6d6, #a3a3a3); }
-    .dot-open { background: radial-gradient(circle at 35% 30%, #ffe27a, var(--accent)); }
-    .dot-paper { width: 8px; height: 8px; margin: 0 2px; background: radial-gradient(circle at 35% 30%, #4a4a4a, var(--ink)); }
+    .title .btn { pointer-events: auto; margin-top: 1.2rem; display: inline-flex; align-items: center; gap: .5rem; padding: .6rem .95rem; border: 2px solid var(--ink); background: #fff; font-family: var(--display); font-weight: 600; font-size: .9rem; color: var(--ink); cursor: pointer; transition: background .15s, color .15s; }
+    .title .btn:hover { background: var(--accent); }
+    .title .btn[aria-pressed="true"] { background: var(--ink); color: #fff; }
+    .title .btn[aria-pressed="true"]:hover { background: #3a3a3a; }
 
     /* Details panel — only exists once something is clicked */
     #panel { position: fixed; z-index: 30; top: calc(var(--header-h) + 1.5rem); right: var(--pad); width: min(340px, calc(100vw - 2 * var(--pad))); max-height: calc(100vh - var(--header-h) - 3rem); overflow-y: auto; background: #fff; border: 1px solid var(--ink); padding: 1.4rem; font-size: .88rem; line-height: 1.55; color: var(--ink-2); display: none; }
@@ -75,7 +72,6 @@
 
     @media (max-width: 700px) {
       .wordmark-role { display: none; }
-      .legend { display: none; }
       #panel { top: auto; bottom: 1rem; left: var(--pad); right: var(--pad); width: auto; max-height: 45vh; }
     }
     @media (prefers-reduced-motion: reduce) { .bar::after { animation: none; } #panel.open { animation: none; } }
@@ -97,16 +93,10 @@
 <div id="graph" aria-label="Three-dimensional map of research themes and publications"></div>
 
 <div class="title">
-  <p class="eyebrow">Research constellation · 3D</p>
-  <h1>Themes and publications in space</h1>
+  <p class="eyebrow">Research overview · 3D view</p>
+  <h1>Themes and publications</h1>
+  <button class="btn" id="expandAll" type="button" aria-pressed="false">Expand all</button>
 </div>
-
-<ul class="legend" aria-hidden="true">
-  <li><span class="dot dot-center">rb</span> Rahul Bhaumik</li>
-  <li><span class="dot dot-theme"></span> Research theme</li>
-  <li><span class="dot dot-open"></span> Selected</li>
-  <li><span class="dot dot-paper"></span> Publication</li>
-</ul>
 
 <aside id="panel" aria-live="polite"></aside>
 <div id="tip"></div>
@@ -116,13 +106,20 @@
 <script src="https://unpkg.com/three-spritetext@1.9.0/dist/three-spritetext.min.js"></script>
 <script src="https://unpkg.com/3d-force-graph@1.73.5/dist/3d-force-graph.min.js"></script>
 <script>
+/* Research overview — 3D view
+   • Only the "rb" centre and the themes are shown at first; themes sit on a ring in semantic order
+   • Clicking a theme brings its publications out around it; "Expand all" places every publication
+     at the semantic centre of the themes it belongs to
+   • Layout is computed (pinned), not simulated, so it is stable and readable */
 (async function () {
   const INK = '#141414', THEME = '#a8a8a8', ACCENT = '#f5c400', ACCENT_DEEP = '212,168,0';
   const FONT = "'Inter Tight', 'Helvetica Neue', Arial, sans-serif";
+  const RING_R = 150, ORBIT_R = 255;
   const el = document.getElementById('graph');
   const panel = document.getElementById('panel');
   const tip = document.getElementById('tip');
   const loading = document.getElementById('loading');
+  const expandBtn = document.getElementById('expandAll');
   const REDUCED = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let data;
@@ -136,22 +133,126 @@
   }
   try { await document.fonts.ready; } catch (e) {}
 
-  // Adjacency (built from ids before the force engine replaces them with objects)
-  const byId = new Map(data.nodes.map(n => [n.id, n]));
-  const nbrs = new Map(data.nodes.map(n => [n.id, new Set()]));
-  data.links.forEach(l => { nbrs.get(l.source).add(l.target); nbrs.get(l.target).add(l.source); });
-  const idOf = x => (typeof x === 'object' ? x.id : x);
+  const nodes = data.nodes;
+  const byId = new Map(nodes.map(n => [n.id, n]));
+  const center = nodes.find(n => n.type === 'center');
+  const themes = nodes.filter(n => n.type === 'theme');
+  const papers = nodes.filter(n => n.type === 'paper');
+  const papersOf = new Map(themes.map(t => [t.id, new Set()]));
+  const themesOf = new Map(papers.map(p => [p.id, new Set()]));
+  data.links.forEach(l => {
+    const a = byId.get(l.source), b = byId.get(l.target);
+    if (!a || !b) return;
+    const [t, p] = a.type === 'theme' && b.type === 'paper' ? [a, b] : b.type === 'theme' && a.type === 'paper' ? [b, a] : [null, null];
+    if (t) { papersOf.get(t.id).add(p.id); themesOf.get(p.id).add(t.id); }
+  });
 
-  let selected = null;   // node id
-  let hovered = null;    // node id
+  /* ── Semantic ring order (same method as the 2D map) ── */
+  const STOP = new Set('and the of for in a to with on design systems system interaction interactive'.split(' '));
+  const words = new Map(themes.map(t => [t.id, new Set(((t.label || '') + ' ' + (t.description || '')).toLowerCase()
+    .match(/[a-z]+/g).filter(w => w.length > 2 && !STOP.has(w)))]));
+  const cos = (A, B) => { if (!A.size || !B.size) return 0; let i = 0; A.forEach(x => { if (B.has(x)) i++; }); return i / Math.sqrt(A.size * B.size); };
+  const sim = (a, b) => 0.75 * cos(papersOf.get(a.id), papersOf.get(b.id)) + 0.25 * cos(words.get(a.id), words.get(b.id));
+  function circularOrder(items) {
+    const n = items.length;
+    if (n < 4 || n > 16) return items;
+    const S = items.map(a => items.map(b => sim(a, b)));
+    const size = 1 << n, dp = new Float64Array(size * n).fill(-Infinity), par = new Int8Array(size * n).fill(-1);
+    dp[n] = 0;
+    for (let mask = 1; mask < size; mask += 2) for (let j = 0; j < n; j++) {
+      const v = dp[mask * n + j]; if (v === -Infinity) continue;
+      for (let k = 1; k < n; k++) { if (mask & (1 << k)) continue; const nm = mask | (1 << k), nv = v + S[j][k];
+        if (nv > dp[nm * n + k]) { dp[nm * n + k] = nv; par[nm * n + k] = j; } }
+    }
+    const full = size - 1; let best = 1, bestV = -Infinity;
+    for (let j = 1; j < n; j++) { const v = dp[full * n + j] + S[j][0]; if (v > bestV) { bestV = v; best = j; } }
+    const order = []; let mask = full, j = best;
+    while (j > 0) { order.push(j); const pj = par[mask * n + j]; mask ^= (1 << j); j = pj; }
+    order.push(0);
+    return order.reverse().map(i => items[i]);
+  }
 
-  // A node is "lit" when it is the selection, or a neighbour of a selected theme / paper
+  const pin = (n, x, y, z) => { n.fx = x; n.fy = y; n.fz = z; if (n.x === undefined) { n.x = x; n.y = y; n.z = z; } };
+  pin(center, 0, 0, 0);
+  circularOrder(themes).forEach((t, i, arr) => {
+    t.__a = Math.PI / 2 - (i / arr.length) * 2 * Math.PI;          // start at 12 o'clock, clockwise
+    t.__z = 38 * Math.sin(2 * t.__a);                                  // gentle wave gives the ring depth
+    pin(t, RING_R * Math.cos(t.__a), RING_R * Math.sin(t.__a), t.__z);
+  });
+
+  /* ── Publication placement ── */
+  const wrap = a => { while (a <= -Math.PI) a += 2 * Math.PI; while (a > Math.PI) a -= 2 * Math.PI; return a; };
+  function spread(items, gap) {
+    // items: {id, a}; keep order, push neighbours at least `gap` apart (circular)
+    items.sort((p, q) => p.a - q.a);
+    for (let it = 0; it < 60; it++) {
+      let moved = false;
+      for (let i = 0; i < items.length; i++) {
+        const p = items[i], q = items[(i + 1) % items.length];
+        let d = q.a - p.a; if (i === items.length - 1) d += 2 * Math.PI;
+        if (items.length > 1 && d < gap) { const push = (gap - d) / 2; p.a -= push; q.a += push; moved = true; }
+      }
+      if (!moved) break;
+    }
+    return items;
+  }
+  function placePapers() {
+    const visible = new Map();   // paper id → angle
+    if (expandAll) {
+      // semantic centre: mean direction of every theme the paper belongs to
+      const items = papers.map(p => {
+        let x = 0, y = 0; themesOf.get(p.id).forEach(tid => { const t = byId.get(tid); x += Math.cos(t.__a); y += Math.sin(t.__a); });
+        return { id: p.id, a: Math.atan2(y, x), k: themesOf.get(p.id).size };
+      });
+      spread(items, 0.19).forEach((it, i) => visible.set(it.id, { a: it.a, layer: i % 2 }));
+    } else {
+      // fan around the most recently opened theme that owns the paper
+      const owner = new Map();
+      [...open].reverse().forEach(tid => [...papersOf.get(tid)]
+        .sort((a, b) => (byId.get(b).year || 0) - (byId.get(a).year || 0))
+        .forEach(pid => { if (!owner.has(pid)) owner.set(pid, tid); }));
+      const items = [];
+      const groups = {};
+      owner.forEach((tid, pid) => (groups[tid] = groups[tid] || []).push(pid));
+      Object.entries(groups).forEach(([tid, pids]) => {
+        const a0 = byId.get(tid).__a;
+        pids.forEach((pid, i) => items.push({ id: pid, a: wrap(a0 + (i - (pids.length - 1) / 2) * 0.17), i }));
+      });
+      spread(items, 0.15).forEach(it => visible.set(it.id, { a: it.a, layer: it.i % 2 }));
+    }
+    papers.forEach(p => {
+      const v = visible.get(p.id);
+      p.__visible = !!v;
+      if (!v) return;
+      const r = ORBIT_R + (v.layer ? 26 : 0);
+      const z = 38 * Math.sin(2 * v.a) + (v.layer ? 22 : -22);
+      const start = !p.__placed;
+      p.fx = r * Math.cos(v.a); p.fy = r * Math.sin(v.a); p.fz = z;
+      if (start) { const t = byId.get([...themesOf.get(p.id)][0]); p.x = t.fx; p.y = t.fy; p.z = t.fz; }
+      p.__placed = true;
+    });
+  }
+
+  /* ── State ── */
+  const open = [];            // opened themes, in order
+  let expandAll = false;
+  let selected = null, hovered = null;
+
+  function visibleData() {
+    const vis = new Set([center.id, ...themes.map(t => t.id), ...papers.filter(p => p.__visible).map(p => p.id)]);
+    return {
+      nodes: nodes.filter(n => vis.has(n.id)),
+      links: data.links.filter(l => vis.has(l.source) && vis.has(l.target)).map(l => ({ source: l.source, target: l.target }))
+    };
+  }
+
   function isLit(id) {
     if (!selected) return false;
     if (id === selected) return true;
-    const s = byId.get(selected);
-    if (s.type === 'center') return false;
-    return nbrs.get(selected).has(id) && byId.get(id).type !== 'center';
+    const s = byId.get(selected), n = byId.get(id);
+    if (s.type === 'theme') return n.type === 'paper' && papersOf.get(s.id).has(id);
+    if (s.type === 'paper') return n.type === 'theme' && themesOf.get(s.id).has(id);
+    return false;
   }
   const dimmed = id => selected && !isLit(id) && byId.get(id).type !== 'center';
 
@@ -159,50 +260,55 @@
 
   function makeNode(n) {
     const g = new THREE.Group();
-    const lit = isLit(n.id), dim = dimmed(n.id);
-    const isSel = n.id === selected, isHov = n.id === hovered;
-    let color = n.type === 'center' ? INK : n.type === 'theme' ? THEME : INK;
-    if (n.type === 'theme' && (isSel || isHov)) color = ACCENT;
-    if (n.type === 'paper' && isSel) color = ACCENT;
+    const lit = isLit(n.id), dim = dimmed(n.id), isSel = n.id === selected, isHov = n.id === hovered;
+    const isOpen = n.type === 'theme' && (open.includes(n.id));
+    let color = n.type === 'theme' ? THEME : INK;
+    if (n.type === 'theme' && (isSel || isHov || (isOpen && !selected))) color = ACCENT;
+    if (n.type === 'paper' && (isSel || isHov)) color = ACCENT;
     const mat = new THREE.MeshStandardMaterial({ color, roughness: .45, metalness: .05, transparent: true, opacity: dim ? .25 : 1 });
     g.add(new THREE.Mesh(new THREE.SphereGeometry(size(n), 32, 20), mat));
 
     if (n.type === 'center') {
-      const t = new SpriteText('rb', 7.5, '#ffffff');
+      // "rb" sits just above the sphere and is drawn on top, so it is never hidden as the view turns
+      const t = new SpriteText('rb', 9, INK);
       t.fontFace = FONT; t.fontWeight = '800';
-      t.position.z = size(n) + .5;
+      t.backgroundColor = 'rgba(255,255,255,.9)'; t.padding = [2, 1.2];
+      t.material.depthTest = false; t.renderOrder = 10;
+      t.position.y = size(n) + 8;
       g.add(t);
       return g;
     }
-    // Publications stay quiet until their theme (or they themselves) are selected or hovered
-    if (n.type === 'paper' && !lit && !isHov) return g;
+    // publication labels: when lit by a selection, hovered, or (with nothing selected) belonging to an opened theme
+    const ownedByOpen = !expandAll && !selected && [...themesOf.get(n.id) || []].some(t => open.includes(t));
+    if (n.type === 'paper' && !lit && !isHov && !ownedByOpen) return g;
     const label = new SpriteText(n.shortLabel || n.label);
     label.fontFace = FONT;
     label.fontWeight = n.type === 'theme' || isSel ? '600' : '500';
-    label.textHeight = n.type === 'theme' ? 6.5 : 3.6;
+    label.textHeight = n.type === 'theme' ? 8 : 4.6;
     label.color = dim ? 'rgba(20,20,20,.28)' : n.type === 'theme' ? INK : '#4d4d4d';
     label.backgroundColor = isSel ? ACCENT : (dim ? false : 'rgba(255,255,255,.85)');
     if (isSel) label.color = INK;
     label.padding = 1.2;
-    label.position.y = size(n) + (n.type === 'theme' ? 7 : 4.5);
+    label.position.y = size(n) + (n.type === 'theme' ? 8 : 5.5);
     g.add(label);
     return g;
   }
 
+  const idOf = x => (typeof x === 'object' ? x.id : x);
   function linkColor(l) {
     const s = idOf(l.source), t = idOf(l.target);
     if (selected && byId.get(selected).type !== 'center' && (s === selected || t === selected)) return `rgba(${ACCENT_DEEP},.95)`;
     if (selected) return 'rgba(20,20,20,.06)';
-    if (byId.get(s).type === 'center' || byId.get(t).type === 'center') return 'rgba(20,20,20,.22)';
-    return 'rgba(20,20,20,.12)';
+    if (s === center.id || t === center.id) return 'rgba(20,20,20,.22)';
+    return expandAll ? 'rgba(20,20,20,.08)' : 'rgba(20,20,20,.16)';
   }
   function linkWidth(l) {
     const s = idOf(l.source), t = idOf(l.target);
     return selected && (s === selected || t === selected) ? 1.1 : 0.35;
   }
 
+  placePapers();
   const Graph = ForceGraph3D({ controlType: 'orbit' })(el)
-    .graphData(data)
     .backgroundColor('#ffffff')
     .showNavInfo(false)
     .width(el.clientWidth).height(el.clientHeight)
@@ -211,125 +317,141 @@
     .linkColor(linkColor)
     .linkWidth(linkWidth)
     .linkOpacity(1)
+    .d3AlphaDecay(0.06)
+    .d3VelocityDecay(0.35)
     .onNodeHover(n => {
       el.style.cursor = n ? 'pointer' : 'grab';
-      const prev = hovered;
-      hovered = n ? n.id : null;
+      const prev = hovered; hovered = n ? n.id : null;
       if (prev !== hovered) refresh();
-      if (n && n.type === 'paper') { tip.textContent = n.label; tip.style.opacity = 1; }
-      else tip.style.opacity = 0;
+      if (n && n.type === 'paper') { tip.textContent = n.label; tip.style.opacity = 1; } else tip.style.opacity = 0;
     })
     .onNodeClick(n => {
+      drift = false;
       if (n.type === 'center') { location.href = 'index.html#research'; return; }
-      select(n.id, true);
+      if (n.type === 'theme') {
+        const i = open.indexOf(n.id);
+        if (!expandAll && i >= 0 && selected === n.id) { open.splice(i, 1); selected = null; panel.classList.remove('open'); rebuild(); frame(REDUCED ? 0 : 700); return; }
+        if (i < 0) open.push(n.id);
+        rebuild();
+      }
+      select(n.id);
     })
-    .onBackgroundClick(() => clearSelection())
-    .cooldownTicks(160)
-    .onEngineStop(() => fit());
-  let fitted = false, fitAt = 0, stopped = false;
-  function fit() {
-    // fit once early so the page never looks empty, and once more when the layout has settled
-    if (stopped) return;
-    if (fitted) stopped = true;
-    fitted = true; fitAt = performance.now();
-    // Frame the x/y extent tightly (zoomToFit also budgets for depth, which leaves the map tiny)
-    const bb = Graph.getGraphBbox();
-    if (!bb) return;
-    const c = { x: (bb.x[0] + bb.x[1]) / 2, y: (bb.y[0] + bb.y[1]) / 2, z: (bb.z[0] + bb.z[1]) / 2 };
-    const cam = Graph.camera(), half = Math.tan((cam.fov * Math.PI / 180) / 2);
-    const w = (bb.x[1] - bb.x[0]) / 2, h = (bb.y[1] - bb.y[0]) / 2;
-    const dist = Math.max(h / half, w / (half * cam.aspect)) * 1.12 + (bb.z[1] - bb.z[0]) / 2;
-    Graph.cameraPosition({ x: c.x, y: c.y, z: c.z + dist }, c, REDUCED ? 0 : 800);
-    orbitC = c;
-  }
-  let orbitC = { x: 0, y: 0, z: 0 };
-  setTimeout(fit, 3000);
+    .onBackgroundClick(() => clearSelection());
   el.__graph = Graph;
 
-  // Lighting: soft, top-lit — matches the "raised" nodes of the 2D map
+  // No forces: every node is pinned to its computed place; the engine only animates papers out
+  Graph.d3Force('charge', null); Graph.d3Force('center', null);
+  Graph.d3Force('link').strength(0);
+
   const scene = Graph.scene();
   scene.add(new THREE.AmbientLight(0xffffff, 1.6));
   const key = new THREE.DirectionalLight(0xffffff, 1.8); key.position.set(200, 400, 300); scene.add(key);
 
-  Graph.d3Force('charge').strength(-160);
-  Graph.d3Force('link').distance(l => {
-    const a = byId.get(idOf(l.source)).type, b = byId.get(idOf(l.target)).type;
-    if (a === 'center' || b === 'center') return 110;
-    return 70;
-  });
-
-  function refresh() {
-    Graph.nodeThreeObject(makeNode).linkColor(linkColor).linkWidth(linkWidth);
-  }
-
-  function select(id, fly) {
-    selected = id;
-    refresh();
-    showPanel(byId.get(id));
-    if (fly) {
-      const n = byId.get(id);
-      const d = n.type === 'theme' ? 260 : 170;
-      const len = Math.hypot(n.x, n.y, n.z) || 1;
-      Graph.cameraPosition({ x: n.x + n.x / len * d, y: n.y + n.y / len * d + 30, z: n.z + n.z / len * d + 40 }, n, REDUCED ? 0 : 900);
+  function rebuild() {
+    placePapers();
+    // fx/fy/fz pin the final spot; ease papers from their theme to it
+    const target = new Map();
+    papers.forEach(p => { if (p.__visible) { target.set(p.id, [p.fx, p.fy, p.fz]); } });
+    Graph.graphData(visibleData());
+    if (!REDUCED) {
+      const moving = papers.filter(p => p.__visible && (p.x !== p.fx || p.y !== p.fy || p.z !== p.fz));
+      const from = new Map(moving.map(p => [p.id, [p.x, p.y, p.z]]));
+      const t0 = performance.now(), D = 650;
+      moving.forEach(p => { const f = from.get(p.id); p.fx = f[0]; p.fy = f[1]; p.fz = f[2]; });
+      (function step() {
+        const k = Math.min(1, (performance.now() - t0) / D), e = 1 - Math.pow(1 - k, 3);
+        moving.forEach(p => { const f = from.get(p.id), t = target.get(p.id);
+          p.fx = f[0] + (t[0] - f[0]) * e; p.fy = f[1] + (t[1] - f[1]) * e; p.fz = f[2] + (t[2] - f[2]) * e; });
+        Graph.d3ReheatSimulation();
+        if (k < 1) requestAnimationFrame(step);
+      })();
     }
+    refresh();
+  }
+  function refresh() { Graph.nodeThreeObject(makeNode).linkColor(linkColor).linkWidth(linkWidth); }
+
+  function select(id) {
+    const wasOpen = panel.classList.contains('open');
+    selected = id; refresh(); showPanel(byId.get(id));
+    if (!wasOpen) frame(REDUCED ? 0 : 700);
   }
   function clearSelection() {
     if (!selected) return;
-    selected = null; refresh();
-    panel.classList.remove('open');
+    selected = null; refresh(); panel.classList.remove('open');
+    frame(REDUCED ? 0 : 700);
   }
 
-  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  expandBtn.addEventListener('click', () => {
+    expandAll = !expandAll;
+    expandBtn.setAttribute('aria-pressed', String(expandAll));
+    expandBtn.textContent = expandAll ? 'Collapse all' : 'Expand all';
+    drift = false;
+    if (!expandAll && selected) { open.length = 0; selected = null; panel.classList.remove('open'); frame(REDUCED ? 0 : 700); }
+    else if (!expandAll) open.length = 0;
+    rebuild();
+  });
 
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   function showPanel(n) {
     let html = '<button class="panel-close" aria-label="Close">×</button>';
-    html += `<p class="panel-label">${n.type === 'theme' ? 'Theme' : 'Publication'}</p>`;
-    html += `<h2>${esc(n.label)}</h2>`;
-    if (n.type === 'paper') {
-      const meta = [n.venue, n.year].filter(Boolean).join(' · ');
-      if (meta) html += `<p class="panel-meta">${esc(meta)}</p>`;
-    }
+    html += `<p class="panel-label">${n.type === 'theme' ? 'Theme' : 'Publication'}</p><h2>${esc(n.label)}</h2>`;
+    if (n.type === 'paper') { const meta = [n.venue, n.year].filter(Boolean).join(' · '); if (meta) html += `<p class="panel-meta">${esc(meta)}</p>`; }
     if (n.description) html += `<p>${esc(n.description)}</p>`;
     if (n.type === 'theme') {
-      const papers = [...nbrs.get(n.id)].map(i => byId.get(i)).filter(p => p.type === 'paper')
-        .sort((a, b) => (b.year || 0) - (a.year || 0));
-      html += `<p class="panel-count">${papers.length} publication${papers.length === 1 ? '' : 's'}</p>`;
-      html += '<ul class="panel-papers">' + papers.map(p =>
-        `<li><button data-id="${esc(p.id)}"><span>${esc(p.year || '')}</span>${esc(p.shortLabel || p.label)}</button></li>`).join('') + '</ul>';
+      const ps = [...papersOf.get(n.id)].map(i => byId.get(i)).sort((a, b) => (b.year || 0) - (a.year || 0));
+      html += `<p class="panel-count">${ps.length} publication${ps.length === 1 ? '' : 's'}</p><ul class="panel-papers">` +
+        ps.map(p => `<li><button data-id="${esc(p.id)}"><span>${esc(p.year || '')}</span>${esc(p.shortLabel || p.label)}</button></li>`).join('') + '</ul>';
     } else {
-      const themes = [...nbrs.get(n.id)].map(i => byId.get(i)).filter(t => t.type === 'theme');
-      if (themes.length) html += '<ul class="panel-papers">' + themes.map(t =>
-        `<li><button data-id="${esc(t.id)}"><span>Theme</span>${esc(t.shortLabel || t.label)}</button></li>`).join('') + '</ul>';
+      const ts = [...themesOf.get(n.id)].map(i => byId.get(i));
+      if (ts.length) html += '<ul class="panel-papers">' + ts.map(t => `<li><button data-id="${esc(t.id)}"><span>Theme</span>${esc(t.shortLabel || t.label)}</button></li>`).join('') + '</ul>';
       if (n.url) html += `<a class="paper-link" href="${esc(n.url)}" target="_blank" rel="noopener noreferrer">Open publication ↗</a>`;
     }
-    panel.innerHTML = html;
-    panel.classList.add('open');
+    panel.innerHTML = html; panel.classList.add('open');
     panel.querySelector('.panel-close').onclick = clearSelection;
-    panel.querySelectorAll('button[data-id]').forEach(b => b.onclick = () => select(b.dataset.id, true));
+    panel.querySelectorAll('button[data-id]').forEach(b => b.onclick = () => {
+      const t = byId.get(b.dataset.id);
+      if (t.type === 'theme' && !open.includes(t.id)) { open.push(t.id); rebuild(); }
+      select(t.id);
+    });
   }
 
   window.addEventListener('mousemove', e => { tip.style.left = (e.clientX + 14) + 'px'; tip.style.top = (e.clientY + 12) + 'px'; });
   window.addEventListener('keydown', e => { if (e.key === 'Escape') clearSelection(); });
-  window.addEventListener('resize', () => Graph.width(el.clientWidth).height(el.clientHeight));
+  window.addEventListener('resize', () => { Graph.width(el.clientWidth).height(el.clientHeight); frame(0); });
 
-  // Gentle idle drift so the map reads as 3D without any instructions
-  let drift = !REDUCED, t0 = performance.now();
+  // Frame the whole orbit (so opened publications never fall outside the view)
+  let lookX = 0;
+  function frame(ms) {
+    const cam = Graph.camera(), half = Math.tan((cam.fov * Math.PI / 180) / 2);
+    const narrow = el.clientWidth <= 700, isOpen = panel.classList.contains('open');
+    const R = narrow ? RING_R + 75 : ORBIT_R + 45;   // phones frame the theme ring; publications may run to the edge
+    const dist = Math.max(R / half, R / (half * cam.aspect));
+    const pxToWorld = (2 * dist * half) / el.clientHeight;
+    // keep the map clear of the details panel: slide left on wide screens, up on phones
+    lookX = !narrow && el.clientWidth > 900 && isOpen ? (panel.offsetWidth / 2 + 20) * pxToWorld : 0;
+    const lookY = narrow && isOpen ? -(panel.offsetHeight / 2) * pxToWorld : 0;
+    Graph.cameraPosition({ x: lookX, y: lookY + 30, z: dist }, { x: lookX, y: lookY, z: 0 }, ms);
+  }
+
+  // Gentle idle turn so the map reads as 3D; stops on first interaction
+  let drift = !REDUCED;
   el.addEventListener('pointerdown', () => { drift = false; });
   el.addEventListener('wheel', () => { drift = false; }, { passive: true });
 
+  Graph.graphData(visibleData());
+  frame(0);
   setTimeout(() => {
-    loading.style.opacity = 0;
-    setTimeout(() => loading.remove(), 500);
-    setTimeout(function spin() {
-      if (drift && !selected && fitted && performance.now() - fitAt > 1000) {
-        const c = Graph.cameraPosition(), o = orbitC;
-        const dx = c.x - o.x, dz = c.z - o.z;
-        const r = Math.hypot(dx, dz), a = Math.atan2(dx, dz) + 0.0016;
-        Graph.cameraPosition({ x: o.x + r * Math.sin(a), y: c.y, z: o.z + r * Math.cos(a) }, o);
+    loading.style.opacity = 0; setTimeout(() => loading.remove(), 500);
+    let a = 0;
+    (function spin() {
+      if (drift) {
+        const c = Graph.cameraPosition(), r = Math.hypot(c.x, c.z);
+        a = Math.atan2(c.x, c.z) + 0.0014;
+        Graph.cameraPosition({ x: r * Math.sin(a), y: c.y, z: r * Math.cos(a) }, { x: 0, y: 0, z: 0 });
       }
       requestAnimationFrame(spin);
-    }, REDUCED ? 0 : 1000);
-  }, 1600);
+    })();
+  }, 600);
 })();
 </script>
 </body>
