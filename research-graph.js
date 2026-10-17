@@ -13,8 +13,8 @@ const graphContainer = document.getElementById("researchGraph");
 const infoPanel = document.getElementById("researchInfoPanel");
 
 const INK = "#141414";
-const ACCENT = "#161616";
-const FONT = "'Schibsted Grotesk', 'Helvetica Neue', Arial, sans-serif";
+const ACCENT = "#f24e1e";
+const FONT = "'Inter Tight', 'Helvetica Neue', Arial, sans-serif";
 const RING_R = 200;                 // theme ring
 const ORBIT_R = 300;                // publication orbit
 const MIN_GAP = 0.075;              // min angle between neighbouring publications (radians)
@@ -222,7 +222,7 @@ if (graphContainer) {
         .linkColor(link => {
           const s = link.source, t = link.target;
           const active = [s, t].some(n => n && (n === hoverNode || n === selectedNode));
-          if (active) return "rgba(22,22,22,0.6)";
+          if (active) return "rgba(242,78,30,0.6)";
           const paper = [s, t].find(n => n && n.type === "paper");
           if (!paper) return "rgba(20,20,20,0.11)";                       // centre ↔ theme spokes
           const theme = paper === s ? t : s;
@@ -333,7 +333,7 @@ if (graphContainer) {
           const period = isCenter ? 3.2 : 2.8;
           const reach = isCenter ? 26 : isTheme ? 16 : 9;
           const strength = isHover ? 0.45 : isCenter ? 0.22 : isExpanded ? 0.1 : isTheme ? 0.18 : 0.12;
-          const col = isExpanded || (isHover && !isCenter) ? "22,22,22" : "20,20,20";
+          const col = isExpanded || (isHover && !isCenter) ? "242,78,30" : "20,20,20";
           for (let k = 0; k < 2; k++) {
             const p = ((t / period) + node.__phase + k * 0.5) % 1;
             const ease = 1 - Math.pow(1 - p, 3);
@@ -347,7 +347,7 @@ if (graphContainer) {
 
         // Raised body: soft drop shadow + top-lit gradient
         const base = isCenter ? INK : isExpanded ? ACCENT : isTheme ? "#a8a8a8" : INK;
-        const light = isCenter ? "#3a3a3a" : isExpanded ? "#5a5a5a" : isTheme ? "#cfcfcf" : "#4a4a4a";
+        const light = isCenter ? "#3a3a3a" : isExpanded ? "#ff7a4d" : isTheme ? "#cfcfcf" : "#4a4a4a";
         ctx.save();
         ctx.shadowColor = "rgba(0,0,0,0.22)";
         ctx.shadowBlur = isHover ? 14 : 8;
