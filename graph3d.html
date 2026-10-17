@@ -3,505 +3,333 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3D Research Constellation | Rahul Bhaumik</title>
+  <title>Research Constellation in 3D – Rahul Bhaumik</title>
+  <meta name="description" content="Rahul Bhaumik's research themes and publications as a three-dimensional map." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;600&display=swap');
-
-    *, *::before, *::after { box-sizing: border-box; }
-
-    html, body {
-      margin: 0; padding: 0;
-      width: 100%; height: 100%;
-      overflow: hidden;
-      background: #000;
-      font-family: 'DM Sans', sans-serif;
+    :root {
+      --bg: #ffffff; --ink: #141414; --ink-2: #3d3d3d; --mute: #767676; --rule: #e6e6e6; --tint: #f4f4f4;
+      --accent: #f5c400; --accent-soft: #fff6cc;
+      --header-h: 64px; --pad: clamp(1rem, 3vw, 2.5rem);
+      --display: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --body: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      --ease: cubic-bezier(.2,.7,.2,1);
     }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink); font-family: var(--body); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--accent); color: var(--ink); }
 
-    #graph-container {
-      position: fixed;
-      inset: 0;
-    }
+    /* Header — same as the homepage */
+    .g-header { position: fixed; inset: 0 0 auto 0; z-index: 40; height: var(--header-h); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--pad); background: rgba(255,255,255,.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--rule); }
+    .wordmark { display: flex; align-items: center; gap: .75rem; }
+    .wordmark-mark { width: 34px; height: 34px; background: var(--ink); color: #fff; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: .95rem; letter-spacing: -.04em; transition: background .2s, color .2s; }
+    .wordmark:hover .wordmark-mark { background: var(--accent); color: var(--ink); }
+    .wordmark-text { line-height: 1.1; }
+    .wordmark-name { display: block; font-family: var(--display); font-weight: 700; font-size: 1rem; letter-spacing: -.01em; }
+    .wordmark-role { display: block; font-family: var(--mono); font-size: .66rem; color: var(--mute); letter-spacing: .04em; text-transform: uppercase; }
+    .back { font-family: var(--display); font-weight: 500; font-size: .9rem; color: var(--ink-2); padding: .25rem 0; transition: box-shadow .2s, color .15s; }
+    .back:hover { color: var(--ink); box-shadow: inset 0 -3px 0 var(--accent); }
 
-    /* ── TOP BAR ── */
-    .top-bar {
-      position: fixed;
-      top: 20px; left: 20px; right: 20px;
-      z-index: 30;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-      pointer-events: none;
-    }
+    #graph { position: fixed; inset: var(--header-h) 0 0 0; cursor: grab; }
+    #graph:active { cursor: grabbing; }
 
-    .title-box {
-      pointer-events: auto;
-      padding: 14px 18px;
-      border-radius: 16px;
-      background: rgba(4, 10, 22, 0.82);
-      border: 1px solid rgba(140, 200, 255, 0.18);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      max-width: 520px;
-    }
+    .title { position: fixed; z-index: 20; top: calc(var(--header-h) + 1.5rem); left: var(--pad); pointer-events: none; }
+    .eyebrow { display: inline-block; font-family: var(--mono); font-size: .72rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; background: var(--accent); padding: .32rem .6rem .28rem; margin-bottom: .9rem; }
+    .title h1 { font-family: var(--display); font-weight: 700; font-size: clamp(1.7rem, 3vw, 2.6rem); line-height: 1; letter-spacing: -.035em; max-width: 12ch; }
 
-    .title-box h1 {
-      margin: 0 0 4px;
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: #fff;
-      letter-spacing: 0.01em;
-    }
+    .legend { position: fixed; z-index: 20; left: var(--pad); bottom: 1.5rem; list-style: none; display: grid; gap: .55rem; font-size: .82rem; color: var(--ink-2); pointer-events: none; }
+    .legend li { display: flex; align-items: center; gap: .65rem; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 2px 4px rgba(0,0,0,.2); }
+    .dot-center { width: 22px; height: 22px; margin: 0 -5px; background: radial-gradient(circle at 35% 30%, #3a3a3a, var(--ink)); color: #fff; font-family: var(--display); font-weight: 800; font-size: .6rem; display: grid; place-items: center; letter-spacing: -.03em; }
+    .dot-theme { background: radial-gradient(circle at 35% 30%, #d6d6d6, #a3a3a3); }
+    .dot-open { background: radial-gradient(circle at 35% 30%, #ffe27a, var(--accent)); }
+    .dot-paper { width: 8px; height: 8px; margin: 0 2px; background: radial-gradient(circle at 35% 30%, #4a4a4a, var(--ink)); }
 
-    .title-box p {
-      margin: 0;
-      font-size: 0.8rem;
-      color: rgba(180, 220, 255, 0.7);
-      line-height: 1.5;
-    }
+    /* Details panel — only exists once something is clicked */
+    #panel { position: fixed; z-index: 30; top: calc(var(--header-h) + 1.5rem); right: var(--pad); width: min(340px, calc(100vw - 2 * var(--pad))); max-height: calc(100vh - var(--header-h) - 3rem); overflow-y: auto; background: #fff; border: 1px solid var(--ink); padding: 1.4rem; font-size: .88rem; line-height: 1.55; color: var(--ink-2); display: none; }
+    #panel.open { display: block; animation: panelIn .35s var(--ease); }
+    @keyframes panelIn { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+    .panel-close { position: absolute; top: .7rem; right: .8rem; width: 28px; height: 28px; border: 0; background: none; font-size: 1.3rem; line-height: 1; color: var(--mute); cursor: pointer; }
+    .panel-close:hover { color: var(--ink); }
+    .panel-label { display: inline-block; font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); background: var(--accent); padding: .2rem .45rem; margin-bottom: .7rem; }
+    #panel h2 { font-family: var(--display); font-size: 1.15rem; font-weight: 700; letter-spacing: -.01em; color: var(--ink); line-height: 1.2; margin-bottom: .8rem; padding-right: 1.5rem; }
+    .panel-meta { font-family: var(--mono); font-size: .72rem; color: var(--mute); margin-bottom: .8rem; }
+    .panel-count { font-family: var(--mono); font-size: .72rem; color: var(--ink); margin-top: .8rem; }
+    .panel-papers { list-style: none; margin-top: .5rem; border-top: 1px solid var(--rule); }
+    .panel-papers button { all: unset; box-sizing: border-box; width: 100%; cursor: pointer; display: grid; grid-template-columns: 2.6rem 1fr; gap: .4rem; padding: .5rem 0; border-bottom: 1px solid var(--rule); font-size: .84rem; color: var(--ink); line-height: 1.35; }
+    .panel-papers button span { font-family: var(--mono); font-size: .7rem; color: var(--mute); padding-top: .1rem; }
+    .panel-papers button:hover, .panel-papers button:focus-visible { background: var(--accent-soft); }
+    .paper-link { display: inline-block; margin-top: .9rem; font-family: var(--display); font-weight: 600; color: var(--ink); border-bottom: 2px solid var(--ink); }
+    .paper-link:hover { background: var(--accent); }
 
-    .back-btn {
-      pointer-events: auto;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 10px 18px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      color: #fff;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 600;
-      border: 1px solid rgba(255,255,255,0.2);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      transition: background 0.2s, border-color 0.2s;
-      white-space: nowrap;
-    }
-    .back-btn:hover {
-      background: rgba(100, 180, 255, 0.22);
-      border-color: rgba(100, 180, 255, 0.5);
-    }
+    #tip { position: fixed; z-index: 35; pointer-events: none; opacity: 0; transition: opacity .15s; background: var(--ink); color: #fff; font-family: var(--display); font-weight: 500; font-size: .8rem; line-height: 1.35; padding: .35rem .6rem; max-width: 280px; }
 
-    /* ── LEGEND ── */
-    .legend {
-      position: fixed;
-      left: 20px; bottom: 20px;
-      z-index: 30;
-      padding: 12px 16px;
-      border-radius: 14px;
-      background: rgba(4, 10, 22, 0.80);
-      border: 1px solid rgba(140, 200, 255, 0.15);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      color: rgba(200, 230, 255, 0.8);
-      font-size: 0.78rem;
-      line-height: 1.9;
-    }
+    #loading { position: fixed; inset: var(--header-h) 0 0 0; z-index: 25; background: #fff; display: grid; place-items: center; transition: opacity .5s; }
+    .bar { width: 120px; height: 4px; background: var(--tint); overflow: hidden; position: relative; }
+    .bar::after { content: ''; position: absolute; inset: 0; width: 40%; background: var(--accent); animation: slide 1s var(--ease) infinite; }
+    @keyframes slide { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
 
-    .legend-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .dot-center { background: #ffffff; box-shadow: 0 0 6px #fff; }
-    .dot-theme  { background: #5bc4ff; box-shadow: 0 0 6px #5bc4ff; }
-    .dot-paper  { background: #8be6c8; box-shadow: 0 0 6px #8be6c8; }
-
-    /* ── INFO PANEL ── */
-    #info-panel {
-      position: fixed;
-      right: 20px; bottom: 20px;
-      z-index: 30;
-      width: min(380px, calc(100vw - 40px));
-      max-height: 50vh;
-      overflow-y: auto;
-      padding: 18px 20px;
-      border-radius: 18px;
-      background: rgba(4, 10, 22, 0.85);
-      border: 1px solid rgba(140, 200, 255, 0.2);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      color: rgba(210, 235, 255, 0.88);
-      font-size: 0.85rem;
-      line-height: 1.55;
-      transition: opacity 0.3s;
-    }
-
-    #info-panel::-webkit-scrollbar { width: 4px; }
-    #info-panel::-webkit-scrollbar-thumb { background: rgba(100,180,255,0.3); border-radius: 4px; }
-
-    .panel-eyebrow {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.68rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #5bc4ff;
-      margin: 0 0 8px;
-    }
-
-    #info-panel h2 {
-      margin: 0 0 10px;
-      font-size: 1rem;
-      font-weight: 600;
-      color: #fff;
-      line-height: 1.3;
-    }
-
-    #info-panel p {
-      margin: 4px 0;
-      font-size: 0.82rem;
-    }
-
-    #info-panel strong { color: rgba(180, 220, 255, 0.9); }
-
-    .open-link {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 8px 16px;
-      border-radius: 999px;
-      background: rgba(91, 196, 255, 0.15);
-      border: 1px solid rgba(91, 196, 255, 0.4);
-      color: #5bc4ff;
-      font-weight: 600;
-      font-size: 0.8rem;
-      text-decoration: none;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    .open-link:hover {
-      background: rgba(91, 196, 255, 0.28);
-      border-color: rgba(91, 196, 255, 0.7);
-    }
-
-    /* ── TOOLTIP (hover) ── */
-    #tooltip {
-      position: fixed;
-      z-index: 40;
-      padding: 6px 12px;
-      border-radius: 8px;
-      background: rgba(4, 10, 22, 0.92);
-      border: 1px solid rgba(91, 196, 255, 0.3);
-      color: #fff;
-      font-size: 0.78rem;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.15s;
-      white-space: nowrap;
-      max-width: 260px;
-      white-space: normal;
-      line-height: 1.4;
-    }
-
-    /* ── LOADING ── */
-    #loading {
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: #000;
-      color: rgba(180,220,255,0.8);
-      font-size: 0.9rem;
-      gap: 16px;
-      transition: opacity 0.6s;
-    }
-
-    .loader-ring {
-      width: 40px; height: 40px;
-      border: 2px solid rgba(91,196,255,0.15);
-      border-top-color: #5bc4ff;
-      border-radius: 50%;
-      animation: spin 0.9s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── CONTROLS HINT ── */
-    .controls-hint {
-      position: fixed;
-      left: 50%; bottom: 20px;
-      transform: translateX(-50%);
-      z-index: 30;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      color: rgba(140, 180, 220, 0.45);
-      letter-spacing: 0.06em;
-      pointer-events: none;
-      white-space: nowrap;
-    }
-
-    /* ── MOBILE ── */
     @media (max-width: 700px) {
-      .title-box { max-width: calc(100vw - 100px); }
+      .wordmark-role { display: none; }
       .legend { display: none; }
-      #info-panel { left: 20px; right: 20px; width: auto; bottom: 56px; }
-      .controls-hint { font-size: 0.62rem; bottom: 8px; }
+      #panel { top: auto; bottom: 1rem; left: var(--pad); right: var(--pad); width: auto; max-height: 45vh; }
     }
+    @media (prefers-reduced-motion: reduce) { .bar::after { animation: none; } #panel.open { animation: none; } }
   </style>
 </head>
 <body>
 
-<div id="graph-container"></div>
+<header class="g-header">
+  <a class="wordmark" href="index.html" aria-label="Rahul Bhaumik — home">
+    <span class="wordmark-mark">rb</span>
+    <span class="wordmark-text">
+      <span class="wordmark-name">Rahul Bhaumik</span>
+      <span class="wordmark-role">Designer &amp; Researcher</span>
+    </span>
+  </a>
+  <a class="back" href="index.html#research">← Back to the site</a>
+</header>
 
-<div class="top-bar">
-  <div class="title-box">
-    <h1>3D Research Constellation</h1>
-    <p>Drag to rotate · Scroll to zoom · Click any node to explore</p>
-  </div>
-  <a class="back-btn" href="index.html#research">← Back</a>
+<div id="graph" aria-label="Three-dimensional map of research themes and publications"></div>
+
+<div class="title">
+  <p class="eyebrow">Research constellation · 3D</p>
+  <h1>Themes and publications in space</h1>
 </div>
 
-<div class="legend">
-  <div class="legend-row"><span class="dot dot-center"></span> Me (center)</div>
-  <div class="legend-row"><span class="dot dot-theme"></span> Research theme</div>
-  <div class="legend-row"><span class="dot dot-paper"></span> Publication</div>
-</div>
+<ul class="legend" aria-hidden="true">
+  <li><span class="dot dot-center">rb</span> Rahul Bhaumik</li>
+  <li><span class="dot dot-theme"></span> Research theme</li>
+  <li><span class="dot dot-open"></span> Selected</li>
+  <li><span class="dot dot-paper"></span> Publication</li>
+</ul>
 
-<aside id="info-panel">
-  <p class="panel-eyebrow">Research Constellation</p>
-  <h2>Explore the 3D graph</h2>
-  <p>Click any node to view its details, publication link, and connected research themes.</p>
-</aside>
+<aside id="panel" aria-live="polite"></aside>
+<div id="tip"></div>
+<div id="loading"><div class="bar"></div></div>
 
-<div id="tooltip"></div>
-
-<div id="loading">
-  <div class="loader-ring"></div>
-  <span>Loading research constellation…</span>
-</div>
-
-<p class="controls-hint">LEFT DRAG · rotate &nbsp;|&nbsp; RIGHT DRAG · pan &nbsp;|&nbsp; SCROLL · zoom</p>
-
-<!-- 3d-force-graph + three-spritetext via CDN -->
 <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
 <script src="https://unpkg.com/three-spritetext@1.9.0/dist/three-spritetext.min.js"></script>
 <script src="https://unpkg.com/3d-force-graph@1.73.5/dist/3d-force-graph.min.js"></script>
-
 <script>
 (async function () {
-  const container  = document.getElementById('graph-container');
-  const infoPanel  = document.getElementById('info-panel');
-  const tooltip    = document.getElementById('tooltip');
-  const loadingEl  = document.getElementById('loading');
+  const INK = '#141414', THEME = '#a8a8a8', ACCENT = '#f5c400', ACCENT_DEEP = '212,168,0';
+  const FONT = "'Inter Tight', 'Helvetica Neue', Arial, sans-serif";
+  const el = document.getElementById('graph');
+  const panel = document.getElementById('panel');
+  const tip = document.getElementById('tip');
+  const loading = document.getElementById('loading');
+  const REDUCED = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ── Load data ──────────────────────────────────────────────
-  let graphData;
+  let data;
   try {
-    const res = await fetch('data/researchGraph.json');
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    graphData = await res.json();
-  } catch (err) {
-    loadingEl.innerHTML = `<p style="color:#ff8080;text-align:center;padding:2rem;">
-      Could not load <code>data/researchGraph.json</code><br><small>${err.message}</small></p>`;
+    const r = await fetch('data/researchGraph.json');
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    data = await r.json();
+  } catch (e) {
+    loading.innerHTML = '<p style="font-family:var(--display);font-weight:600">The research map could not be loaded.</p>';
     return;
   }
+  try { await document.fonts.ready; } catch (e) {}
 
-  // ── Colour + size helpers ──────────────────────────────────
-  function nodeColor(node) {
-    if (node.type === 'center') return '#ffffff';
-    if (node.type === 'theme')  return '#5bc4ff';
-    return '#8be6c8';
+  // Adjacency (built from ids before the force engine replaces them with objects)
+  const byId = new Map(data.nodes.map(n => [n.id, n]));
+  const nbrs = new Map(data.nodes.map(n => [n.id, new Set()]));
+  data.links.forEach(l => { nbrs.get(l.source).add(l.target); nbrs.get(l.target).add(l.source); });
+  const idOf = x => (typeof x === 'object' ? x.id : x);
+
+  let selected = null;   // node id
+  let hovered = null;    // node id
+
+  // A node is "lit" when it is the selection, or a neighbour of a selected theme / paper
+  function isLit(id) {
+    if (!selected) return false;
+    if (id === selected) return true;
+    const s = byId.get(selected);
+    if (s.type === 'center') return false;
+    return nbrs.get(selected).has(id) && byId.get(id).type !== 'center';
+  }
+  const dimmed = id => selected && !isLit(id) && byId.get(id).type !== 'center';
+
+  const size = n => (n.type === 'center' ? 11 : n.type === 'theme' ? 6.5 : 3.2);
+
+  function makeNode(n) {
+    const g = new THREE.Group();
+    const lit = isLit(n.id), dim = dimmed(n.id);
+    const isSel = n.id === selected, isHov = n.id === hovered;
+    let color = n.type === 'center' ? INK : n.type === 'theme' ? THEME : INK;
+    if (n.type === 'theme' && (isSel || isHov)) color = ACCENT;
+    if (n.type === 'paper' && isSel) color = ACCENT;
+    const mat = new THREE.MeshStandardMaterial({ color, roughness: .45, metalness: .05, transparent: true, opacity: dim ? .25 : 1 });
+    g.add(new THREE.Mesh(new THREE.SphereGeometry(size(n), 32, 20), mat));
+
+    if (n.type === 'center') {
+      const t = new SpriteText('rb', 7.5, '#ffffff');
+      t.fontFace = FONT; t.fontWeight = '800';
+      t.position.z = size(n) + .5;
+      g.add(t);
+      return g;
+    }
+    // Publications stay quiet until their theme (or they themselves) are selected or hovered
+    if (n.type === 'paper' && !lit && !isHov) return g;
+    const label = new SpriteText(n.shortLabel || n.label);
+    label.fontFace = FONT;
+    label.fontWeight = n.type === 'theme' || isSel ? '600' : '500';
+    label.textHeight = n.type === 'theme' ? 6.5 : 3.6;
+    label.color = dim ? 'rgba(20,20,20,.28)' : n.type === 'theme' ? INK : '#4d4d4d';
+    label.backgroundColor = isSel ? ACCENT : (dim ? false : 'rgba(255,255,255,.85)');
+    if (isSel) label.color = INK;
+    label.padding = 1.2;
+    label.position.y = size(n) + (n.type === 'theme' ? 7 : 4.5);
+    g.add(label);
+    return g;
   }
 
-  function nodeSize(node) {
-    if (node.type === 'center') return 10;
-    if (node.type === 'theme')  return 6;
-    return 3.5;
+  function linkColor(l) {
+    const s = idOf(l.source), t = idOf(l.target);
+    if (selected && byId.get(selected).type !== 'center' && (s === selected || t === selected)) return `rgba(${ACCENT_DEEP},.95)`;
+    if (selected) return 'rgba(20,20,20,.06)';
+    if (byId.get(s).type === 'center' || byId.get(t).type === 'center') return 'rgba(20,20,20,.22)';
+    return 'rgba(20,20,20,.12)';
+  }
+  function linkWidth(l) {
+    const s = idOf(l.source), t = idOf(l.target);
+    return selected && (s === selected || t === selected) ? 1.1 : 0.35;
   }
 
-  function linkColor(link) {
-    const s = typeof link.source === 'object' ? link.source : {};
-    const t = typeof link.target === 'object' ? link.target : {};
-    if (s.type === 'center' || t.type === 'center') return 'rgba(91,196,255,0.45)';
-    if (s.type === 'theme'  || t.type === 'theme')  return 'rgba(91,196,255,0.22)';
-    return 'rgba(139,230,200,0.18)';
-  }
-
-  // ── Build graph ────────────────────────────────────────────
-  const Graph = ForceGraph3D({ controlType: 'orbit' })(container)
-    .graphData(graphData)
-    .backgroundColor('#000010')
+  const Graph = ForceGraph3D({ controlType: 'orbit' })(el)
+    .graphData(data)
+    .backgroundColor('#ffffff')
     .showNavInfo(false)
-
-    // nodes
-    .nodeVal(nodeSize)
-    .nodeColor(nodeColor)
-    .nodeOpacity(0.95)
-    .nodeResolution(16)
-
-    // labels via SpriteText — always visible, no CSS2D issues
-    .nodeThreeObject(node => {
-      const group = new THREE.Group();
-
-      // sphere
-      const radius = nodeSize(node);
-      const geo  = new THREE.SphereGeometry(radius, 20, 14);
-      const mat  = new THREE.MeshStandardMaterial({
-        color: nodeColor(node),
-        emissive: nodeColor(node),
-        emissiveIntensity: node.type === 'center' ? 0.6 : node.type === 'theme' ? 0.35 : 0.2,
-        roughness: 0.25,
-        metalness: 0.1
-      });
-      group.add(new THREE.Mesh(geo, mat));
-
-      // label sprite — always rendered in 3D space, no DOM dependency
-      const sprite = new SpriteText(node.shortLabel || node.label);
-      sprite.color = node.type === 'center' ? '#ffffff'
-                   : node.type === 'theme'  ? '#b8e8ff'
-                   : '#c8f5e8';
-      sprite.textHeight = node.type === 'center' ? 8
-                        : node.type === 'theme'  ? 5.5
-                        : 3.5;
-      sprite.fontFace  = 'DM Sans, Arial, sans-serif';
-      sprite.fontWeight = node.type === 'center' ? '600' : '400';
-      sprite.backgroundColor = node.type === 'center' ? 'rgba(0,0,0,0.55)'
-                              : node.type === 'theme'  ? 'rgba(0,10,28,0.52)'
-                              : 'rgba(0,10,20,0.45)';
-      sprite.padding = 2.5;
-      sprite.borderRadius = 3;
-      sprite.position.y = radius + (node.type === 'center' ? 16 : node.type === 'theme' ? 12 : 9);
-      group.add(sprite);
-
-      return group;
-    })
+    .width(el.clientWidth).height(el.clientHeight)
+    .nodeThreeObject(makeNode)
     .nodeThreeObjectExtend(false)
-
-    // links
     .linkColor(linkColor)
-    .linkWidth(link => link.strength ? link.strength * 0.55 : 0.5)
-    .linkOpacity(0.65)
-    .linkDirectionalParticles(link => {
-      const s = typeof link.source === 'object' ? link.source : {};
-      if (s.type === 'center') return 3;
-      if (s.type === 'theme')  return 1;
-      return 0;
+    .linkWidth(linkWidth)
+    .linkOpacity(1)
+    .onNodeHover(n => {
+      el.style.cursor = n ? 'pointer' : 'grab';
+      const prev = hovered;
+      hovered = n ? n.id : null;
+      if (prev !== hovered) refresh();
+      if (n && n.type === 'paper') { tip.textContent = n.label; tip.style.opacity = 1; }
+      else tip.style.opacity = 0;
     })
-    .linkDirectionalParticleWidth(1.2)
-    .linkDirectionalParticleColor(linkColor)
-    .linkDirectionalParticleSpeed(0.006)
-
-    // interaction
-    .onNodeClick(node => {
-      if (node.type === 'center') {
-        window.location.href = 'index.html#research';
-        return;
-      }
-      showDetails(node);
+    .onNodeClick(n => {
+      if (n.type === 'center') { location.href = 'index.html#research'; return; }
+      select(n.id, true);
     })
-    .onNodeHover(node => {
-      container.style.cursor = node ? 'pointer' : 'grab';
-      if (node) {
-        tooltip.textContent = node.label;
-        tooltip.style.opacity = '1';
-      } else {
-        tooltip.style.opacity = '0';
-      }
-    })
+    .onBackgroundClick(() => clearSelection())
+    .cooldownTicks(160)
+    .onEngineStop(() => fit());
+  let fitted = false, fitAt = 0, stopped = false;
+  function fit() {
+    // fit once early so the page never looks empty, and once more when the layout has settled
+    if (stopped) return;
+    if (fitted) stopped = true;
+    fitted = true; fitAt = performance.now();
+    // Frame the x/y extent tightly (zoomToFit also budgets for depth, which leaves the map tiny)
+    const bb = Graph.getGraphBbox();
+    if (!bb) return;
+    const c = { x: (bb.x[0] + bb.x[1]) / 2, y: (bb.y[0] + bb.y[1]) / 2, z: (bb.z[0] + bb.z[1]) / 2 };
+    const cam = Graph.camera(), half = Math.tan((cam.fov * Math.PI / 180) / 2);
+    const w = (bb.x[1] - bb.x[0]) / 2, h = (bb.y[1] - bb.y[0]) / 2;
+    const dist = Math.max(h / half, w / (half * cam.aspect)) * 1.12 + (bb.z[1] - bb.z[0]) / 2;
+    Graph.cameraPosition({ x: c.x, y: c.y, z: c.z + dist }, c, REDUCED ? 0 : 800);
+    orbitC = c;
+  }
+  let orbitC = { x: 0, y: 0, z: 0 };
+  setTimeout(fit, 3000);
+  el.__graph = Graph;
 
-    // dimensions
-    .width(window.innerWidth)
-    .height(window.innerHeight);
-
-  // ── Move tooltip with mouse ────────────────────────────────
-  window.addEventListener('mousemove', e => {
-    tooltip.style.left = (e.clientX + 14) + 'px';
-    tooltip.style.top  = (e.clientY - 10) + 'px';
-  });
-
-  // ── Force tuning ───────────────────────────────────────────
-  Graph.d3Force('charge').strength(-180);
-  Graph.d3Force('link').distance(link => {
-    const s = typeof link.source === 'object' ? link.source.type : '';
-    const t = typeof link.target === 'object' ? link.target.type : '';
-    if (s === 'center' || t === 'center') return 130;
-    if (s === 'theme'  || t === 'theme')  return 95;
-    return 75;
-  });
-
-  // ── Lighting ───────────────────────────────────────────────
+  // Lighting: soft, top-lit — matches the "raised" nodes of the 2D map
   const scene = Graph.scene();
+  scene.add(new THREE.AmbientLight(0xffffff, 1.6));
+  const key = new THREE.DirectionalLight(0xffffff, 1.8); key.position.set(200, 400, 300); scene.add(key);
 
-  const ambient = new THREE.AmbientLight(0xffffff, 0.6);
-  scene.add(ambient);
-
-  const keyLight = new THREE.DirectionalLight(0xb9ddff, 1.2);
-  keyLight.position.set(300, 400, 500);
-  scene.add(keyLight);
-
-  const fillLight = new THREE.PointLight(0x5bc4ff, 2.5, 1400);
-  fillLight.position.set(-250, -100, 350);
-  scene.add(fillLight);
-
-  const rimLight = new THREE.PointLight(0x8be6c8, 1.2, 1000);
-  rimLight.position.set(0, -400, -300);
-  scene.add(rimLight);
-
-  // ── Starfield ──────────────────────────────────────────────
-  const starGeo = new THREE.BufferGeometry();
-  const starPos = [];
-  for (let i = 0; i < 1200; i++) {
-    starPos.push(
-      (Math.random() - 0.5) * 2800,
-      (Math.random() - 0.5) * 1800,
-      (Math.random() - 0.5) * 2800
-    );
-  }
-  starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starPos, 3));
-  scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({
-    color: 0xffffff, size: 1.1, transparent: true, opacity: 0.38, depthWrite: false
-  })));
-
-  // ── Camera start position ──────────────────────────────────
-  Graph.cameraPosition({ x: 0, y: 60, z: 700 });
-
-  // ── Hide loading once graph settles ───────────────────────
-  setTimeout(() => {
-    loadingEl.style.opacity = '0';
-    setTimeout(() => loadingEl.style.display = 'none', 600);
-    // zoom to fit after force settles
-    Graph.zoomToFit(1200, 120);
-  }, 1800);
-
-  // ── Resize ────────────────────────────────────────────────
-  window.addEventListener('resize', () => {
-    Graph.width(window.innerWidth).height(window.innerHeight);
+  Graph.d3Force('charge').strength(-160);
+  Graph.d3Force('link').distance(l => {
+    const a = byId.get(idOf(l.source)).type, b = byId.get(idOf(l.target)).type;
+    if (a === 'center' || b === 'center') return 110;
+    return 70;
   });
 
-  // ── Info panel ────────────────────────────────────────────
-  function showDetails(node) {
-    const type  = node.type  ? node.type.replace('-', ' ') : 'node';
-    const year  = node.year  ? `<p><strong>Year:</strong> ${node.year}</p>` : '';
-    const venue = node.venue ? `<p><strong>Venue:</strong> ${node.venue}</p>` : '';
-    const link  = node.url
-      ? `<a class="open-link" href="${node.url}" target="_blank" rel="noopener noreferrer">Open publication ↗</a>`
-      : '';
-
-    infoPanel.innerHTML = `
-      <p class="panel-eyebrow">${type}</p>
-      <h2>${node.label}</h2>
-      ${year}${venue}
-      <p>${node.description || 'No description yet.'}</p>
-      ${link}
-    `;
-
-    // fly camera to node
-    const dist = 220;
-    const { x = 0, y = 0, z = 0 } = node;
-    Graph.cameraPosition(
-      { x: x + dist * 0.6, y: y + dist * 0.4, z: z + dist },
-      { x, y, z },
-      900
-    );
+  function refresh() {
+    Graph.nodeThreeObject(makeNode).linkColor(linkColor).linkWidth(linkWidth);
   }
 
+  function select(id, fly) {
+    selected = id;
+    refresh();
+    showPanel(byId.get(id));
+    if (fly) {
+      const n = byId.get(id);
+      const d = n.type === 'theme' ? 260 : 170;
+      const len = Math.hypot(n.x, n.y, n.z) || 1;
+      Graph.cameraPosition({ x: n.x + n.x / len * d, y: n.y + n.y / len * d + 30, z: n.z + n.z / len * d + 40 }, n, REDUCED ? 0 : 900);
+    }
+  }
+  function clearSelection() {
+    if (!selected) return;
+    selected = null; refresh();
+    panel.classList.remove('open');
+  }
+
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  function showPanel(n) {
+    let html = '<button class="panel-close" aria-label="Close">×</button>';
+    html += `<p class="panel-label">${n.type === 'theme' ? 'Theme' : 'Publication'}</p>`;
+    html += `<h2>${esc(n.label)}</h2>`;
+    if (n.type === 'paper') {
+      const meta = [n.venue, n.year].filter(Boolean).join(' · ');
+      if (meta) html += `<p class="panel-meta">${esc(meta)}</p>`;
+    }
+    if (n.description) html += `<p>${esc(n.description)}</p>`;
+    if (n.type === 'theme') {
+      const papers = [...nbrs.get(n.id)].map(i => byId.get(i)).filter(p => p.type === 'paper')
+        .sort((a, b) => (b.year || 0) - (a.year || 0));
+      html += `<p class="panel-count">${papers.length} publication${papers.length === 1 ? '' : 's'}</p>`;
+      html += '<ul class="panel-papers">' + papers.map(p =>
+        `<li><button data-id="${esc(p.id)}"><span>${esc(p.year || '')}</span>${esc(p.shortLabel || p.label)}</button></li>`).join('') + '</ul>';
+    } else {
+      const themes = [...nbrs.get(n.id)].map(i => byId.get(i)).filter(t => t.type === 'theme');
+      if (themes.length) html += '<ul class="panel-papers">' + themes.map(t =>
+        `<li><button data-id="${esc(t.id)}"><span>Theme</span>${esc(t.shortLabel || t.label)}</button></li>`).join('') + '</ul>';
+      if (n.url) html += `<a class="paper-link" href="${esc(n.url)}" target="_blank" rel="noopener noreferrer">Open publication ↗</a>`;
+    }
+    panel.innerHTML = html;
+    panel.classList.add('open');
+    panel.querySelector('.panel-close').onclick = clearSelection;
+    panel.querySelectorAll('button[data-id]').forEach(b => b.onclick = () => select(b.dataset.id, true));
+  }
+
+  window.addEventListener('mousemove', e => { tip.style.left = (e.clientX + 14) + 'px'; tip.style.top = (e.clientY + 12) + 'px'; });
+  window.addEventListener('keydown', e => { if (e.key === 'Escape') clearSelection(); });
+  window.addEventListener('resize', () => Graph.width(el.clientWidth).height(el.clientHeight));
+
+  // Gentle idle drift so the map reads as 3D without any instructions
+  let drift = !REDUCED, t0 = performance.now();
+  el.addEventListener('pointerdown', () => { drift = false; });
+  el.addEventListener('wheel', () => { drift = false; }, { passive: true });
+
+  setTimeout(() => {
+    loading.style.opacity = 0;
+    setTimeout(() => loading.remove(), 500);
+    setTimeout(function spin() {
+      if (drift && !selected && fitted && performance.now() - fitAt > 1000) {
+        const c = Graph.cameraPosition(), o = orbitC;
+        const dx = c.x - o.x, dz = c.z - o.z;
+        const r = Math.hypot(dx, dz), a = Math.atan2(dx, dz) + 0.0016;
+        Graph.cameraPosition({ x: o.x + r * Math.sin(a), y: c.y, z: o.z + r * Math.cos(a) }, o);
+      }
+      requestAnimationFrame(spin);
+    }, REDUCED ? 0 : 1000);
+  }, 1600);
 })();
 </script>
 </body>

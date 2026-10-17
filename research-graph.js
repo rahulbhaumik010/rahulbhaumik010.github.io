@@ -13,7 +13,8 @@ const graphContainer = document.getElementById("researchGraph");
 const infoPanel = document.getElementById("researchInfoPanel");
 
 const INK = "#141414";
-const ACCENT = "#f24e1e";
+const ACCENT = "#f5c400";
+const ACCENT_DEEP = "212,168,0";      // darker yellow for thin lines on white
 const FONT = "'Inter Tight', 'Helvetica Neue', Arial, sans-serif";
 const RING_R = 200;                 // theme ring
 const ORBIT_R = 300;                // publication orbit
@@ -222,7 +223,7 @@ if (graphContainer) {
         .linkColor(link => {
           const s = link.source, t = link.target;
           const active = [s, t].some(n => n && (n === hoverNode || n === selectedNode));
-          if (active) return "rgba(242,78,30,0.6)";
+          if (active) return `rgba(${ACCENT_DEEP},0.85)`;
           const paper = [s, t].find(n => n && n.type === "paper");
           if (!paper) return "rgba(20,20,20,0.11)";                       // centre ↔ theme spokes
           const theme = paper === s ? t : s;
@@ -333,7 +334,7 @@ if (graphContainer) {
           const period = isCenter ? 3.2 : 2.8;
           const reach = isCenter ? 26 : isTheme ? 16 : 9;
           const strength = isHover ? 0.45 : isCenter ? 0.22 : isExpanded ? 0.1 : isTheme ? 0.18 : 0.12;
-          const col = isExpanded || (isHover && !isCenter) ? "242,78,30" : "20,20,20";
+          const col = isExpanded || (isHover && !isCenter) ? ACCENT_DEEP : "20,20,20";
           for (let k = 0; k < 2; k++) {
             const p = ((t / period) + node.__phase + k * 0.5) % 1;
             const ease = 1 - Math.pow(1 - p, 3);
@@ -347,7 +348,7 @@ if (graphContainer) {
 
         // Raised body: soft drop shadow + top-lit gradient
         const base = isCenter ? INK : isExpanded ? ACCENT : isTheme ? "#a8a8a8" : INK;
-        const light = isCenter ? "#3a3a3a" : isExpanded ? "#ff7a4d" : isTheme ? "#cfcfcf" : "#4a4a4a";
+        const light = isCenter ? "#3a3a3a" : isExpanded ? "#ffe27a" : isTheme ? "#cfcfcf" : "#4a4a4a";
         ctx.save();
         ctx.shadowColor = "rgba(0,0,0,0.22)";
         ctx.shadowBlur = isHover ? 14 : 8;
@@ -369,8 +370,8 @@ if (graphContainer) {
         if (isSelected && !isCenter) {
           ctx.beginPath();
           ctx.arc(node.x, node.y, r + 3.5, 0, 2 * Math.PI);
-          ctx.strokeStyle = ACCENT;
-          ctx.lineWidth = 1.6 / scale;
+          ctx.strokeStyle = isExpanded ? INK : ACCENT;
+          ctx.lineWidth = 2.4 / scale;
           ctx.stroke();
         }
 
@@ -390,7 +391,7 @@ if (graphContainer) {
         ctx.lineJoin = "round";
         ctx.lineWidth = 4 / scale;
         ctx.strokeStyle = "rgba(255,255,255,0.95)";
-        ctx.fillStyle = isExpanded || isSelected ? ACCENT : isTheme ? INK : "#4d4d4d";
+        ctx.fillStyle = isExpanded || isSelected || isTheme ? INK : "#4d4d4d";
         if (isTheme) {
           ctx.font = `600 ${12 / scale}px ${FONT}`;
           const off = r + 8 / scale;

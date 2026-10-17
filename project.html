@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #ffffff; --ink: #141414; --ink-2: #3d3d3d; --mute: #767676; --rule: #e6e6e6; --tint: #f4f4f4; --accent: #f24e1e;
+      --bg: #ffffff; --ink: #141414; --ink-2: #3d3d3d; --mute: #767676; --rule: #e6e6e6; --tint: #f4f4f4; --accent: #f5c400; --accent-soft: #fff6cc;
       --header-h: 64px; --max: 1120px; --pad: clamp(1rem, 3vw, 2.5rem);
       --display: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
       --body: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -23,31 +23,30 @@
     body { font-family: var(--body); line-height: 1.6; overflow-x: hidden; }
     a { color: inherit; text-decoration: none; }
     img, video { display: block; max-width: 100%; }
-    ::selection { background: var(--accent); color: #fff; }
+    ::selection { background: var(--accent); color: var(--ink); }
 
     .g-header { position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--header-h); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--pad); background: rgba(255,255,255,.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--rule); }
     .wordmark { display: flex; align-items: center; gap: .75rem; }
     .wordmark-mark { width: 34px; height: 34px; background: var(--ink); color: #fff; display: grid; place-items: center; font-family: var(--display); font-weight: 800; font-size: .95rem; letter-spacing: -.04em; transition: background .2s; }
-    .wordmark:hover .wordmark-mark { background: var(--accent); }
+    .wordmark:hover .wordmark-mark { background: var(--accent); color: var(--ink); }
     .wordmark-name { font-family: var(--display); font-weight: 700; }
     .back { font-family: var(--display); font-weight: 500; font-size: .9rem; color: var(--ink-2); }
-    .back:hover { color: var(--accent); }
+    .back:hover { color: var(--ink); box-shadow: inset 0 -3px 0 var(--accent); }
 
     .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
-    .eyebrow { display: flex; align-items: center; gap: .6rem; font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); margin-bottom: 1rem; }
-    .eyebrow::before { content: ''; width: 8px; height: 8px; background: var(--accent); }
+    .eyebrow { display: flex; align-items: center; gap: .6rem; font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); margin-bottom: 1rem; width: fit-content; background: var(--accent); padding: .32rem .6rem .28rem; }
 
     /* Hero */
     .hero { padding: calc(var(--header-h) + 3.5rem) 0 2.5rem; }
     .title { font-family: var(--display); font-weight: 700; font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: .98; letter-spacing: -.045em; max-width: 14ch; }
-    .title em { font-style: normal; color: var(--accent); }
+    .title em { font-style: normal; color: var(--ink); background: linear-gradient(transparent 62%, var(--accent) 62%, var(--accent) 92%, transparent 92%); }
     .lede { font-family: var(--display); font-weight: 500; font-size: clamp(1.15rem, 2vw, 1.5rem); line-height: 1.32; letter-spacing: -.01em; color: var(--ink-2); max-width: 40ch; margin-top: 1.5rem; }
     .meta { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--ink); margin-top: 2.5rem; }
     .meta > div { padding: .9rem 1rem 0 0; }
     .k { font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); margin-bottom: .25rem; }
     .v { font-size: .92rem; line-height: 1.45; }
     .v a { border-bottom: 1px solid currentColor; }
-    .v a:hover { color: var(--accent); }
+    .v a:hover { background: var(--accent); }
     .cover { margin-top: 2.5rem; aspect-ratio: 16 / 8; overflow: hidden; background: var(--tint); }
     .cover img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -74,13 +73,13 @@
 
     .steps { list-style: none; counter-reset: s; border-top: 1px solid var(--ink); margin-top: 1.5rem; }
     .steps li { counter-increment: s; display: grid; grid-template-columns: 2.5rem 1fr; gap: .5rem; padding: .9rem 0; border-bottom: 1px solid var(--rule); color: var(--ink-2); }
-    .steps li::before { content: counter(s, decimal-leading-zero); font-family: var(--mono); font-size: .75rem; color: var(--accent); padding-top: .2rem; }
+    .steps li::before { content: counter(s, decimal-leading-zero); font-family: var(--mono); font-size: .75rem; color: var(--ink); padding-top: .2rem; }
     .steps strong { color: var(--ink); font-weight: 600; }
 
     .pubs { list-style: none; border-top: 1px solid var(--ink); }
     .pubs a { display: grid; grid-template-columns: 4rem 1fr 1.5rem; gap: 1rem; padding: 1.1rem 0; border-bottom: 1px solid var(--rule); align-items: baseline; transition: background .2s, padding .25s; }
     .pubs a:hover { background: var(--tint); padding-left: .75rem; padding-right: .75rem; }
-    .pubs a:hover .pt { color: var(--accent); }
+    .pubs a:hover .pt { background: var(--accent); }
     .py { font-family: var(--mono); font-size: .8rem; color: var(--mute); }
     .pt { font-family: var(--display); font-weight: 600; font-size: 1.05rem; line-height: 1.3; }
     .pv { display: block; font-family: var(--body); font-weight: 400; font-size: .82rem; color: var(--mute); margin-top: .2rem; }
@@ -100,7 +99,7 @@
     .fig-row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1.25rem; align-items: start; }
     .takeaways { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin-top: 1.75rem; }
     .takeaways li { background: #fff; padding: 1rem 1.1rem; font-family: var(--display); font-weight: 600; font-size: 1rem; letter-spacing: -.01em; }
-    .takeaways li span { display: block; font-family: var(--mono); font-weight: 400; font-size: .68rem; color: var(--accent); letter-spacing: .06em; text-transform: uppercase; margin-bottom: .3rem; }
+    .takeaways li span { display: block; font-family: var(--mono); font-weight: 400; font-size: .68rem; color: var(--mute); letter-spacing: .06em; text-transform: uppercase; margin-bottom: .3rem; }
     .fig-grid figure img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; }
     /* Side-by-side pair with equal heights: columns proportional to each image's aspect ratio */
     .fig-pair { grid-template-columns: 1.2805fr 0.92fr; }
