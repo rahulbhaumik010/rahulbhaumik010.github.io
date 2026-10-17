@@ -9,18 +9,22 @@
   <meta property="og:image" content="https://rahulbhaumik010.github.io/Picture%201.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #ffffff; --ink: #141414; --ink-2: #3d3d3d; --mute: #767676; --rule: #e6e6e6; --tint: #f4f4f4; --accent: #f24e1e;
+      --bg: #ffffff; --ink: #161616; --ink-2: #3d3d3d; --mute: #767676; --rule: #e6e6e6; --tint: #f4f4f4; --accent: #161616;
       --header-h: 64px; --max: 1120px; --pad: clamp(1rem, 3vw, 2.5rem);
-      --display: 'Inter Tight', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      --body: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+      --display: 'Schibsted Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --body: 'Newsreader', 'Iowan Old Style', Georgia, serif;
+      --mono: 'Schibsted Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
-    body { font-family: var(--body); line-height: 1.6; overflow-x: hidden; }
+    body { font-family: var(--body); font-size: 17.5px; line-height: 1.55; overflow-x: hidden; }
+    .g-header, .meta, .k, .v, .steps, .facts, .pubs, .g-footer, .back, figcaption, .takeaways { font-family: var(--display); }
+    .v, .steps li { font-size: .92rem; }
+    .eyebrow, .k, .fact-label, figcaption, .sec-num, .py { letter-spacing: .04em; }
+    figcaption { text-transform: none; letter-spacing: 0; font-size: .82rem; }
     a { color: inherit; text-decoration: none; }
     img, video { display: block; max-width: 100%; }
     ::selection { background: var(--accent); color: #fff; }
@@ -35,13 +39,13 @@
 
     .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
     .eyebrow { display: flex; align-items: center; gap: .6rem; font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); margin-bottom: 1rem; }
-    .eyebrow::before { content: ''; width: 8px; height: 8px; background: var(--accent); }
+    .eyebrow::before { content: none; }
 
     /* Hero */
     .hero { padding: calc(var(--header-h) + 3.5rem) 0 2.5rem; }
-    .title { font-family: var(--display); font-weight: 700; font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: .98; letter-spacing: -.045em; max-width: 14ch; }
-    .title em { font-style: normal; color: var(--accent); }
-    .lede { font-family: var(--display); font-weight: 500; font-size: clamp(1.15rem, 2vw, 1.5rem); line-height: 1.32; letter-spacing: -.01em; color: var(--ink-2); max-width: 40ch; margin-top: 1.5rem; }
+    .title { font-family: var(--display); font-weight: 600; font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: .98; letter-spacing: -.028em; max-width: 14ch; }
+    .title em { font-family: var(--body); font-style: italic; font-weight: 400; letter-spacing: -.01em; }
+    .lede { font-family: var(--body); font-weight: 400; font-size: clamp(1.15rem, 2vw, 1.5rem); line-height: 1.32; color: var(--ink); max-width: 40ch; margin-top: 1.5rem; }
     .meta { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--ink); margin-top: 2.5rem; }
     .meta > div { padding: .9rem 1rem 0 0; }
     .k { font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); margin-bottom: .25rem; }
@@ -54,10 +58,11 @@
     /* Sections */
     .sec { display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: 2.5rem; padding: 4.5rem 0; border-bottom: 1px solid var(--rule); }
     .sec-num { font-family: var(--mono); font-size: .75rem; color: var(--mute); }
-    .sec-title { font-family: var(--display); font-weight: 700; font-size: 1.6rem; line-height: 1.1; letter-spacing: -.025em; margin-top: .35rem; position: sticky; top: calc(var(--header-h) + 1.5rem); }
+    .sec-title { font-family: var(--display); font-weight: 700; font-size: 1.55rem; line-height: 1.12; letter-spacing: -.01em; margin-top: .35rem; position: sticky; top: calc(var(--header-h) + 1.5rem); }
     .sec-head { align-self: start; position: sticky; top: calc(var(--header-h) + 1.5rem); }
     .prose p { color: var(--ink-2); font-size: 1.04rem; margin-bottom: 1rem; max-width: 66ch; }
-    .prose strong { color: var(--ink); font-weight: 600; }
+    .sec { scroll-margin-top: 80px; }
+    .prose strong { color: var(--ink); font-weight: 500; }
     figure { margin: 2rem 0 0; }
     figcaption { font-family: var(--mono); font-size: .72rem; color: var(--mute); margin-top: .6rem; line-height: 1.5; }
     .fig-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
@@ -68,7 +73,7 @@
 
     .facts { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--ink); margin-top: 2rem; }
     .fact { padding: 1rem 1rem 0 0; }
-    .fact-num { font-family: var(--display); font-weight: 700; font-size: clamp(1.5rem, 3vw, 2.2rem); letter-spacing: -.04em; line-height: 1; }
+    .fact-num { font-family: var(--display); font-weight: 700; font-size: clamp(1.5rem, 3vw, 2.2rem); letter-spacing: -.02em; line-height: 1; }
     .fact-num small { font-size: .55em; letter-spacing: -.01em; }
     .fact-label { font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--mute); margin-top: .45rem; }
 
@@ -163,7 +168,7 @@
       </div>
     </section>
 
-    <section class="sec">
+    <section class="sec" id="surface">
       <div class="sec-head"><p class="sec-num">03</p><h2 class="sec-title">Surface: textiles that guide touch</h2></div>
       <div class="prose">
         <p>A soft console needs a cover — and the cover itself can tell people how to interact. Two design objectives guided the textile surface: <strong>visual features</strong> (patterns and textures) should convey the intended interaction, and <strong>tactile features</strong> should reinforce those visual cues on touch.</p>
@@ -184,7 +189,7 @@
       </div>
     </section>
 
-    <section class="sec">
+    <section class="sec" id="sensing">
       <div class="sec-head"><p class="sec-num">04</p><h2 class="sec-title">Sensing: conductive embroidery</h2></div>
       <div class="prose">
         <p>Functional prototypes replaced regular yarn with <strong>conductive yarn</strong>, turning embroidered patterns into <strong>capacitive touch</strong> zones — and revealed the constraints of the embroidery process.</p>
